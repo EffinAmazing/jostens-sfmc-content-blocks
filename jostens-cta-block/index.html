@@ -280,6 +280,7 @@
       btn.style.backgroundColor = d.btnColor;
       btn.style.color = d.btnTextColor;
       btn.textContent = d.ctaLabel;
+      btn.setAttribute('href', d.ctaUrl || '#');
     }
 
     /* ─── Read all field values into a data object ─── */
@@ -318,10 +319,22 @@
     function onChange() {
       var d = readFields();
       updatePreview(d);
-      /* setData saves editor state so it can be restored when block is reopened */
       sdk.setData(d, function() {
-        /* setContent sends the final email HTML to Content Builder */
+        /*
+          setContent: the real email HTML sent at send time.
+          AMPscript in ctaUrl is preserved here and resolves at send time.
+        */
         sdk.setContent(buildContent(d));
+
+        /*
+          setSuperContent: shown on the Content Builder canvas preview only.
+          We swap AMPscript URLs for a safe placeholder so the canvas renders cleanly.
+          Per SDK docs, setSuperContent is ignored at send time.
+        */
+        var previewData = Object.assign({}, d, {
+          ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+        });
+        sdk.setSuperContent(buildContent(previewData));
       });
     }
 
@@ -356,6 +369,10 @@
       populateFields(d);
       updatePreview(d);
       sdk.setContent(buildContent(d));
+      var previewData = Object.assign({}, d, {
+        ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+      });
+      sdk.setSuperContent(buildContent(previewData));
     });
   </script>
 </body>
