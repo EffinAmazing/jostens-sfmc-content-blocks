@@ -128,7 +128,7 @@
 
   <div class="field">
     <label for="headerText">Header Text</label>
-    <input type="text" id="headerText" placeholder="THE JOSTENS DIFFERENCE" />
+    <input type="text" id="headerText" placeholder="THE JOSTENS DIFFERENCE" value="THE JOSTENS DIFFERENCE" />
   </div>
 
   <div class="field">
@@ -138,7 +138,7 @@
 
   <div class="field">
     <label for="ctaLabel">Button Label</label>
-    <input type="text" id="ctaLabel" placeholder="LET'S PARTNER TOGETHER" />
+    <input type="text" id="ctaLabel" placeholder="LET'S PARTNER TOGETHER" value="LET'S PARTNER TOGETHER" />
   </div>
 
   <div class="field">
@@ -154,7 +154,7 @@
     <label>Background Color</label>
     <div class="color-row">
       <input type="color" id="bgColorPicker" value="#D22E7A" />
-      <input type="text" id="bgColor" class="color-hex" placeholder="#D22E7A" />
+      <input type="text" id="bgColor" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
     </div>
   </div>
 
@@ -162,7 +162,7 @@
     <label>Text Color</label>
     <div class="color-row">
       <input type="color" id="textColorPicker" value="#ffffff" />
-      <input type="text" id="textColor" class="color-hex" placeholder="#ffffff" />
+      <input type="text" id="textColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
     </div>
   </div>
 
@@ -170,7 +170,7 @@
     <label>Button Background Color</label>
     <div class="color-row">
       <input type="color" id="btnColorPicker" value="#000000" />
-      <input type="text" id="btnColor" class="color-hex" placeholder="#000000" />
+      <input type="text" id="btnColor" class="color-hex" placeholder="#000000" value="#000000" />
     </div>
   </div>
 
@@ -178,27 +178,27 @@
     <label>Button Text Color</label>
     <div class="color-row">
       <input type="color" id="btnTextColorPicker" value="#ffffff" />
-      <input type="text" id="btnTextColor" class="color-hex" placeholder="#ffffff" />
+      <input type="text" id="btnTextColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
     </div>
   </div>
 
   <!-- ─── Live Preview ─── -->
   <div class="preview-wrap">
     <div class="preview-label">Preview</div>
-    <table class="cta-preview" role="presentation" id="previewTable">
+    <table class="cta-preview" role="presentation" id="previewTable" style="background-color:#D22E7A;">
       <tr>
-        <td align="center" style="padding:32px 20px 10px; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px;">
+        <td align="center" style="padding:32px 20px 10px; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:#ffffff;">
           <div id="previewHeader">THE JOSTENS DIFFERENCE</div>
         </td>
       </tr>
       <tr>
-        <td align="center" style="padding:0 20px 20px; font-size:15px; line-height:24px;">
+        <td align="center" style="padding:0 20px 20px; font-size:15px; line-height:24px; color:#ffffff;">
           <div id="previewBody">Everything in the Digital Classroom is shaped by adviser feedback and built by people who understand yearbook.</div>
         </td>
       </tr>
       <tr>
         <td align="center" style="padding:0 0 28px;">
-          <a id="previewBtn" class="cta-button-preview" href="#">LET'S PARTNER TOGETHER</a>
+          <a id="previewBtn" class="cta-button-preview" href="#" style="background-color:#000000; color:#ffffff;">LET'S PARTNER TOGETHER</a>
         </td>
       </tr>
     </table>
@@ -349,7 +349,8 @@
       document.getElementById(id).addEventListener('input', onChange);
     });
 
-    /* ─── On load: restore saved data via getData, then set initial content ─── */
+    /* ─── On load: render defaults immediately, then restore saved data ─── */
+    updatePreview(DEFAULTS);
     sdk.getData(function(savedData) {
       var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
       populateFields(d);
