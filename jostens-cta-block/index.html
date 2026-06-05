@@ -253,17 +253,13 @@
     /* ─── Build email HTML output from current data ─── */
     function buildContent(d) {
       return [
-        '<table class="cta-section" role="presentation" width="100%" style="background-color:' + d.bgColor + ';">',
-        '<!--[if mso]>',
         '<style>',
         '  [data-ogsb] .cta-section { background-color: ' + d.bgColor + ' !important; }',
         '  [data-ogsb] .cta-section .header-text { color: ' + d.textColor + ' !important; }',
         '  [data-ogsb] .cta-section .body-text { color: ' + d.textColor + ' !important; }',
-        '  [data-ogsb] .cta-section v\\:roundrect { fill: ' + d.btnColor + ' !important; }',
-        '  [data-ogsb] .cta-section center { color: ' + d.btnTextColor + ' !important; }',
         '  [data-ogsb] .cta-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
         '</style>',
-        '<![endif]-->',
+        '<table class="cta-section" role="presentation" width="100%" style="background-color:' + d.bgColor + ';">',
         '<tr>',
         '  <td align="center" style="padding:32px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
         '    <div class="header-text">' + d.headerText + '</div>',
@@ -289,7 +285,7 @@
         '    </v:roundrect>',
         '    <![endif]-->',
         '    <!--[if !mso]><!-->',
-        '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; color:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center; text-decoration:none; padding:12px 24px; border-radius:24px;">' + d.ctaLabel + '</a>',
+        '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center; text-decoration:none; padding:12px 24px; border-radius:24px;">' + d.ctaLabel + '</a>',
         '    <!--<![endif]-->',
         '    </div>',
         '  </td>',
