@@ -251,7 +251,7 @@
         '    <!--[if mso]>',
         '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '      href="' + d.ctaUrl + '"',
-        '      style="height:44px; v-text-anchor:middle; width:260px;"',
+        '      style="height:44px; v-text-anchor:middle; width:' + Math.max(180, d.ctaLabel.length * 9 + 48) + 'px;"',
         '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
         '      <w:anchorlock/>',
         '      <center style="color:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
