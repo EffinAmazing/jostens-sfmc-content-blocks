@@ -86,6 +86,26 @@
 
     .color-hex { flex: 1; }
 
+    .swatch-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: 0;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+    }
+
+    .swatch:hover { border-color: #999; }
+    .swatch.active { border-color: #333; }
+
     .hint {
       font-size: 11px;
       color: #999;
@@ -259,6 +279,12 @@
 
   <div class="field">
     <label>Background Color</label>
+    <div class="swatch-row">
+      <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+      <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+      <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+      <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+    </div>
     <div class="color-row">
       <input type="color" id="bgColorPicker" value="#79BB2F" />
       <input type="text" id="bgColor" class="color-hex" placeholder="#79BB2F" value="#79BB2F" />
@@ -385,7 +411,7 @@
 
     /* ─── Build email HTML output from current data ─── */
     function buildContent(d) {
-      var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 72);
+      var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 96);
       return [
         '<style type="text/css">',
         '@media only screen and (max-width: 550px) {',
@@ -451,6 +477,7 @@
 
     /* ─── Update live preview ─── */
     function updatePreview(d) {
+      updateSwatchActive(d.bgColor);
       document.getElementById('previewTable').style.backgroundColor = d.bgColor;
       document.getElementById('previewHeader').style.color = d.textColor;
       document.getElementById('previewHeader').innerHTML = d.headerText;
@@ -546,6 +573,20 @@
     bindColorPair('textColorPicker',    'textColor');
     bindColorPair('btnColorPicker',     'btnColor');
     bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    /* ─── Bind background color swatches ─── */
+    function updateSwatchActive(color) {
+      document.querySelectorAll('.swatch').forEach(function(s) {
+        s.classList.toggle('active', s.getAttribute('data-color').toLowerCase() === color.toLowerCase());
+      });
+    }
+
+    document.querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        setColor('bgColor', 'bgColorPicker', this.getAttribute('data-color'));
+        onChange();
+      });
+    });
 
     /* ─── Bind text and textarea fields ─── */
     var textFields = ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl'];
