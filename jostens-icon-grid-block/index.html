@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jostens Icon Grid Block</title>
+  <script src="https://cdn.jsdelivr.net/npm/blocksdk@1.3.0/blocksdk.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: #333;
+      padding: 16px;
+      background: #f9f9f9;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin: 20px 0 10px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 4px;
+    }
+
+    .section-title:first-child { margin-top: 0; }
+
+    .field { margin-bottom: 14px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #D22E7A;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    textarea.short {
+      min-height: 50px;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="color"] {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px;
+      cursor: pointer;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .color-hex { flex: 1; }
+
+    .hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+
+    .icon-group {
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      padding: 10px 10px 4px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .icon-group-title {
+      font-size: 11px;
+      font-weight: bold;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .preview-wrap {
+      margin-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 16px;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .icon-grid-preview {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .cta-button-preview {
+      display: inline-block;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 24px;
+    }
+
+    .preview-icon-col {
+      width: 25%;
+      padding: 8px;
+      text-align: center;
+      vertical-align: top;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 18px;
+    }
+
+    .preview-icon-col img {
+      width: 32px;
+      height: auto;
+      display: block;
+      margin: 0 auto 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Content Fields ─── -->
+  <div class="section-title">Content</div>
+
+  <div class="field">
+    <label for="headerText">Headline</label>
+    <textarea id="headerText" class="short" placeholder="SUPPORT FOR&lt;br&gt;REAL CLASSROOMS"></textarea>
+    <div class="hint">HTML supported — use &lt;br&gt; for a line break.</div>
+  </div>
+
+  <div class="field">
+    <label for="bodyText">Body Text</label>
+    <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
+  </div>
+
+  <!-- ─── Icon Fields ─── -->
+  <div class="section-title">Icons</div>
+
+  <div class="icon-group">
+    <div class="icon-group-title">Icon 1</div>
+    <div class="field">
+      <label for="icon1Url">Image URL</label>
+      <input type="text" id="icon1Url" />
+    </div>
+    <div class="field">
+      <label for="icon1Alt">Alt Text</label>
+      <input type="text" id="icon1Alt" />
+    </div>
+    <div class="field">
+      <label for="icon1Text">Caption</label>
+      <textarea id="icon1Text" class="short"></textarea>
+    </div>
+  </div>
+
+  <div class="icon-group">
+    <div class="icon-group-title">Icon 2</div>
+    <div class="field">
+      <label for="icon2Url">Image URL</label>
+      <input type="text" id="icon2Url" />
+    </div>
+    <div class="field">
+      <label for="icon2Alt">Alt Text</label>
+      <input type="text" id="icon2Alt" />
+    </div>
+    <div class="field">
+      <label for="icon2Text">Caption</label>
+      <textarea id="icon2Text" class="short"></textarea>
+    </div>
+  </div>
+
+  <div class="icon-group">
+    <div class="icon-group-title">Icon 3</div>
+    <div class="field">
+      <label for="icon3Url">Image URL</label>
+      <input type="text" id="icon3Url" />
+    </div>
+    <div class="field">
+      <label for="icon3Alt">Alt Text</label>
+      <input type="text" id="icon3Alt" />
+    </div>
+    <div class="field">
+      <label for="icon3Text">Caption</label>
+      <textarea id="icon3Text" class="short"></textarea>
+    </div>
+  </div>
+
+  <div class="icon-group">
+    <div class="icon-group-title">Icon 4</div>
+    <div class="field">
+      <label for="icon4Url">Image URL</label>
+      <input type="text" id="icon4Url" />
+    </div>
+    <div class="field">
+      <label for="icon4Alt">Alt Text</label>
+      <input type="text" id="icon4Alt" />
+    </div>
+    <div class="field">
+      <label for="icon4Text">Caption</label>
+      <textarea id="icon4Text" class="short"></textarea>
+    </div>
+  </div>
+
+  <!-- ─── Button Fields ─── -->
+  <div class="section-title">Button</div>
+
+  <div class="field">
+    <label for="ctaLabel">Button Label</label>
+    <input type="text" id="ctaLabel" placeholder="LEARN MORE" value="LEARN MORE" />
+  </div>
+
+  <div class="field">
+    <label for="ctaUrl">Button URL</label>
+    <input type="text" id="ctaUrl" placeholder="%%=RedirectTo(@URL)=%% or https://..." />
+    <div class="hint">Accepts plain URLs or AMPscript expressions.</div>
+  </div>
+
+  <!-- ─── Style Fields ─── -->
+  <div class="section-title">Style</div>
+
+  <div class="field">
+    <label>Background Color</label>
+    <div class="color-row">
+      <input type="color" id="bgColorPicker" value="#ffffff" />
+      <input type="text" id="bgColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Text Color</label>
+    <div class="color-row">
+      <input type="color" id="textColorPicker" value="#212121" />
+      <input type="text" id="textColor" class="color-hex" placeholder="#212121" value="#212121" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Background Color</label>
+    <div class="color-row">
+      <input type="color" id="btnColorPicker" value="#212121" />
+      <input type="text" id="btnColor" class="color-hex" placeholder="#212121" value="#212121" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Text Color</label>
+    <div class="color-row">
+      <input type="color" id="btnTextColorPicker" value="#ffffff" />
+      <input type="text" id="btnTextColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <!-- ─── Live Preview ─── -->
+  <div class="preview-wrap">
+    <div class="preview-label">Preview</div>
+    <table class="icon-grid-preview" role="presentation" id="previewTable" style="background-color:#ffffff;">
+      <tr>
+        <td align="center" style="padding:30px 20px 10px; font-size:24px; line-height:32px; font-weight:bold; color:#212121;">
+          <div id="previewHeader"></div>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" style="padding:0 20px 20px; font-size:15px; line-height:24px; color:#212121;">
+          <div id="previewBody"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table width="100%" role="presentation" style="border-collapse:collapse;">
+            <tr>
+              <td class="preview-icon-col">
+                <img id="previewIcon1Img" src="" alt="" width="32">
+                <div id="previewIcon1Text"></div>
+              </td>
+              <td class="preview-icon-col">
+                <img id="previewIcon2Img" src="" alt="" width="32">
+                <div id="previewIcon2Text"></div>
+              </td>
+              <td class="preview-icon-col">
+                <img id="previewIcon3Img" src="" alt="" width="32">
+                <div id="previewIcon3Text"></div>
+              </td>
+              <td class="preview-icon-col">
+                <img id="previewIcon4Img" src="" alt="" width="32">
+                <div id="previewIcon4Text"></div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" style="padding:16px 0 28px;">
+          <a id="previewBtn" class="cta-button-preview" href="#" style="background-color:#212121; color:#ffffff;">LEARN MORE</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    /* ─── Defaults ─── */
+    var DEFAULTS = {
+      headerText:   'SUPPORT FOR<br>REAL CLASSROOMS',
+      bodyText:     'Beyond lesson planning, the Digital Classroom includes:',
+      icon1Url:     'https://cdn.jostens.com/apps/shop/images/email/2026/Yearbook/B2B/Aircover/Icon/light-bulb.png',
+      icon1Alt:     'Light Bulb',
+      icon1Text:    'creative inspiration galleries for theme, writing, design and social media.',
+      icon2Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/3e01cd9f-ff16-4c22-a8ca-56612bbf1afc.png',
+      icon2Alt:     'Presentation',
+      icon2Text:    'video libraries for page creation and technology support for independent student learning.',
+      icon3Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51344fe9-fc2b-4737-9977-8712e858cae4.png',
+      icon3Alt:     'Cards',
+      icon3Text:    'guidance on building project management systems and grading expectations.',
+      icon4Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51555df1-8e16-430d-be9a-9c6179efb2a1.png',
+      icon4Alt:     'Chat Bubbles',
+      icon4Text:    'practical support you can use to fill skill gaps and build confidence with your staff.',
+      ctaLabel:     'LEARN MORE',
+      ctaUrl:       '%%=RedirectTo(@JYBKProspectFormURL)=%%',
+      bgColor:      '#ffffff',
+      textColor:    '#212121',
+      btnColor:     '#212121',
+      btnTextColor: '#ffffff'
+    };
+
+    /* ─── Init SDK ─── */
+    var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
+    if (!BlockSDK) {
+      console.error('BlockSDK failed to load - check CDN URL');
+    }
+    var sdk = new BlockSDK();
+
+    /* ─── Build one icon column ─── */
+    function iconCell(d, n) {
+      return [
+        '        <td align="center" class="icon-col" style="width:25%; padding:10px;" valign="top">',
+        '          <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">',
+        '            <tr><td align="center" style="padding:0 0 10px;">',
+        '              <img alt="' + d['icon' + n + 'Alt'] + '" src="' + d['icon' + n + 'Url'] + '" style="border:none; display:block; margin:0 auto;" width="40">',
+        '            </td></tr>',
+        '            <tr><td align="center" style="padding:0 0 20px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+        '              <div class="body-text">' + d['icon' + n + 'Text'] + '</div>',
+        '            </td></tr>',
+        '          </table>',
+        '        </td>'
+      ].join('\n');
+    }
+
+    /* ─── Build email HTML output from current data ─── */
+    function buildContent(d) {
+      var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 72);
+      return [
+        '<style type="text/css">',
+        '@media only screen and (max-width: 550px) {',
+        '  .icon-col { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
+        '}',
+        '</style>',
+        '<table class="icon-grid-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; background-color:' + d.bgColor + ';" width="100%">',
+        '<!--[if mso]>',
+        '<style>',
+        '  [data-ogsb] .icon-grid-section { background-color: ' + d.bgColor + ' !important; }',
+        '  [data-ogsb] .icon-grid-section .header-text { color: ' + d.textColor + ' !important; }',
+        '  [data-ogsb] .icon-grid-section .body-text { color: ' + d.textColor + ' !important; }',
+        '  [data-ogsb] .icon-grid-section v\\:roundrect { fill: ' + d.btnColor + ' !important; }',
+        '  [data-ogsb] .icon-grid-section center { color: ' + d.btnTextColor + ' !important; }',
+        '  [data-ogsb] .icon-grid-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
+        '</style>',
+        '<![endif]-->',
+        '<tr>',
+        '  <td align="center" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; letter-spacing:0; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '    <div class="header-text">' + d.headerText + '</div>',
+        '  </td>',
+        '</tr>',
+        '<tr>',
+        '  <td align="center" style="padding:0 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '    <div class="body-text">' + d.bodyText + '</div>',
+        '  </td>',
+        '</tr>',
+        '<tr>',
+        '  <td align="center" style="padding:0; margin:0;">',
+        '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
+        '      <tr>',
+        iconCell(d, 1),
+        iconCell(d, 2),
+        iconCell(d, 3),
+        iconCell(d, 4),
+        '      </tr>',
+        '    </table>',
+        '  </td>',
+        '</tr>',
+        '<tr>',
+        '  <td align="center" style="padding:0 0 40px;">',
+        '    <div>',
+        '    <!--[if mso]>',
+        '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+        '      href="' + d.ctaUrl + '"',
+        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+        '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+        '      <w:anchorlock/>',
+        '      <center style="color:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
+        '        ' + d.ctaLabel,
+        '      </center>',
+        '    </v:roundrect>',
+        '    <![endif]-->',
+        '    <!--[if !mso]><!-->',
+        '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; color:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center; text-decoration:none; padding:12px 24px; border-radius:24px;">' + d.ctaLabel + '</a>',
+        '    <!--<![endif]-->',
+        '    </div>',
+        '  </td>',
+        '</tr>',
+        '</table>'
+      ].join('\n');
+    }
+
+    /* ─── Update live preview ─── */
+    function updatePreview(d) {
+      document.getElementById('previewTable').style.backgroundColor = d.bgColor;
+      document.getElementById('previewHeader').style.color = d.textColor;
+      document.getElementById('previewHeader').innerHTML = d.headerText;
+      document.getElementById('previewBody').style.color = d.textColor;
+      document.getElementById('previewBody').innerHTML = d.bodyText;
+
+      [1, 2, 3, 4].forEach(function(n) {
+        document.getElementById('previewIcon' + n + 'Img').src = d['icon' + n + 'Url'] || '';
+        document.getElementById('previewIcon' + n + 'Img').alt = d['icon' + n + 'Alt'] || '';
+        document.getElementById('previewIcon' + n + 'Text').innerHTML = d['icon' + n + 'Text'] || '';
+        document.getElementById('previewIcon' + n + 'Text').style.color = d.textColor;
+      });
+
+      var btn = document.getElementById('previewBtn');
+      btn.style.backgroundColor = d.btnColor;
+      btn.style.color = d.btnTextColor;
+      btn.textContent = d.ctaLabel;
+      btn.setAttribute('href', d.ctaUrl || '#');
+    }
+
+    /* ─── Read all field values into a data object ─── */
+    function readFields() {
+      var d = {
+        headerText:   document.getElementById('headerText').value   || DEFAULTS.headerText,
+        bodyText:     document.getElementById('bodyText').value     || DEFAULTS.bodyText,
+        ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
+        ctaUrl:       document.getElementById('ctaUrl').value       || DEFAULTS.ctaUrl,
+        bgColor:      document.getElementById('bgColor').value      || DEFAULTS.bgColor,
+        textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
+        btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
+        btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor
+      };
+      [1, 2, 3, 4].forEach(function(n) {
+        d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
+        d['icon' + n + 'Alt']  = document.getElementById('icon' + n + 'Alt').value  || DEFAULTS['icon' + n + 'Alt'];
+        d['icon' + n + 'Text'] = document.getElementById('icon' + n + 'Text').value || DEFAULTS['icon' + n + 'Text'];
+      });
+      return d;
+    }
+
+    /* ─── Populate fields from a saved data object ─── */
+    function populateFields(d) {
+      document.getElementById('headerText').value = d.headerText || DEFAULTS.headerText;
+      document.getElementById('bodyText').value   = d.bodyText   || DEFAULTS.bodyText;
+      document.getElementById('ctaLabel').value   = d.ctaLabel   || DEFAULTS.ctaLabel;
+      document.getElementById('ctaUrl').value     = d.ctaUrl     || DEFAULTS.ctaUrl;
+
+      [1, 2, 3, 4].forEach(function(n) {
+        document.getElementById('icon' + n + 'Url').value  = d['icon' + n + 'Url']  || DEFAULTS['icon' + n + 'Url'];
+        document.getElementById('icon' + n + 'Alt').value  = d['icon' + n + 'Alt']  || DEFAULTS['icon' + n + 'Alt'];
+        document.getElementById('icon' + n + 'Text').value = d['icon' + n + 'Text'] || DEFAULTS['icon' + n + 'Text'];
+      });
+
+      setColor('bgColor',      'bgColorPicker',      d.bgColor      || DEFAULTS.bgColor);
+      setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
+      setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
+      setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
+    }
+
+    function setColor(hexId, pickerId, value) {
+      document.getElementById(hexId).value    = value;
+      document.getElementById(pickerId).value = value;
+    }
+
+    /* ─── Push updated content and data to SDK ─── */
+    function onChange() {
+      var d = readFields();
+      updatePreview(d);
+      sdk.setData(d, function() {
+        sdk.setContent(buildContent(d));
+        var previewData = Object.assign({}, d, {
+          ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+        });
+        sdk.setSuperContent(buildContent(previewData));
+      });
+    }
+
+    /* ─── Bind color pickers <-> hex inputs ─── */
+    function bindColorPair(pickerId, hexId) {
+      document.getElementById(pickerId).addEventListener('input', function() {
+        document.getElementById(hexId).value = this.value;
+        onChange();
+      });
+      document.getElementById(hexId).addEventListener('input', function() {
+        if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+          document.getElementById(pickerId).value = this.value;
+        }
+        onChange();
+      });
+    }
+
+    bindColorPair('bgColorPicker',      'bgColor');
+    bindColorPair('textColorPicker',    'textColor');
+    bindColorPair('btnColorPicker',     'btnColor');
+    bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    /* ─── Bind text and textarea fields ─── */
+    var textFields = ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl'];
+    [1, 2, 3, 4].forEach(function(n) {
+      textFields.push('icon' + n + 'Url', 'icon' + n + 'Alt', 'icon' + n + 'Text');
+    });
+    textFields.forEach(function(id) {
+      document.getElementById(id).addEventListener('input', onChange);
+    });
+
+    /* ─── On load: render defaults immediately, then restore saved data ─── */
+    updatePreview(DEFAULTS);
+    sdk.getData(function(savedData) {
+      var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
+      populateFields(d);
+      updatePreview(d);
+      sdk.setContent(buildContent(d));
+      var previewData = Object.assign({}, d, {
+        ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+      });
+      sdk.setSuperContent(buildContent(previewData));
+    });
+  </script>
+</body>
+</html>
