@@ -31,6 +31,32 @@
 
     .field { margin-bottom: 14px; }
 
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .field-header label:first-child { margin-bottom: 0; }
+
+    .toggle-check {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: normal;
+      color: #888;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-check input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+      margin: 0;
+    }
+
     label {
       display: block;
       font-size: 12px;
@@ -183,13 +209,19 @@
   <div class="section-title">Content</div>
 
   <div class="field">
-    <label for="headerText">Headline</label>
+    <div class="field-header">
+      <label for="headerText">Headline</label>
+      <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+    </div>
     <textarea id="headerText" class="short" placeholder="SUPPORT FOR&lt;br&gt;REAL CLASSROOMS"></textarea>
     <div class="hint">HTML supported — use &lt;br&gt; for a line break.</div>
   </div>
 
   <div class="field">
-    <label for="bodyText">Body Text</label>
+    <div class="field-header">
+      <label for="bodyText">Body Text</label>
+      <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+    </div>
     <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
   </div>
 
@@ -264,7 +296,10 @@
   <div class="section-title">Button</div>
 
   <div class="field">
-    <label for="ctaLabel">Button Label</label>
+    <div class="field-header">
+      <label for="ctaLabel">Button Label</label>
+      <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+    </div>
     <input type="text" id="ctaLabel" placeholder="LEARN MORE" value="LEARN MORE" />
   </div>
 
@@ -319,12 +354,12 @@
   <div class="preview-wrap">
     <div class="preview-label">Preview</div>
     <table class="icon-grid-preview" role="presentation" id="previewTable" style="background-color:#79BB2F;">
-      <tr>
+      <tr id="previewHeaderRow">
         <td align="center" style="padding:30px 20px 10px; font-size:24px; line-height:32px; font-weight:bold; color:#212121;">
           <div id="previewHeader"></div>
         </td>
       </tr>
-      <tr>
+      <tr id="previewBodyRow">
         <td align="center" style="padding:0 20px 20px; font-size:15px; line-height:24px; color:#212121;">
           <div id="previewBody"></div>
         </td>
@@ -353,7 +388,7 @@
           </table>
         </td>
       </tr>
-      <tr>
+      <tr id="previewBtnRow">
         <td align="center" style="padding:16px 0 28px;">
           <a id="previewBtn" class="cta-button-preview" href="#" style="background-color:#212121; color:#ffffff;">LEARN MORE</a>
         </td>
@@ -383,7 +418,10 @@
       bgColor:      '#79BB2F',
       textColor:    '#212121',
       btnColor:     '#212121',
-      btnTextColor: '#ffffff'
+      btnTextColor: '#ffffff',
+      showHeader:   true,
+      showBody:     true,
+      showBtn:      true
     };
 
     /* ─── Init SDK ─── */
@@ -412,7 +450,9 @@
     /* ─── Build email HTML output from current data ─── */
     function buildContent(d) {
       var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 96);
-      return [
+      var bodyTopPad = d.showHeader ? '0' : '30px';
+
+      var lines = [
         '<style type="text/css">',
         '@media only screen and (max-width: 550px) {',
         '  .icon-col { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
@@ -422,17 +462,30 @@
         '[data-ogsb] .icon-grid-section .body-text { color: ' + d.textColor + ' !important; }',
         '[data-ogsb] .icon-grid-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
         '</style>',
-        '<table class="icon-grid-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; background-color:' + d.bgColor + ';" width="100%">',
-        '<tr>',
-        '  <td align="center" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; letter-spacing:0; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
-        '    <div class="header-text">' + d.headerText + '</div>',
-        '  </td>',
-        '</tr>',
-        '<tr>',
-        '  <td align="center" style="padding:0 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
-        '    <div class="body-text">' + d.bodyText + '</div>',
-        '  </td>',
-        '</tr>',
+        '<table class="icon-grid-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; background-color:' + d.bgColor + ';" width="100%">'
+      ];
+
+      if (d.showHeader) {
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; letter-spacing:0; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '    <div class="header-text">' + d.headerText + '</div>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      if (d.showBody) {
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '    <div class="body-text">' + d.bodyText + '</div>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      lines.push(
         '<tr>',
         '  <td align="center" style="padding:0; margin:0;">',
         '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
@@ -444,29 +497,36 @@
         '      </tr>',
         '    </table>',
         '  </td>',
-        '</tr>',
-        '<tr>',
-        '  <td align="center" style="padding:0 0 40px;">',
-        '    <div>',
-        '    <!--[if mso]>',
-        '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
-        '      href="' + d.ctaUrl + '"',
-        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
-        '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
-        '      <w:anchorlock/>',
-        '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
-        '        ' + d.ctaLabel,
-        '      </center>',
-        '    </v:roundrect>',
-        '    <![endif]-->',
-        '    <!--[if !mso]><!-->',
-        '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:12px 24px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center;">' + d.ctaLabel + '</span></a>',
-        '    <!--<![endif]-->',
-        '    </div>',
-        '  </td>',
-        '</tr>',
-        '</table>'
-      ].join('\n');
+        '</tr>'
+      );
+
+      if (d.showBtn) {
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:0 0 40px;">',
+          '    <div>',
+          '    <!--[if mso]>',
+          '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+          '      href="' + d.ctaUrl + '"',
+          '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+          '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+          '      <w:anchorlock/>',
+          '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
+          '        ' + d.ctaLabel,
+          '      </center>',
+          '    </v:roundrect>',
+          '    <![endif]-->',
+          '    <!--[if !mso]><!-->',
+          '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:12px 24px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center;">' + d.ctaLabel + '</span></a>',
+          '    <!--<![endif]-->',
+          '    </div>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      lines.push('</table>');
+      return lines.join('\n');
     }
 
     /* ─── Update live preview ─── */
@@ -490,6 +550,10 @@
       btn.style.color = d.btnTextColor;
       btn.textContent = d.ctaLabel;
       btn.setAttribute('href', d.ctaUrl || '#');
+
+      document.getElementById('previewHeaderRow').style.display = d.showHeader ? '' : 'none';
+      document.getElementById('previewBodyRow').style.display   = d.showBody   ? '' : 'none';
+      document.getElementById('previewBtnRow').style.display    = d.showBtn    ? '' : 'none';
     }
 
     /* ─── Read all field values into a data object ─── */
@@ -502,7 +566,10 @@
         bgColor:      document.getElementById('bgColor').value      || DEFAULTS.bgColor,
         textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
         btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
-        btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor
+        btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor,
+        showHeader:   document.getElementById('showHeader').checked,
+        showBody:     document.getElementById('showBody').checked,
+        showBtn:      document.getElementById('showBtn').checked
       };
       [1, 2, 3, 4].forEach(function(n) {
         d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
@@ -529,6 +596,10 @@
       setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
       setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
+
+      document.getElementById('showHeader').checked = d.showHeader !== false;
+      document.getElementById('showBody').checked   = d.showBody   !== false;
+      document.getElementById('showBtn').checked    = d.showBtn    !== false;
     }
 
     function setColor(hexId, pickerId, value) {
@@ -582,13 +653,17 @@
       });
     });
 
-    /* ─── Bind text and textarea fields ─── */
+    /* ─── Bind text, textarea fields, and toggles ─── */
     var textFields = ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl'];
     [1, 2, 3, 4].forEach(function(n) {
       textFields.push('icon' + n + 'Url', 'icon' + n + 'Alt', 'icon' + n + 'Text');
     });
     textFields.forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
+    });
+
+    ['showHeader', 'showBody', 'showBtn'].forEach(function(id) {
+      document.getElementById(id).addEventListener('change', onChange);
     });
 
     /* ─── On load: render defaults immediately, then restore saved data ─── */
