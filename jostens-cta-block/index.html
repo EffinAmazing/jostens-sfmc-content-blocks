@@ -134,6 +134,16 @@
       margin-top: 3px;
     }
 
+    .swatch-none {
+      background: linear-gradient(to bottom right, #fff calc(50% - 1px), #bbb calc(50% - 1px), #bbb calc(50% + 1px), #fff calc(50% + 1px));
+      border-color: #ddd;
+    }
+
+    .bg-color-row-disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
     .preview-wrap {
       margin-top: 24px;
       border-top: 1px solid #e0e0e0;
@@ -208,12 +218,13 @@
   <div class="field">
     <label>Background Color</label>
     <div class="swatch-row">
+      <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
       <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
       <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
       <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
       <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
     </div>
-    <div class="color-row">
+    <div class="color-row" id="bgColorRow">
       <input type="color" id="bgColorPicker" value="#D22E7A" />
       <input type="text" id="bgColor" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
     </div>
@@ -287,6 +298,7 @@
       console.error('BlockSDK failed to load - check CDN URL');
     }
     var sdk = new BlockSDK();
+    var bgIsTransparent = false;
 
     /* ─── Build email HTML output from current data ─── */
     function buildContent(d) {
@@ -295,12 +307,12 @@
 
       var lines = [
         '<style>',
-        '  [data-ogsb] .cta-section { background-color: ' + d.bgColor + ' !important; }',
+        d.bgColor !== 'transparent' ? '  [data-ogsb] .cta-section { background-color: ' + d.bgColor + ' !important; }' : '',
         '  [data-ogsb] .cta-section .header-text { color: ' + d.textColor + ' !important; }',
         '  [data-ogsb] .cta-section .body-text { color: ' + d.textColor + ' !important; }',
         '  [data-ogsb] .cta-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
         '</style>',
-        '<table class="cta-section" role="presentation" width="100%" style="background-color:' + d.bgColor + ';">'
+        '<table class="cta-section" role="presentation" width="100%"' + (d.bgColor !== 'transparent' ? ' style="background-color:' + d.bgColor + ';"' : '') + '>'
       ];
 
       if (d.showHeader) {
@@ -355,7 +367,7 @@
     /* ─── Update live preview ─── */
     function updatePreview(d) {
       updateSwatchActive(d.bgColor);
-      document.getElementById('previewTable').style.backgroundColor = d.bgColor;
+      document.getElementById('previewTable').style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
       document.getElementById('previewHeader').style.color = d.textColor;
       document.getElementById('previewHeader').innerHTML = d.headerText;
       document.getElementById('previewBody').style.color = d.textColor;
@@ -378,7 +390,7 @@
         bodyText:     document.getElementById('bodyText').value     || DEFAULTS.bodyText,
         ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
         ctaUrl:       document.getElementById('ctaUrl').value       || DEFAULTS.ctaUrl,
-        bgColor:      document.getElementById('bgColor').value      || DEFAULTS.bgColor,
+        bgColor:      bgIsTransparent ? 'transparent' : (document.getElementById('bgColor').value || DEFAULTS.bgColor),
         textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
         btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
         btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor,
@@ -395,7 +407,14 @@
       document.getElementById('ctaLabel').value   = d.ctaLabel     || DEFAULTS.ctaLabel;
       document.getElementById('ctaUrl').value     = d.ctaUrl       || DEFAULTS.ctaUrl;
 
-      setColor('bgColor',      'bgColorPicker',      d.bgColor      || DEFAULTS.bgColor);
+      if (d.bgColor === 'transparent') {
+        bgIsTransparent = true;
+        document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+      } else {
+        bgIsTransparent = false;
+        setColor('bgColor', 'bgColorPicker', d.bgColor || DEFAULTS.bgColor);
+        document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+      }
       setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
       setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
@@ -461,7 +480,15 @@
 
     document.querySelectorAll('.swatch').forEach(function(swatch) {
       swatch.addEventListener('click', function() {
-        setColor('bgColor', 'bgColorPicker', this.getAttribute('data-color'));
+        var color = this.getAttribute('data-color');
+        if (color === 'transparent') {
+          bgIsTransparent = true;
+          document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+        } else {
+          bgIsTransparent = false;
+          setColor('bgColor', 'bgColorPicker', color);
+          document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+        }
         onChange();
       });
     });

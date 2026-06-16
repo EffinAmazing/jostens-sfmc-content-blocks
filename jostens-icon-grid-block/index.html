@@ -138,6 +138,16 @@
       margin-top: 3px;
     }
 
+    .swatch-none {
+      background: linear-gradient(to bottom right, #fff calc(50% - 1px), #bbb calc(50% - 1px), #bbb calc(50% + 1px), #fff calc(50% + 1px));
+      border-color: #ddd;
+    }
+
+    .bg-color-row-disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
     .icon-group {
       border: 1px solid #e8e8e8;
       border-radius: 4px;
@@ -315,12 +325,13 @@
   <div class="field">
     <label>Background Color</label>
     <div class="swatch-row">
+      <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
       <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
       <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
       <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
       <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
     </div>
-    <div class="color-row">
+    <div class="color-row" id="bgColorRow">
       <input type="color" id="bgColorPicker" value="#79BB2F" />
       <input type="text" id="bgColor" class="color-hex" placeholder="#79BB2F" value="#79BB2F" />
     </div>
@@ -430,6 +441,7 @@
       console.error('BlockSDK failed to load - check CDN URL');
     }
     var sdk = new BlockSDK();
+    var bgIsTransparent = false;
 
     /* ─── Build one icon column ─── */
     function iconCell(d, n) {
@@ -457,12 +469,12 @@
         '@media only screen and (max-width: 550px) {',
         '  .icon-col { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
         '}',
-        '[data-ogsb] .icon-grid-section { background-color: ' + d.bgColor + ' !important; }',
+        d.bgColor !== 'transparent' ? '[data-ogsb] .icon-grid-section { background-color: ' + d.bgColor + ' !important; }' : '',
         '[data-ogsb] .icon-grid-section .header-text { color: ' + d.textColor + ' !important; }',
         '[data-ogsb] .icon-grid-section .body-text { color: ' + d.textColor + ' !important; }',
         '[data-ogsb] .icon-grid-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
         '</style>',
-        '<table class="icon-grid-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; background-color:' + d.bgColor + ';" width="100%">'
+        '<table class="icon-grid-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + (d.bgColor !== 'transparent' ? ' background-color:' + d.bgColor + ';' : '') + '" width="100%">'
       ];
 
       if (d.showHeader) {
@@ -532,7 +544,7 @@
     /* ─── Update live preview ─── */
     function updatePreview(d) {
       updateSwatchActive(d.bgColor);
-      document.getElementById('previewTable').style.backgroundColor = d.bgColor;
+      document.getElementById('previewTable').style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
       document.getElementById('previewHeader').style.color = d.textColor;
       document.getElementById('previewHeader').innerHTML = d.headerText;
       document.getElementById('previewBody').style.color = d.textColor;
@@ -563,7 +575,7 @@
         bodyText:     document.getElementById('bodyText').value     || DEFAULTS.bodyText,
         ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
         ctaUrl:       document.getElementById('ctaUrl').value       || DEFAULTS.ctaUrl,
-        bgColor:      document.getElementById('bgColor').value      || DEFAULTS.bgColor,
+        bgColor:      bgIsTransparent ? 'transparent' : (document.getElementById('bgColor').value || DEFAULTS.bgColor),
         textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
         btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
         btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor,
@@ -592,7 +604,14 @@
         document.getElementById('icon' + n + 'Text').value = d['icon' + n + 'Text'] || DEFAULTS['icon' + n + 'Text'];
       });
 
-      setColor('bgColor',      'bgColorPicker',      d.bgColor      || DEFAULTS.bgColor);
+      if (d.bgColor === 'transparent') {
+        bgIsTransparent = true;
+        document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+      } else {
+        bgIsTransparent = false;
+        setColor('bgColor', 'bgColorPicker', d.bgColor || DEFAULTS.bgColor);
+        document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+      }
       setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
       setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
@@ -648,7 +667,15 @@
 
     document.querySelectorAll('.swatch').forEach(function(swatch) {
       swatch.addEventListener('click', function() {
-        setColor('bgColor', 'bgColorPicker', this.getAttribute('data-color'));
+        var color = this.getAttribute('data-color');
+        if (color === 'transparent') {
+          bgIsTransparent = true;
+          document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+        } else {
+          bgIsTransparent = false;
+          setColor('bgColor', 'bgColorPicker', color);
+          document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+        }
         onChange();
       });
     });
