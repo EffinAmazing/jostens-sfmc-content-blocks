@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jostens Hero Block</title>
+  <script src="https://cdn.jsdelivr.net/npm/blocksdk@1.3.0/blocksdk.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: #333;
+      padding: 16px;
+      background: #f9f9f9;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin: 20px 0 10px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 4px;
+    }
+
+    .section-title:first-child { margin-top: 0; }
+
+    .field { margin-bottom: 14px; }
+
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .field-header label:first-child { margin-bottom: 0; }
+
+    .toggle-check {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: normal;
+      color: #888;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-check input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.15s;
+      appearance: auto;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #D22E7A;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="color"] {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px;
+      cursor: pointer;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .color-hex { flex: 1; }
+
+    .swatch-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: 0;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+    }
+
+    .swatch:hover { border-color: #999; }
+    .swatch.active { border-color: #333; }
+
+    .swatch-none {
+      background: linear-gradient(to bottom right, #fff calc(50% - 1px), #bbb calc(50% - 1px), #bbb calc(50% + 1px), #fff calc(50% + 1px));
+      border-color: #ddd;
+    }
+
+    .bg-color-row-disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+
+    .bg-mode-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+
+    .bg-tab {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .bg-tab:hover { border-color: #aaa; color: #555; }
+
+    .bg-tab.active {
+      background: #D22E7A;
+      color: #fff;
+      border-color: #D22E7A;
+    }
+
+    .preview-wrap {
+      margin-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 16px;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    #previewTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .preview-btn {
+      display: inline-block;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Content ─── -->
+  <div class="section-title">Content</div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="headerText">Header Text</label>
+      <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+    </div>
+    <input type="text" id="headerText" placeholder="THE JOSTENS DIFFERENCE" />
+  </div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="bodyText">Body Text</label>
+      <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+    </div>
+    <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
+  </div>
+
+  <!-- ─── Hero Image ─── -->
+  <div class="section-title">Hero Image</div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="heroImageUrl">Image URL</label>
+      <label class="toggle-check"><input type="checkbox" id="showHero" checked> Show</label>
+    </div>
+    <input type="text" id="heroImageUrl" placeholder="https://..." />
+    <div class="hint">Upload to SFMC Content Builder, then paste the URL here. Designed for full-width (1-column) slots at 768px.</div>
+  </div>
+
+  <div class="field">
+    <label for="heroPosition">Image Position</label>
+    <select id="heroPosition">
+      <option value="top">Top</option>
+      <option value="afterHeader">After Header</option>
+      <option value="afterBody">After Body</option>
+      <option value="bottom">Bottom</option>
+    </select>
+  </div>
+
+  <!-- ─── Button ─── -->
+  <div class="section-title">Button</div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="ctaLabel">Button Label</label>
+      <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+    </div>
+    <input type="text" id="ctaLabel" placeholder="LET'S PARTNER TOGETHER" />
+  </div>
+
+  <div class="field">
+    <label for="ctaUrl">Button URL</label>
+    <input type="text" id="ctaUrl" placeholder="%%=RedirectTo(@URL)=%% or https://..." />
+    <div class="hint">Accepts plain URLs or AMPscript expressions.</div>
+  </div>
+
+  <!-- ─── Background ─── -->
+  <div class="section-title">Background</div>
+
+  <div class="bg-mode-tabs">
+    <button class="bg-tab active" data-mode="solid">Solid</button>
+    <button class="bg-tab" data-mode="image">Image</button>
+    <button class="bg-tab" data-mode="gradient">Gradient</button>
+  </div>
+
+  <!-- Solid controls -->
+  <div id="bgSolidControls">
+    <div class="field">
+      <label>Background Color</label>
+      <div class="swatch-row" id="bgSolidSwatches">
+        <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
+        <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+        <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+        <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+        <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+      </div>
+      <div class="color-row" id="bgColorRow">
+        <input type="color" id="bgColorPicker" value="#D22E7A" />
+        <input type="text" id="bgColor" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Image controls -->
+  <div id="bgImageControls" style="display:none;">
+    <div class="field">
+      <label for="bgImageUrl">Background Image URL</label>
+      <input type="text" id="bgImageUrl" placeholder="https://..." />
+      <div class="hint">Upload to SFMC Content Builder, then paste the URL here.</div>
+    </div>
+    <div class="field">
+      <label>Outlook Fallback Color</label>
+      <div class="swatch-row" id="bgImageSwatches">
+        <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+        <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+        <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+        <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+      </div>
+      <div class="color-row">
+        <input type="color" id="bgColorPickerImg" value="#D22E7A" />
+        <input type="text" id="bgColorImg" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Gradient controls -->
+  <div id="bgGradientControls" style="display:none;">
+    <div class="field">
+      <label>From Color</label>
+      <div class="swatch-row" id="bgGradFromSwatches">
+        <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+        <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+        <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+        <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+      </div>
+      <div class="color-row">
+        <input type="color" id="gradientFromPicker" value="#D22E7A" />
+        <input type="text" id="gradientFrom" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
+      </div>
+    </div>
+    <div class="field">
+      <label>To Color</label>
+      <div class="swatch-row" id="bgGradToSwatches">
+        <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+        <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+        <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+        <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+      </div>
+      <div class="color-row">
+        <input type="color" id="gradientToPicker" value="#264496" />
+        <input type="text" id="gradientTo" class="color-hex" placeholder="#264496" value="#264496" />
+      </div>
+    </div>
+    <div class="field">
+      <label for="gradientDir">Direction</label>
+      <select id="gradientDir">
+        <option value="to bottom">Top → Bottom</option>
+        <option value="to top">Bottom → Top</option>
+        <option value="to right">Left → Right</option>
+        <option value="to left">Right → Left</option>
+        <option value="135deg">Diagonal ↘</option>
+        <option value="45deg">Diagonal ↗</option>
+      </select>
+    </div>
+    <div class="hint" style="margin-bottom:14px;">Outlook shows the From color as a solid fallback.</div>
+  </div>
+
+  <!-- ─── Style ─── -->
+  <div class="section-title">Style</div>
+
+  <div class="field">
+    <label>Text Color</label>
+    <div class="color-row">
+      <input type="color" id="textColorPicker" value="#ffffff" />
+      <input type="text" id="textColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Background Color</label>
+    <div class="color-row">
+      <input type="color" id="btnColorPicker" value="#000000" />
+      <input type="text" id="btnColor" class="color-hex" placeholder="#000000" value="#000000" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Text Color</label>
+    <div class="color-row">
+      <input type="color" id="btnTextColorPicker" value="#ffffff" />
+      <input type="text" id="btnTextColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <!-- ─── Preview ─── -->
+  <div class="preview-wrap">
+    <div class="preview-label">Preview</div>
+    <table id="previewTable" role="presentation">
+      <tbody id="previewTbody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    /* ─── Defaults ─── */
+    var DEFAULTS = {
+      headerText:   'THE JOSTENS DIFFERENCE',
+      bodyText:     'Everything in the Digital Classroom is shaped by adviser feedback and built by people who understand yearbook. When questions come up, you\'re supported by a local Jostens rep who knows your school and your goals.',
+      ctaLabel:     "LET'S PARTNER TOGETHER",
+      ctaUrl:       '%%=RedirectTo(@JYBKProspectFormURL)=%%',
+      heroImageUrl: '',
+      heroPosition: 'top',
+      bgMode:       'solid',
+      bgColor:      '#D22E7A',
+      bgImageUrl:   '',
+      gradientFrom: '#D22E7A',
+      gradientTo:   '#264496',
+      gradientDir:  'to bottom',
+      textColor:    '#ffffff',
+      btnColor:     '#000000',
+      btnTextColor: '#ffffff',
+      showHeader:   true,
+      showBody:     true,
+      showBtn:      true,
+      showHero:     true
+    };
+
+    /* ─── Init SDK ─── */
+    var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
+    if (!BlockSDK) console.error('BlockSDK failed to load - check CDN URL');
+    var sdk = new BlockSDK();
+
+    /* ─── State ─── */
+    var bgIsTransparent = false;
+
+    /* ─── Show/hide background mode controls ─── */
+    function showBgControls(mode) {
+      document.getElementById('bgSolidControls').style.display    = mode === 'solid'    ? '' : 'none';
+      document.getElementById('bgImageControls').style.display    = mode === 'image'    ? '' : 'none';
+      document.getElementById('bgGradientControls').style.display = mode === 'gradient' ? '' : 'none';
+      document.querySelectorAll('.bg-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
+      });
+      if (mode !== 'solid') {
+        bgIsTransparent = false;
+        document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+      }
+    }
+
+    /* ─── Read current bg mode from active tab ─── */
+    function readBgMode() {
+      var active = document.querySelector('.bg-tab.active');
+      return active ? active.getAttribute('data-mode') : 'solid';
+    }
+
+    /* ─── Build email HTML ─── */
+    function buildContent(d) {
+      var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 96);
+      var hasHero  = d.showHero && d.heroImageUrl;
+
+      /* --- Padding logic --- */
+      var heroAboveBody = hasHero && d.heroPosition === 'afterHeader';
+      var heroAboveBtn  = hasHero && d.heroPosition === 'afterBody';
+      var bodyTopPad = !d.showHeader ? '32px' : heroAboveBody ? '16px' : '0';
+      var btnTopPad  = (!d.showHeader && !d.showBody && !heroAboveBtn) ? '32px' : heroAboveBtn ? '16px' : '0';
+
+      /* --- Background --- */
+      var tableBgStyle = '';
+      var darkModeBgRule = '';
+
+      if (d.bgMode === 'solid') {
+        if (d.bgColor !== 'transparent') {
+          tableBgStyle   = 'background-color:' + d.bgColor + ';';
+          darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.bgColor + ' !important; }';
+        }
+      } else if (d.bgMode === 'image' && d.bgImageUrl) {
+        tableBgStyle   = 'background-color:' + d.bgColor + '; background-image:url(' + d.bgImageUrl + '); background-size:cover; background-position:center center;';
+        darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.bgColor + ' !important; }';
+      } else if (d.bgMode === 'gradient') {
+        tableBgStyle   = 'background-color:' + d.gradientFrom + '; background-image:linear-gradient(' + d.gradientDir + ', ' + d.gradientFrom + ', ' + d.gradientTo + ');';
+        darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.gradientFrom + ' !important; }';
+      }
+
+      /* --- VML background image wrapper for Outlook --- */
+      var vmlOpen = '', vmlClose = '';
+      if (d.bgMode === 'image' && d.bgImageUrl) {
+        vmlOpen = [
+          '<!--[if mso]>',
+          '<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:768px;">',
+          '  <v:fill type="frame" src="' + d.bgImageUrl + '" color="' + d.bgColor + '"/>',
+          '  <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">',
+          '<![endif]-->'
+        ].join('\n');
+        vmlClose = [
+          '<!--[if mso]>',
+          '  </v:textbox>',
+          '</v:rect>',
+          '<![endif]-->'
+        ].join('\n');
+      }
+
+      /* --- Build rows --- */
+      var heroRow = hasHero ? [
+        '<tr>',
+        '  <td align="center" style="padding:0; font-size:0; line-height:0; border:0;">',
+        '    <img src="' + d.heroImageUrl + '" width="768" style="display:block; width:100%; max-width:768px; height:auto; border:0;" />',
+        '  </td>',
+        '</tr>'
+      ].join('\n') : '';
+
+      var headerRow = d.showHeader ? [
+        '<tr>',
+        '  <td align="center" style="padding:32px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '    <div class="header-text">' + d.headerText + '</div>',
+        '  </td>',
+        '</tr>'
+      ].join('\n') : '';
+
+      var bodyRow = d.showBody ? [
+        '<tr>',
+        '  <td align="center" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '    <div class="body-text">' + d.bodyText + '</div>',
+        '  </td>',
+        '</tr>'
+      ].join('\n') : '';
+
+      var btnRow = d.showBtn ? [
+        '<tr>',
+        '  <td align="center" style="padding:' + btnTopPad + ' 0 28px;">',
+        '    <div>',
+        '    <!--[if mso]>',
+        '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+        '      href="' + d.ctaUrl + '"',
+        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+        '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+        '      <w:anchorlock/>',
+        '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
+        '        ' + d.ctaLabel,
+        '      </center>',
+        '    </v:roundrect>',
+        '    <![endif]-->',
+        '    <!--[if !mso]><!-->',
+        '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:12px 24px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center;">' + d.ctaLabel + '</span></a>',
+        '    <!--<![endif]-->',
+        '    </div>',
+        '  </td>',
+        '</tr>'
+      ].join('\n') : '';
+
+      /* --- Order rows --- */
+      var rows;
+      switch (d.heroPosition) {
+        case 'afterHeader': rows = [headerRow, heroRow, bodyRow, btnRow]; break;
+        case 'afterBody':   rows = [headerRow, bodyRow, heroRow, btnRow]; break;
+        case 'bottom':      rows = [headerRow, bodyRow, btnRow, heroRow]; break;
+        default:            rows = [heroRow, headerRow, bodyRow, btnRow];
+      }
+      rows = rows.filter(function(r) { return r; });
+
+      return [
+        '<style>',
+        darkModeBgRule,
+        '[data-ogsb] .hero-section .header-text { color: ' + d.textColor + ' !important; }',
+        '[data-ogsb] .hero-section .body-text { color: ' + d.textColor + ' !important; }',
+        '[data-ogsb] .hero-section .cta-button { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
+        '</style>',
+        vmlOpen,
+        '<table class="hero-section" role="presentation" width="100%"' + (tableBgStyle ? ' style="' + tableBgStyle + '"' : '') + '>',
+        rows.join('\n'),
+        '</table>',
+        vmlClose
+      ].join('\n');
+    }
+
+    /* ─── Update live preview ─── */
+    function updatePreview(d) {
+      var table  = document.getElementById('previewTable');
+      var tbody  = document.getElementById('previewTbody');
+      var hasHero = d.showHero && d.heroImageUrl;
+
+      /* Background */
+      if (d.bgMode === 'solid') {
+        table.style.backgroundImage = '';
+        table.style.backgroundSize  = '';
+        table.style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
+      } else if (d.bgMode === 'image') {
+        table.style.backgroundColor = d.bgColor;
+        if (d.bgImageUrl) {
+          table.style.backgroundImage    = 'url(' + d.bgImageUrl + ')';
+          table.style.backgroundSize     = 'cover';
+          table.style.backgroundPosition = 'center center';
+        } else {
+          table.style.backgroundImage = '';
+        }
+      } else if (d.bgMode === 'gradient') {
+        table.style.backgroundColor = d.gradientFrom;
+        table.style.backgroundImage = 'linear-gradient(' + d.gradientDir + ', ' + d.gradientFrom + ', ' + d.gradientTo + ')';
+        table.style.backgroundSize  = '';
+      }
+
+      /* Build preview rows */
+      var heroHtml = hasHero ? (
+        '<tr><td style="padding:0; font-size:0; line-height:0;">' +
+        '<img src="' + d.heroImageUrl + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>'
+      ) : '';
+
+      var headerHtml = d.showHeader ? (
+        '<tr><td align="center" style="padding:32px 20px 10px; font-family:Helvetica,Arial,sans-serif; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:' + d.textColor + ';">' +
+        d.headerText + '</td></tr>'
+      ) : '';
+
+      var bodyHtml = d.showBody ? (
+        '<tr><td align="center" style="padding:0 20px 20px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + ';">' +
+        d.bodyText + '</td></tr>'
+      ) : '';
+
+      var btnHtml = d.showBtn ? (
+        '<tr><td align="center" style="padding:16px 0 28px;">' +
+        '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' +
+        d.ctaLabel + '</a></td></tr>'
+      ) : '';
+
+      var rows;
+      switch (d.heroPosition) {
+        case 'afterHeader': rows = [headerHtml, heroHtml, bodyHtml, btnHtml]; break;
+        case 'afterBody':   rows = [headerHtml, bodyHtml, heroHtml, btnHtml]; break;
+        case 'bottom':      rows = [headerHtml, bodyHtml, btnHtml, heroHtml]; break;
+        default:            rows = [heroHtml, headerHtml, bodyHtml, btnHtml];
+      }
+
+      tbody.innerHTML = rows.join('');
+
+      /* Swatch active states */
+      updateSwatchGroupActive('bgSolidSwatches',  d.bgColor);
+      updateSwatchGroupActive('bgImageSwatches',  d.bgColor);
+      updateSwatchGroupActive('bgGradFromSwatches', d.gradientFrom);
+      updateSwatchGroupActive('bgGradToSwatches',   d.gradientTo);
+    }
+
+    /* ─── Read all fields ─── */
+    function readFields() {
+      var mode = readBgMode();
+      return {
+        headerText:   document.getElementById('headerText').value   || DEFAULTS.headerText,
+        bodyText:     document.getElementById('bodyText').value     || DEFAULTS.bodyText,
+        ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
+        ctaUrl:       document.getElementById('ctaUrl').value       || DEFAULTS.ctaUrl,
+        heroImageUrl: document.getElementById('heroImageUrl').value || '',
+        heroPosition: document.getElementById('heroPosition').value || DEFAULTS.heroPosition,
+        bgMode:       mode,
+        bgColor:      (mode === 'solid' && bgIsTransparent) ? 'transparent' : (document.getElementById('bgColor').value || DEFAULTS.bgColor),
+        bgImageUrl:   document.getElementById('bgImageUrl').value   || '',
+        gradientFrom: document.getElementById('gradientFrom').value || DEFAULTS.gradientFrom,
+        gradientTo:   document.getElementById('gradientTo').value   || DEFAULTS.gradientTo,
+        gradientDir:  document.getElementById('gradientDir').value  || DEFAULTS.gradientDir,
+        textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
+        btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
+        btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor,
+        showHeader:   document.getElementById('showHeader').checked,
+        showBody:     document.getElementById('showBody').checked,
+        showBtn:      document.getElementById('showBtn').checked,
+        showHero:     document.getElementById('showHero').checked
+      };
+    }
+
+    /* ─── Populate fields from saved data ─── */
+    function populateFields(d) {
+      document.getElementById('headerText').value   = d.headerText   || DEFAULTS.headerText;
+      document.getElementById('bodyText').value     = d.bodyText     || DEFAULTS.bodyText;
+      document.getElementById('ctaLabel').value     = d.ctaLabel     || DEFAULTS.ctaLabel;
+      document.getElementById('ctaUrl').value       = d.ctaUrl       || DEFAULTS.ctaUrl;
+      document.getElementById('heroImageUrl').value = d.heroImageUrl || '';
+      document.getElementById('heroPosition').value = d.heroPosition || DEFAULTS.heroPosition;
+      document.getElementById('bgImageUrl').value   = d.bgImageUrl   || '';
+      document.getElementById('gradientDir').value  = d.gradientDir  || DEFAULTS.gradientDir;
+
+      var mode = d.bgMode || 'solid';
+      showBgControls(mode);
+
+      if (d.bgColor === 'transparent') {
+        bgIsTransparent = true;
+        document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+      } else {
+        bgIsTransparent = false;
+        setColor('bgColor', 'bgColorPicker', d.bgColor || DEFAULTS.bgColor);
+        setColor('bgColorImg', 'bgColorPickerImg', d.bgColor || DEFAULTS.bgColor);
+        document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+      }
+
+      setColor('gradientFrom', 'gradientFromPicker', d.gradientFrom || DEFAULTS.gradientFrom);
+      setColor('gradientTo',   'gradientToPicker',   d.gradientTo   || DEFAULTS.gradientTo);
+      setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
+      setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
+      setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
+
+      document.getElementById('showHeader').checked = d.showHeader !== false;
+      document.getElementById('showBody').checked   = d.showBody   !== false;
+      document.getElementById('showBtn').checked    = d.showBtn    !== false;
+      document.getElementById('showHero').checked   = d.showHero   !== false;
+    }
+
+    function setColor(hexId, pickerId, value) {
+      document.getElementById(hexId).value    = value;
+      document.getElementById(pickerId).value = value;
+    }
+
+    /* ─── Push to SDK ─── */
+    function onChange() {
+      var d = readFields();
+      updatePreview(d);
+      sdk.setData(d, function() {
+        sdk.setContent(buildContent(d));
+        var previewData = Object.assign({}, d, {
+          ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+        });
+        sdk.setSuperContent(buildContent(previewData));
+      });
+    }
+
+    /* ─── Color pair binding ─── */
+    function bindColorPair(pickerId, hexId) {
+      document.getElementById(pickerId).addEventListener('input', function() {
+        document.getElementById(hexId).value = this.value;
+        onChange();
+      });
+      document.getElementById(hexId).addEventListener('input', function() {
+        if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+          document.getElementById(pickerId).value = this.value;
+        }
+        onChange();
+      });
+    }
+
+    bindColorPair('bgColorPicker',      'bgColor');
+    /* bgColorImg mirrors bgColor — keep them in sync */
+    document.getElementById('bgColorPickerImg').addEventListener('input', function() {
+      setColor('bgColorImg', 'bgColorPickerImg', this.value);
+      setColor('bgColor',    'bgColorPicker',    this.value);
+      onChange();
+    });
+    document.getElementById('bgColorImg').addEventListener('input', function() {
+      if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+        setColor('bgColor', 'bgColorPicker', this.value);
+        document.getElementById('bgColorPickerImg').value = this.value;
+      }
+      onChange();
+    });
+    bindColorPair('gradientFromPicker', 'gradientFrom');
+    bindColorPair('gradientToPicker',   'gradientTo');
+    bindColorPair('textColorPicker',    'textColor');
+    bindColorPair('btnColorPicker',     'btnColor');
+    bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    /* ─── Swatch active state ─── */
+    function updateSwatchGroupActive(groupId, color) {
+      document.getElementById(groupId).querySelectorAll('.swatch').forEach(function(s) {
+        var c = s.getAttribute('data-color') || '';
+        s.classList.toggle('active', c.toLowerCase() === (color || '').toLowerCase());
+      });
+    }
+
+    /* ─── Swatch click — solid bg (includes transparent) ─── */
+    document.getElementById('bgSolidSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        var color = this.getAttribute('data-color');
+        if (color === 'transparent') {
+          bgIsTransparent = true;
+          document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+        } else {
+          bgIsTransparent = false;
+          setColor('bgColor', 'bgColorPicker', color);
+          document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+        }
+        onChange();
+      });
+    });
+
+    /* ─── Swatch click — image fallback ─── */
+    document.getElementById('bgImageSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        setColor('bgColorImg', 'bgColorPickerImg', this.getAttribute('data-color'));
+        setColor('bgColor',    'bgColorPicker',    this.getAttribute('data-color'));
+        onChange();
+      });
+    });
+
+    /* ─── Swatch click — gradient from ─── */
+    document.getElementById('bgGradFromSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        setColor('gradientFrom', 'gradientFromPicker', this.getAttribute('data-color'));
+        onChange();
+      });
+    });
+
+    /* ─── Swatch click — gradient to ─── */
+    document.getElementById('bgGradToSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        setColor('gradientTo', 'gradientToPicker', this.getAttribute('data-color'));
+        onChange();
+      });
+    });
+
+    /* ─── Background mode tabs ─── */
+    document.querySelectorAll('.bg-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showBgControls(this.getAttribute('data-mode'));
+        onChange();
+      });
+    });
+
+    /* ─── Text / select fields ─── */
+    ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl', 'heroImageUrl', 'heroPosition', 'bgImageUrl', 'gradientDir'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', onChange);
+      document.getElementById(id).addEventListener('change', onChange);
+    });
+
+    /* ─── Toggles ─── */
+    ['showHeader', 'showBody', 'showBtn', 'showHero'].forEach(function(id) {
+      document.getElementById(id).addEventListener('change', onChange);
+    });
+
+    /* ─── On load ─── */
+    updatePreview(DEFAULTS);
+    sdk.getData(function(savedData) {
+      var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
+      populateFields(d);
+      updatePreview(d);
+      sdk.setContent(buildContent(d));
+      var previewData = Object.assign({}, d, {
+        ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+      });
+      sdk.setSuperContent(buildContent(previewData));
+    });
+  </script>
+</body>
+</html>
