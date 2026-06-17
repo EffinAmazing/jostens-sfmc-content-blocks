@@ -66,7 +66,8 @@
     }
 
     input[type="text"],
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 7px 10px;
       border: 1px solid #ccc;
@@ -76,10 +77,12 @@
       color: #333;
       background: #fff;
       transition: border-color 0.15s;
+      appearance: auto;
     }
 
     input[type="text"]:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
       outline: none;
       border-color: #D22E7A;
     }
@@ -132,12 +135,6 @@
     .swatch:hover { border-color: #999; }
     .swatch.active { border-color: #333; }
 
-    .hint {
-      font-size: 11px;
-      color: #999;
-      margin-top: 3px;
-    }
-
     .swatch-none {
       background: linear-gradient(to bottom right, #fff calc(50% - 1px), #bbb calc(50% - 1px), #bbb calc(50% + 1px), #fff calc(50% + 1px));
       border-color: #ddd;
@@ -146,6 +143,12 @@
     .bg-color-row-disabled {
       opacity: 0.4;
       pointer-events: none;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
     }
 
     .icon-group {
@@ -196,7 +199,6 @@
     }
 
     .preview-icon-col {
-      width: 25%;
       padding: 8px;
       text-align: center;
       vertical-align: top;
@@ -238,7 +240,17 @@
   <!-- ─── Icon Fields ─── -->
   <div class="section-title">Icons</div>
 
-  <div class="icon-group">
+  <div class="field">
+    <label for="iconCount">Number of Icons</label>
+    <select id="iconCount">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+    </select>
+  </div>
+
+  <div class="icon-group" id="iconGroup1">
     <div class="icon-group-title">Icon 1</div>
     <div class="field">
       <label for="icon1Url">Image URL</label>
@@ -254,7 +266,7 @@
     </div>
   </div>
 
-  <div class="icon-group">
+  <div class="icon-group" id="iconGroup2">
     <div class="icon-group-title">Icon 2</div>
     <div class="field">
       <label for="icon2Url">Image URL</label>
@@ -270,7 +282,7 @@
     </div>
   </div>
 
-  <div class="icon-group">
+  <div class="icon-group" id="iconGroup3">
     <div class="icon-group-title">Icon 3</div>
     <div class="field">
       <label for="icon3Url">Image URL</label>
@@ -286,7 +298,7 @@
     </div>
   </div>
 
-  <div class="icon-group">
+  <div class="icon-group" id="iconGroup4">
     <div class="icon-group-title">Icon 4</div>
     <div class="field">
       <label for="icon4Url">Image URL</label>
@@ -377,21 +389,21 @@
       </tr>
       <tr>
         <td>
-          <table width="100%" role="presentation" style="border-collapse:collapse;">
+          <table width="100%" role="presentation" style="border-collapse:collapse;" id="previewIconRow">
             <tr>
-              <td class="preview-icon-col">
+              <td class="preview-icon-col" id="previewIconCol1" style="width:25%;">
                 <img id="previewIcon1Img" src="" alt="" width="32">
                 <div id="previewIcon1Text"></div>
               </td>
-              <td class="preview-icon-col">
+              <td class="preview-icon-col" id="previewIconCol2" style="width:25%;">
                 <img id="previewIcon2Img" src="" alt="" width="32">
                 <div id="previewIcon2Text"></div>
               </td>
-              <td class="preview-icon-col">
+              <td class="preview-icon-col" id="previewIconCol3" style="width:25%;">
                 <img id="previewIcon3Img" src="" alt="" width="32">
                 <div id="previewIcon3Text"></div>
               </td>
-              <td class="preview-icon-col">
+              <td class="preview-icon-col" id="previewIconCol4" style="width:25%;">
                 <img id="previewIcon4Img" src="" alt="" width="32">
                 <div id="previewIcon4Text"></div>
               </td>
@@ -410,6 +422,7 @@
   <script>
     /* ─── Defaults ─── */
     var DEFAULTS = {
+      iconCount:    4,
       headerText:   'SUPPORT FOR<br>REAL CLASSROOMS',
       bodyText:     'Beyond lesson planning, the Digital Classroom includes:',
       icon1Url:     'https://cdn.jostens.com/apps/shop/images/email/2026/Yearbook/B2B/Aircover/Icon/light-bulb.png',
@@ -437,16 +450,37 @@
 
     /* ─── Init SDK ─── */
     var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
-    if (!BlockSDK) {
-      console.error('BlockSDK failed to load - check CDN URL');
-    }
+    if (!BlockSDK) console.error('BlockSDK failed to load - check CDN URL');
     var sdk = new BlockSDK();
     var bgIsTransparent = false;
 
+    /* ─── Show/hide icon editor groups based on count ─── */
+    function updateIconGroups(count) {
+      [1, 2, 3, 4].forEach(function(n) {
+        document.getElementById('iconGroup' + n).style.display = n <= count ? '' : 'none';
+      });
+    }
+
+    /* ─── Column class and width by icon count ─── */
+    function iconColClass(count) {
+      if (count === 3) return 'icon-col-3';
+      if (count === 1) return 'icon-col-1';
+      return 'icon-col-24'; /* 2 and 4 share 2-up mobile behavior */
+    }
+
+    function iconColWidth(count) {
+      if (count === 1) return '100%';
+      if (count === 2) return '50%';
+      if (count === 3) return '33.333%';
+      return '25%';
+    }
+
     /* ─── Build one icon column ─── */
-    function iconCell(d, n) {
+    function iconCell(d, n, count) {
+      var cls   = iconColClass(count);
+      var width = iconColWidth(count);
       return [
-        '        <td align="center" class="icon-col" style="width:25%; padding:10px;" valign="top">',
+        '        <td align="center" class="' + cls + '" style="width:' + width + '; padding:10px;" valign="top">',
         '          <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">',
         '            <tr><td align="center" style="padding:0 0 10px;">',
         '              <img alt="' + d['icon' + n + 'Alt'] + '" src="' + d['icon' + n + 'Url'] + '" style="border:none; display:block; margin:0 auto;" width="40">',
@@ -459,15 +493,17 @@
       ].join('\n');
     }
 
-    /* ─── Build email HTML output from current data ─── */
+    /* ─── Build email HTML output ─── */
     function buildContent(d) {
+      var count    = d.iconCount || 4;
       var btnWidth = Math.max(180, d.ctaLabel.length * 9 + 96);
       var bodyTopPad = d.showHeader ? '0' : '30px';
 
       var lines = [
         '<style type="text/css">',
         '@media only screen and (max-width: 550px) {',
-        '  .icon-col { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
+        '  .icon-col-24 { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
+        '  .icon-col-3  { display:block !important; width:100% !important; padding-left:0 !important; padding-right:0 !important; }',
         '}',
         d.bgColor !== 'transparent' ? '[data-ogsb] .icon-grid-section { background-color: ' + d.bgColor + ' !important; }' : '',
         '[data-ogsb] .icon-grid-section .header-text { color: ' + d.textColor + ' !important; }',
@@ -497,15 +533,18 @@
         );
       }
 
+      /* Icon grid row — only render active count */
+      var cells = [];
+      for (var i = 1; i <= count; i++) {
+        cells.push(iconCell(d, i, count));
+      }
+
       lines.push(
         '<tr>',
         '  <td align="center" style="padding:0; margin:0;">',
         '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
         '      <tr>',
-        iconCell(d, 1),
-        iconCell(d, 2),
-        iconCell(d, 3),
-        iconCell(d, 4),
+        cells.join('\n'),
         '      </tr>',
         '    </table>',
         '  </td>',
@@ -543,24 +582,30 @@
 
     /* ─── Update live preview ─── */
     function updatePreview(d) {
+      var count = d.iconCount || 4;
       updateSwatchActive(d.bgColor);
+
       document.getElementById('previewTable').style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
       document.getElementById('previewHeader').style.color = d.textColor;
-      document.getElementById('previewHeader').innerHTML = d.headerText;
-      document.getElementById('previewBody').style.color = d.textColor;
-      document.getElementById('previewBody').innerHTML = d.bodyText;
+      document.getElementById('previewHeader').innerHTML   = d.headerText;
+      document.getElementById('previewBody').style.color  = d.textColor;
+      document.getElementById('previewBody').innerHTML    = d.bodyText;
 
+      var colWidth = iconColWidth(count);
       [1, 2, 3, 4].forEach(function(n) {
-        document.getElementById('previewIcon' + n + 'Img').src = d['icon' + n + 'Url'] || '';
-        document.getElementById('previewIcon' + n + 'Img').alt = d['icon' + n + 'Alt'] || '';
-        document.getElementById('previewIcon' + n + 'Text').innerHTML = d['icon' + n + 'Text'] || '';
-        document.getElementById('previewIcon' + n + 'Text').style.color = d.textColor;
+        var col = document.getElementById('previewIconCol' + n);
+        col.style.display = n <= count ? '' : 'none';
+        col.style.width   = n <= count ? colWidth : '';
+        document.getElementById('previewIcon' + n + 'Img').src     = d['icon' + n + 'Url'] || '';
+        document.getElementById('previewIcon' + n + 'Img').alt     = d['icon' + n + 'Alt'] || '';
+        document.getElementById('previewIcon' + n + 'Text').innerHTML    = d['icon' + n + 'Text'] || '';
+        document.getElementById('previewIcon' + n + 'Text').style.color  = d.textColor;
       });
 
       var btn = document.getElementById('previewBtn');
       btn.style.backgroundColor = d.btnColor;
-      btn.style.color = d.btnTextColor;
-      btn.textContent = d.ctaLabel;
+      btn.style.color           = d.btnTextColor;
+      btn.textContent           = d.ctaLabel;
       btn.setAttribute('href', d.ctaUrl || '#');
 
       document.getElementById('previewHeaderRow').style.display = d.showHeader ? '' : 'none';
@@ -568,9 +613,10 @@
       document.getElementById('previewBtnRow').style.display    = d.showBtn    ? '' : 'none';
     }
 
-    /* ─── Read all field values into a data object ─── */
+    /* ─── Read all fields ─── */
     function readFields() {
       var d = {
+        iconCount:    parseInt(document.getElementById('iconCount').value) || 4,
         headerText:   document.getElementById('headerText').value   || DEFAULTS.headerText,
         bodyText:     document.getElementById('bodyText').value     || DEFAULTS.bodyText,
         ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
@@ -591,8 +637,12 @@
       return d;
     }
 
-    /* ─── Populate fields from a saved data object ─── */
+    /* ─── Populate fields from saved data ─── */
     function populateFields(d) {
+      var count = d.iconCount || 4;
+      document.getElementById('iconCount').value = count;
+      updateIconGroups(count);
+
       document.getElementById('headerText').value = d.headerText || DEFAULTS.headerText;
       document.getElementById('bodyText').value   = d.bodyText   || DEFAULTS.bodyText;
       document.getElementById('ctaLabel').value   = d.ctaLabel   || DEFAULTS.ctaLabel;
@@ -612,6 +662,7 @@
         setColor('bgColor', 'bgColorPicker', d.bgColor || DEFAULTS.bgColor);
         document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
       }
+
       setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
       setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
@@ -626,7 +677,7 @@
       document.getElementById(pickerId).value = value;
     }
 
-    /* ─── Push updated content and data to SDK ─── */
+    /* ─── Push to SDK ─── */
     function onChange() {
       var d = readFields();
       updatePreview(d);
@@ -639,7 +690,7 @@
       });
     }
 
-    /* ─── Bind color pickers <-> hex inputs ─── */
+    /* ─── Color pair binding ─── */
     function bindColorPair(pickerId, hexId) {
       document.getElementById(pickerId).addEventListener('input', function() {
         document.getElementById(hexId).value = this.value;
@@ -658,13 +709,15 @@
     bindColorPair('btnColorPicker',     'btnColor');
     bindColorPair('btnTextColorPicker', 'btnTextColor');
 
-    /* ─── Bind background color swatches ─── */
+    /* ─── Swatch active state ─── */
     function updateSwatchActive(color) {
+      var lc = (color || '').toLowerCase();
       document.querySelectorAll('.swatch').forEach(function(s) {
-        s.classList.toggle('active', s.getAttribute('data-color').toLowerCase() === color.toLowerCase());
+        s.classList.toggle('active', (s.getAttribute('data-color') || '').toLowerCase() === lc);
       });
     }
 
+    /* ─── Swatch clicks ─── */
     document.querySelectorAll('.swatch').forEach(function(swatch) {
       swatch.addEventListener('click', function() {
         var color = this.getAttribute('data-color');
@@ -680,7 +733,13 @@
       });
     });
 
-    /* ─── Bind text, textarea fields, and toggles ─── */
+    /* ─── Icon count dropdown ─── */
+    document.getElementById('iconCount').addEventListener('change', function() {
+      updateIconGroups(parseInt(this.value));
+      onChange();
+    });
+
+    /* ─── Text / textarea fields ─── */
     var textFields = ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl'];
     [1, 2, 3, 4].forEach(function(n) {
       textFields.push('icon' + n + 'Url', 'icon' + n + 'Alt', 'icon' + n + 'Text');
@@ -689,12 +748,14 @@
       document.getElementById(id).addEventListener('input', onChange);
     });
 
+    /* ─── Toggles ─── */
     ['showHeader', 'showBody', 'showBtn'].forEach(function(id) {
       document.getElementById(id).addEventListener('change', onChange);
     });
 
-    /* ─── On load: render defaults immediately, then restore saved data ─── */
+    /* ─── On load ─── */
     updatePreview(DEFAULTS);
+    updateIconGroups(DEFAULTS.iconCount);
     sdk.getData(function(savedData) {
       var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
       populateFields(d);
