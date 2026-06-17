@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jostens List Block</title>
+  <script src="https://cdn.jsdelivr.net/npm/blocksdk@1.3.0/blocksdk.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      color: #333;
+      padding: 16px;
+      background: #f9f9f9;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin: 20px 0 10px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 4px;
+    }
+
+    .section-title:first-child { margin-top: 0; }
+
+    .field { margin-bottom: 14px; }
+
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .field-header label:first-child { margin-bottom: 0; }
+
+    .toggle-check {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: normal;
+      color: #888;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-check input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.15s;
+      appearance: auto;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #D22E7A;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="color"] {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 2px;
+      cursor: pointer;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .color-hex { flex: 1; }
+
+    .swatch-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      padding: 0;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+    }
+
+    .swatch:hover { border-color: #999; }
+    .swatch.active { border-color: #333; }
+
+    .swatch-none {
+      background: linear-gradient(to bottom right, #fff calc(50% - 1px), #bbb calc(50% - 1px), #bbb calc(50% + 1px), #fff calc(50% + 1px));
+      border-color: #ddd;
+    }
+
+    .bg-color-row-disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+
+    .layout-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0;
+    }
+
+    .layout-tab {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .layout-tab:hover { border-color: #aaa; color: #555; }
+
+    .layout-tab.active {
+      background: #D22E7A;
+      color: #fff;
+      border-color: #D22E7A;
+    }
+
+    .item-group {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+
+    .item-group-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .preview-wrap {
+      margin-top: 24px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 16px;
+    }
+
+    .preview-label {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    #previewTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .preview-btn {
+      display: inline-block;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 24px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Content ─── -->
+  <div class="section-title">Content</div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="headerText">Header Text</label>
+      <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+    </div>
+    <input type="text" id="headerText" placeholder="Section Header" />
+  </div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="bodyText">Body Text</label>
+      <label class="toggle-check"><input type="checkbox" id="showBody"> Show</label>
+    </div>
+    <textarea id="bodyText" placeholder="Optional section intro text..."></textarea>
+  </div>
+
+  <!-- ─── Layout ─── -->
+  <div class="section-title">Layout</div>
+
+  <div class="field">
+    <label>List Style</label>
+    <div class="layout-tabs">
+      <button class="layout-tab active" data-layout="horizontal">Horizontal</button>
+      <button class="layout-tab" data-layout="vertical">Vertical</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="itemCount">Number of Items</label>
+    <select id="itemCount">
+      <option value="1">1</option>
+      <option value="2" selected>2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="toggle-check" style="font-size:12px; font-weight:600; color:#444; gap:6px;">
+      <input type="checkbox" id="showIcons" checked> Show Icons
+    </label>
+    <div class="hint">80×80px. Upload to SFMC Content Builder and paste the URL in each item.</div>
+  </div>
+
+  <!-- ─── Items ─── -->
+  <div class="section-title">Items</div>
+
+  <div class="item-group" id="itemGroup1">
+    <div class="item-group-title">Item 1</div>
+    <div class="field">
+      <label for="item1IconUrl">Icon URL</label>
+      <input type="text" id="item1IconUrl" placeholder="https://..." />
+    </div>
+    <div class="field">
+      <label for="item1Header">Header</label>
+      <input type="text" id="item1Header" placeholder="Item Header" />
+    </div>
+    <div class="field">
+      <label for="item1Body">Body</label>
+      <textarea id="item1Body" placeholder="Item description..."></textarea>
+    </div>
+    <div class="field">
+      <div class="field-header">
+        <label for="item1BtnLabel">Button Label</label>
+        <label class="toggle-check"><input type="checkbox" id="item1ShowBtn" checked> Show</label>
+      </div>
+      <input type="text" id="item1BtnLabel" placeholder="Learn More" />
+    </div>
+    <div class="field">
+      <label for="item1BtnUrl">Button URL</label>
+      <input type="text" id="item1BtnUrl" placeholder="https://..." />
+    </div>
+  </div>
+
+  <div class="item-group" id="itemGroup2">
+    <div class="item-group-title">Item 2</div>
+    <div class="field">
+      <label for="item2IconUrl">Icon URL</label>
+      <input type="text" id="item2IconUrl" placeholder="https://..." />
+    </div>
+    <div class="field">
+      <label for="item2Header">Header</label>
+      <input type="text" id="item2Header" placeholder="Item Header" />
+    </div>
+    <div class="field">
+      <label for="item2Body">Body</label>
+      <textarea id="item2Body" placeholder="Item description..."></textarea>
+    </div>
+    <div class="field">
+      <div class="field-header">
+        <label for="item2BtnLabel">Button Label</label>
+        <label class="toggle-check"><input type="checkbox" id="item2ShowBtn" checked> Show</label>
+      </div>
+      <input type="text" id="item2BtnLabel" placeholder="Learn More" />
+    </div>
+    <div class="field">
+      <label for="item2BtnUrl">Button URL</label>
+      <input type="text" id="item2BtnUrl" placeholder="https://..." />
+    </div>
+  </div>
+
+  <div class="item-group" id="itemGroup3" style="display:none;">
+    <div class="item-group-title">Item 3</div>
+    <div class="field">
+      <label for="item3IconUrl">Icon URL</label>
+      <input type="text" id="item3IconUrl" placeholder="https://..." />
+    </div>
+    <div class="field">
+      <label for="item3Header">Header</label>
+      <input type="text" id="item3Header" placeholder="Item Header" />
+    </div>
+    <div class="field">
+      <label for="item3Body">Body</label>
+      <textarea id="item3Body" placeholder="Item description..."></textarea>
+    </div>
+    <div class="field">
+      <div class="field-header">
+        <label for="item3BtnLabel">Button Label</label>
+        <label class="toggle-check"><input type="checkbox" id="item3ShowBtn" checked> Show</label>
+      </div>
+      <input type="text" id="item3BtnLabel" placeholder="Learn More" />
+    </div>
+    <div class="field">
+      <label for="item3BtnUrl">Button URL</label>
+      <input type="text" id="item3BtnUrl" placeholder="https://..." />
+    </div>
+  </div>
+
+  <div class="item-group" id="itemGroup4" style="display:none;">
+    <div class="item-group-title">Item 4</div>
+    <div class="field">
+      <label for="item4IconUrl">Icon URL</label>
+      <input type="text" id="item4IconUrl" placeholder="https://..." />
+    </div>
+    <div class="field">
+      <label for="item4Header">Header</label>
+      <input type="text" id="item4Header" placeholder="Item Header" />
+    </div>
+    <div class="field">
+      <label for="item4Body">Body</label>
+      <textarea id="item4Body" placeholder="Item description..."></textarea>
+    </div>
+    <div class="field">
+      <div class="field-header">
+        <label for="item4BtnLabel">Button Label</label>
+        <label class="toggle-check"><input type="checkbox" id="item4ShowBtn" checked> Show</label>
+      </div>
+      <input type="text" id="item4BtnLabel" placeholder="Learn More" />
+    </div>
+    <div class="field">
+      <label for="item4BtnUrl">Button URL</label>
+      <input type="text" id="item4BtnUrl" placeholder="https://..." />
+    </div>
+  </div>
+
+  <!-- ─── Background ─── -->
+  <div class="section-title">Background</div>
+
+  <div class="field">
+    <label>Background Color</label>
+    <div class="swatch-row" id="bgSwatches">
+      <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
+      <button class="swatch" data-color="#00ACD8" style="background:#00ACD8;" title="Teal"></button>
+      <button class="swatch" data-color="#79BB2F" style="background:#79BB2F;" title="Green"></button>
+      <button class="swatch" data-color="#D22E7A" style="background:#D22E7A;" title="Pink"></button>
+      <button class="swatch" data-color="#264496" style="background:#264496;" title="Blue"></button>
+    </div>
+    <div class="color-row" id="bgColorRow">
+      <input type="color" id="bgColorPicker" value="#D22E7A" />
+      <input type="text" id="bgColor" class="color-hex" placeholder="#D22E7A" value="#D22E7A" />
+    </div>
+  </div>
+
+  <!-- ─── Style ─── -->
+  <div class="section-title">Style</div>
+
+  <div class="field">
+    <label>Text Color</label>
+    <div class="color-row">
+      <input type="color" id="textColorPicker" value="#ffffff" />
+      <input type="text" id="textColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Background Color</label>
+    <div class="color-row">
+      <input type="color" id="btnColorPicker" value="#000000" />
+      <input type="text" id="btnColor" class="color-hex" placeholder="#000000" value="#000000" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Button Text Color</label>
+    <div class="color-row">
+      <input type="color" id="btnTextColorPicker" value="#ffffff" />
+      <input type="text" id="btnTextColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <!-- ─── Preview ─── -->
+  <div class="preview-wrap">
+    <div class="preview-label">Preview</div>
+    <table id="previewTable" role="presentation">
+      <tbody id="previewTbody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    var DEFAULTS = {
+      itemCount:    2,
+      layout:       'horizontal',
+      showIcons:    true,
+      showHeader:   true,
+      showBody:     false,
+      headerText:   'THE JOSTENS DIFFERENCE',
+      bodyText:     'Optional section intro text.',
+      bgColor:      '#D22E7A',
+      textColor:    '#ffffff',
+      btnColor:     '#000000',
+      btnTextColor: '#ffffff',
+      item1IconUrl: '', item1Header: 'Item One',   item1Body: 'Description text for this list item goes here.', item1BtnLabel: 'Learn More', item1BtnUrl: '#', item1ShowBtn: true,
+      item2IconUrl: '', item2Header: 'Item Two',   item2Body: 'Description text for this list item goes here.', item2BtnLabel: 'Learn More', item2BtnUrl: '#', item2ShowBtn: true,
+      item3IconUrl: '', item3Header: 'Item Three', item3Body: 'Description text for this list item goes here.', item3BtnLabel: 'Learn More', item3BtnUrl: '#', item3ShowBtn: true,
+      item4IconUrl: '', item4Header: 'Item Four',  item4Body: 'Description text for this list item goes here.', item4BtnLabel: 'Learn More', item4BtnUrl: '#', item4ShowBtn: true
+    };
+
+    var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
+    if (!BlockSDK) console.error('BlockSDK failed to load');
+    var sdk = new BlockSDK();
+
+    var bgIsTransparent = false;
+
+    /* ─── Layout helpers ─── */
+    function readLayout() {
+      var active = document.querySelector('.layout-tab.active');
+      return active ? active.getAttribute('data-layout') : 'horizontal';
+    }
+
+    function listColClass(count) {
+      if (count === 3) return 'list-col-3';
+      if (count === 1) return 'list-col-1';
+      return 'list-col-24';
+    }
+
+    function listColWidth(count) {
+      if (count === 1) return '100%';
+      if (count === 2) return '50%';
+      if (count === 3) return '33.333%';
+      return '25%';
+    }
+
+    /* ─── Show/hide item groups ─── */
+    function updateItemGroups(count) {
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('itemGroup' + i).style.display = i <= count ? '' : 'none';
+      }
+    }
+
+    /* ─── Build item data array from d ─── */
+    function getItems(d, count) {
+      var items = [];
+      for (var i = 1; i <= count; i++) {
+        items.push({
+          iconUrl:  d['item' + i + 'IconUrl']  || '',
+          header:   d['item' + i + 'Header']   || '',
+          body:     d['item' + i + 'Body']     || '',
+          btnLabel: d['item' + i + 'BtnLabel'] || '',
+          btnUrl:   d['item' + i + 'BtnUrl']   || '#',
+          showBtn:  d['item' + i + 'ShowBtn']  !== false
+        });
+      }
+      return items;
+    }
+
+    /* ─── Build VML+HTML button for email ─── */
+    function buildBtn(item, d) {
+      if (!item.showBtn || !item.btnLabel) return '';
+      var btnWidth = Math.max(140, item.btnLabel.length * 9 + 60);
+      return [
+        '<div>',
+        '<!--[if mso]>',
+        '<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+        '  href="' + item.btnUrl + '"',
+        '  style="height:36px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+        '  arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+        '  <w:anchorlock/>',
+        '  <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:13px; font-weight:bold;">',
+        '    ' + item.btnLabel,
+        '  </center>',
+        '</v:roundrect>',
+        '<![endif]-->',
+        '<!--[if !mso]><!-->',
+        '<a alias="Button_List_Link" class="list-btn" href="' + item.btnUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:10px 20px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:13px; line-height:16px; font-weight:bold; text-align:center;">' + item.btnLabel + '</span></a>',
+        '<!--<![endif]-->',
+        '</div>'
+      ].join('\n');
+    }
+
+    /* ─── Build horizontal item <td> ─── */
+    function buildHorizontalCell(item, count, d) {
+      var cls   = listColClass(count);
+      var width = listColWidth(count);
+      var rows  = [];
+
+      if (d.showIcons && item.iconUrl) {
+        rows.push(
+          '<tr><td align="center" style="padding:0 0 10px;">',
+          '<img src="' + item.iconUrl + '" width="80" height="80" style="display:block; width:80px; height:80px; border:0;" />',
+          '</td></tr>'
+        );
+      }
+
+      if (item.header) {
+        rows.push(
+          '<tr><td align="center" style="padding:0 0 8px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+          item.header,
+          '</td></tr>'
+        );
+      }
+
+      if (item.body) {
+        rows.push(
+          '<tr><td align="center" style="padding:0 4px 12px; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+          item.body,
+          '</td></tr>'
+        );
+      }
+
+      if (item.showBtn && item.btnLabel) {
+        rows.push(
+          '<tr><td align="center" style="padding:0 0 10px;">',
+          buildBtn(item, d),
+          '</td></tr>'
+        );
+      }
+
+      return [
+        '<td align="center" class="' + cls + '" style="width:' + width + '; padding:10px;" valign="top">',
+        '<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">',
+        rows.join('\n'),
+        '</table>',
+        '</td>'
+      ].join('\n');
+    }
+
+    /* ─── Build vertical item <tr> ─── */
+    function buildVerticalRow(item, isFirst, d) {
+      var topPad = isFirst ? '0' : '20px';
+      var cells  = [];
+
+      if (d.showIcons) {
+        cells.push(
+          '<td width="100" valign="top" style="width:100px; padding:0 16px 0 0;">',
+          item.iconUrl
+            ? '<img src="' + item.iconUrl + '" width="80" height="80" style="display:block; width:80px; height:80px; border:0;" />'
+            : '<div style="width:80px; height:80px;"></div>',
+          '</td>'
+        );
+      }
+
+      var textContent = [];
+      if (item.header) {
+        textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:8px;">' + item.header + '</div>');
+      }
+      if (item.body) {
+        textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:12px;">' + item.body + '</div>');
+      }
+      if (item.showBtn && item.btnLabel) {
+        textContent.push(buildBtn(item, d));
+      }
+
+      cells.push(
+        '<td valign="top">',
+        textContent.join('\n'),
+        '</td>'
+      );
+
+      return [
+        '<tr>',
+        '<td style="padding:' + topPad + ' 0 0;">',
+        '<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">',
+        '<tr>',
+        cells.join('\n'),
+        '</tr>',
+        '</table>',
+        '</td>',
+        '</tr>'
+      ].join('\n');
+    }
+
+    /* ─── Build email HTML ─── */
+    function buildContent(d) {
+      var count  = d.itemCount || 2;
+      var layout = d.layout    || 'horizontal';
+      var bgStyle = d.bgColor !== 'transparent' ? ' background-color:' + d.bgColor + ';' : '';
+      var darkModeBgRule = d.bgColor !== 'transparent'
+        ? '[data-ogsb] .list-section { background-color: ' + d.bgColor + ' !important; }'
+        : '';
+
+      var items = getItems(d, count);
+
+      var lines = ['<style type="text/css">'];
+
+      if (layout === 'horizontal') {
+        lines.push(
+          '@media only screen and (max-width: 550px) {',
+          '  .list-col-24 { display:inline-block !important; width:46% !important; padding-left:2% !important; padding-right:2% !important; }',
+          '  .list-col-3  { display:block !important; width:96% !important; padding-left:2% !important; padding-right:2% !important; }',
+          '}'
+        );
+      }
+
+      lines.push(
+        darkModeBgRule,
+        '[data-ogsb] .list-section .list-header { color: ' + d.textColor + ' !important; }',
+        '[data-ogsb] .list-section .list-body { color: ' + d.textColor + ' !important; }',
+        '[data-ogsb] .list-section .list-btn { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
+        '</style>',
+        '<table class="list-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + bgStyle + '" width="100%">'
+      );
+
+      if (d.showHeader && d.headerText) {
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '    <div class="list-header">' + d.headerText + '</div>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      if (d.showBody && d.bodyText) {
+        var bodyTopPad = d.showHeader ? '0' : '30px';
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '    <div class="list-body">' + d.bodyText + '</div>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      if (layout === 'horizontal') {
+        lines.push(
+          '<tr>',
+          '  <td align="center" style="padding:0; margin:0;">',
+          '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
+          '      <tr>'
+        );
+        items.forEach(function(item) {
+          lines.push(buildHorizontalCell(item, count, d));
+        });
+        lines.push(
+          '      </tr>',
+          '    </table>',
+          '  </td>',
+          '</tr>'
+        );
+      } else {
+        lines.push(
+          '<tr>',
+          '  <td style="padding:20px;">',
+          '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">'
+        );
+        items.forEach(function(item, i) {
+          lines.push(buildVerticalRow(item, i === 0, d));
+        });
+        lines.push(
+          '    </table>',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
+      lines.push('</table>');
+      return lines.join('\n');
+    }
+
+    /* ─── Update live preview ─── */
+    function updatePreview(d) {
+      var table  = document.getElementById('previewTable');
+      var tbody  = document.getElementById('previewTbody');
+      var count  = d.itemCount || 2;
+      var layout = d.layout    || 'horizontal';
+
+      table.style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
+
+      var items = getItems(d, count);
+      var html  = [];
+
+      if (d.showHeader && d.headerText) {
+        html.push(
+          '<tr><td align="center" style="padding:20px 16px 8px; font-family:Helvetica,Arial,sans-serif; font-size:20px; line-height:26px; font-weight:bold; color:' + d.textColor + ';">' + d.headerText + '</td></tr>'
+        );
+      }
+
+      if (d.showBody && d.bodyText) {
+        html.push(
+          '<tr><td align="center" style="padding:0 16px 12px; font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:' + d.textColor + ';">' + d.bodyText + '</td></tr>'
+        );
+      }
+
+      if (layout === 'horizontal') {
+        var colWidth = Math.floor(100 / count) + '%';
+        var cells = items.map(function(item) {
+          var c = '<td align="center" style="width:' + colWidth + '; padding:8px; vertical-align:top;">';
+          if (d.showIcons && item.iconUrl) {
+            c += '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; margin:0 auto 8px; width:60px; height:60px; border:0;" />';
+          }
+          if (item.header) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:6px;">' + item.header + '</div>';
+          if (item.body)   c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+          if (item.showBtn && item.btnLabel) c += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
+          c += '</td>';
+          return c;
+        });
+        html.push('<tr><td style="padding:0;"><table width="100%" style="border-collapse:collapse;"><tr>' + cells.join('') + '</tr></table></td></tr>');
+      } else {
+        items.forEach(function(item, i) {
+          var topPad = i === 0 ? '12px' : '16px';
+          var r = '<tr><td style="padding:' + topPad + ' 12px 0;"><table width="100%"><tr>';
+          if (d.showIcons) {
+            r += '<td width="70" valign="top" style="width:70px; padding-right:12px;">';
+            r += item.iconUrl
+              ? '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; width:60px; height:60px; border:0;" />'
+              : '<div style="width:60px; height:60px; background:rgba(255,255,255,0.15); border-radius:4px;"></div>';
+            r += '</td>';
+          }
+          r += '<td valign="top">';
+          if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
+          if (item.body)   r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+          if (item.showBtn && item.btnLabel) r += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
+          r += '</td></tr></table></td></tr>';
+          html.push(r);
+        });
+        html.push('<tr><td style="height:12px;"></td></tr>');
+      }
+
+      tbody.innerHTML = html.join('');
+      updateSwatchActive(d.bgColor);
+    }
+
+    /* ─── Read all fields ─── */
+    function readFields() {
+      var d = {
+        itemCount:    parseInt(document.getElementById('itemCount').value) || 2,
+        layout:       readLayout(),
+        showIcons:    document.getElementById('showIcons').checked,
+        showHeader:   document.getElementById('showHeader').checked,
+        showBody:     document.getElementById('showBody').checked,
+        headerText:   document.getElementById('headerText').value || DEFAULTS.headerText,
+        bodyText:     document.getElementById('bodyText').value   || DEFAULTS.bodyText,
+        bgColor:      bgIsTransparent ? 'transparent' : (document.getElementById('bgColor').value || DEFAULTS.bgColor),
+        textColor:    document.getElementById('textColor').value    || DEFAULTS.textColor,
+        btnColor:     document.getElementById('btnColor').value     || DEFAULTS.btnColor,
+        btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor
+      };
+      for (var i = 1; i <= 4; i++) {
+        d['item' + i + 'IconUrl']  = document.getElementById('item' + i + 'IconUrl').value  || '';
+        d['item' + i + 'Header']   = document.getElementById('item' + i + 'Header').value   || '';
+        d['item' + i + 'Body']     = document.getElementById('item' + i + 'Body').value     || '';
+        d['item' + i + 'BtnLabel'] = document.getElementById('item' + i + 'BtnLabel').value || '';
+        d['item' + i + 'BtnUrl']   = document.getElementById('item' + i + 'BtnUrl').value   || '#';
+        d['item' + i + 'ShowBtn']  = document.getElementById('item' + i + 'ShowBtn').checked;
+      }
+      return d;
+    }
+
+    /* ─── Populate fields from saved data ─── */
+    function populateFields(d) {
+      document.getElementById('headerText').value   = d.headerText || DEFAULTS.headerText;
+      document.getElementById('bodyText').value     = d.bodyText   || DEFAULTS.bodyText;
+      document.getElementById('showHeader').checked = d.showHeader !== false;
+      document.getElementById('showBody').checked   = d.showBody   !== false;
+      document.getElementById('showIcons').checked  = d.showIcons  !== false;
+
+      var layout = d.layout || 'horizontal';
+      document.querySelectorAll('.layout-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-layout') === layout);
+      });
+
+      var count = d.itemCount || 2;
+      document.getElementById('itemCount').value = count;
+      updateItemGroups(count);
+
+      if (d.bgColor === 'transparent') {
+        bgIsTransparent = true;
+        document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+      } else {
+        bgIsTransparent = false;
+        setColor('bgColor', 'bgColorPicker', d.bgColor || DEFAULTS.bgColor);
+        document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+      }
+
+      setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
+      setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
+      setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
+
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('item' + i + 'IconUrl').value   = d['item' + i + 'IconUrl']  || '';
+        document.getElementById('item' + i + 'Header').value    = d['item' + i + 'Header']   || '';
+        document.getElementById('item' + i + 'Body').value      = d['item' + i + 'Body']     || '';
+        document.getElementById('item' + i + 'BtnLabel').value  = d['item' + i + 'BtnLabel'] || '';
+        document.getElementById('item' + i + 'BtnUrl').value    = d['item' + i + 'BtnUrl']   || '';
+        document.getElementById('item' + i + 'ShowBtn').checked = d['item' + i + 'ShowBtn']  !== false;
+      }
+    }
+
+    function setColor(hexId, pickerId, value) {
+      document.getElementById(hexId).value    = value;
+      document.getElementById(pickerId).value = value;
+    }
+
+    /* ─── Swatch active state ─── */
+    function updateSwatchActive(color) {
+      document.getElementById('bgSwatches').querySelectorAll('.swatch').forEach(function(s) {
+        var c = (s.getAttribute('data-color') || '').toLowerCase();
+        s.classList.toggle('active', c === (color || '').toLowerCase());
+      });
+    }
+
+    /* ─── Push to SDK ─── */
+    function onChange() {
+      var d = readFields();
+      updatePreview(d);
+      sdk.setData(d, function() {
+        sdk.setContent(buildContent(d));
+        var previewData = {};
+        Object.keys(d).forEach(function(k) {
+          previewData[k] = (typeof d[k] === 'string' && d[k].indexOf('%%') !== -1) ? '#' : d[k];
+        });
+        sdk.setSuperContent(buildContent(previewData));
+      });
+    }
+
+    /* ─── Color pair binding ─── */
+    function bindColorPair(pickerId, hexId) {
+      document.getElementById(pickerId).addEventListener('input', function() {
+        document.getElementById(hexId).value = this.value;
+        onChange();
+      });
+      document.getElementById(hexId).addEventListener('input', function() {
+        if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+          document.getElementById(pickerId).value = this.value;
+        }
+        onChange();
+      });
+    }
+
+    bindColorPair('bgColorPicker',      'bgColor');
+    bindColorPair('textColorPicker',    'textColor');
+    bindColorPair('btnColorPicker',     'btnColor');
+    bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    /* ─── Swatch clicks ─── */
+    document.getElementById('bgSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
+      swatch.addEventListener('click', function() {
+        var color = this.getAttribute('data-color');
+        if (color === 'transparent') {
+          bgIsTransparent = true;
+          document.getElementById('bgColorRow').classList.add('bg-color-row-disabled');
+        } else {
+          bgIsTransparent = false;
+          setColor('bgColor', 'bgColorPicker', color);
+          document.getElementById('bgColorRow').classList.remove('bg-color-row-disabled');
+        }
+        onChange();
+      });
+    });
+
+    /* ─── Layout tabs ─── */
+    document.querySelectorAll('.layout-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.layout-tab').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        onChange();
+      });
+    });
+
+    /* ─── Item count ─── */
+    document.getElementById('itemCount').addEventListener('change', function() {
+      updateItemGroups(parseInt(this.value));
+      onChange();
+    });
+
+    /* ─── Text fields and toggles ─── */
+    ['headerText', 'bodyText'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', onChange);
+    });
+
+    ['showHeader', 'showBody', 'showIcons'].forEach(function(id) {
+      document.getElementById(id).addEventListener('change', onChange);
+    });
+
+    /* ─── Per-item field bindings ─── */
+    for (var n = 1; n <= 4; n++) {
+      (function(i) {
+        ['item' + i + 'IconUrl', 'item' + i + 'Header', 'item' + i + 'Body', 'item' + i + 'BtnLabel', 'item' + i + 'BtnUrl'].forEach(function(id) {
+          document.getElementById(id).addEventListener('input', onChange);
+        });
+        document.getElementById('item' + i + 'ShowBtn').addEventListener('change', onChange);
+      })(n);
+    }
+
+    /* ─── On load ─── */
+    updateItemGroups(DEFAULTS.itemCount);
+    updatePreview(DEFAULTS);
+    sdk.getData(function(savedData) {
+      var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
+      populateFields(d);
+      updatePreview(d);
+      sdk.setContent(buildContent(d));
+      var previewData = {};
+      Object.keys(d).forEach(function(k) {
+        previewData[k] = (typeof d[k] === 'string' && d[k].indexOf('%%') !== -1) ? '#' : d[k];
+      });
+      sdk.setSuperContent(buildContent(previewData));
+    });
+  </script>
+</body>
+</html>
