@@ -278,7 +278,7 @@
   <div class="field">
     <label for="imageWidth">Image Width (px)</label>
     <input type="text" id="imageWidth" placeholder="768" value="768" />
-    <div class="hint">Exact pixel width for Outlook. Left/right padding reduces this automatically.</div>
+    <div class="hint">Effective width for Outlook: <strong id="effectiveWidthDisplay">768px</strong></div>
   </div>
 
   <div class="field">
@@ -654,6 +654,8 @@
 
       /* Build preview rows */
       var previewImgPad = (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
+      var dispWidth = Math.max(1, (d.imageWidth || 768) - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
+      document.getElementById('effectiveWidthDisplay').textContent = dispWidth + 'px';
       var heroHtml = hasHero ? (
         '<tr><td style="padding:' + previewImgPad + '; font-size:0; line-height:0;">' +
         '<img src="' + d.heroImageUrl + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>'
