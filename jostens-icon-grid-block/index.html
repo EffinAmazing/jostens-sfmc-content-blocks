@@ -369,7 +369,14 @@
   <div class="field">
     <div class="field-header">
       <label for="ctaLabel">Button Label</label>
-      <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="btnAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+      </div>
     </div>
     <input type="text" id="ctaLabel" placeholder="LEARN MORE" value="LEARN MORE" />
   </div>
@@ -506,7 +513,8 @@
       showBtn:      true,
       headerAlign:   'center',
       bodyAlign:     'center',
-      iconTextAlign: 'center'
+      iconTextAlign: 'center',
+      btnAlign:      'center'
     };
 
     /* ─── Init SDK ─── */
@@ -615,7 +623,7 @@
       if (d.showBtn) {
         lines.push(
           '<tr>',
-          '  <td align="' + d.headerAlign + '" style="padding:0 0 40px; text-align:' + d.headerAlign + ';">',
+          '  <td align="' + d.btnAlign + '" style="padding:0 20px 40px; text-align:' + d.btnAlign + ';">',
           '    <div>',
           '    <!--[if mso]>',
           '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
@@ -672,8 +680,8 @@
       btn.style.color           = d.btnTextColor;
       btn.textContent           = d.ctaLabel;
       btn.setAttribute('href', d.ctaUrl || '#');
-      document.getElementById('previewBtnTd').setAttribute('align', d.headerAlign);
-      document.getElementById('previewBtnTd').style.textAlign = d.headerAlign;
+      document.getElementById('previewBtnTd').setAttribute('align', d.btnAlign);
+      document.getElementById('previewBtnTd').style.textAlign = d.btnAlign;
 
       document.getElementById('previewHeaderRow').style.display = d.showHeader ? '' : 'none';
       document.getElementById('previewBodyRow').style.display   = d.showBody   ? '' : 'none';
@@ -697,7 +705,8 @@
         showBtn:      document.getElementById('showBtn').checked,
         headerAlign:   readAlign('headerAlignBtns'),
         bodyAlign:     readAlign('bodyAlignBtns'),
-        iconTextAlign: readAlign('iconTextAlignBtns')
+        iconTextAlign: readAlign('iconTextAlignBtns'),
+        btnAlign:      readAlign('btnAlignBtns')
       };
       [1, 2, 3, 4].forEach(function(n) {
         d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
@@ -744,6 +753,7 @@
       setAlign('headerAlignBtns',   d.headerAlign   || 'center');
       setAlign('bodyAlignBtns',     d.bodyAlign     || 'center');
       setAlign('iconTextAlignBtns', d.iconTextAlign || 'center');
+      setAlign('btnAlignBtns',      d.btnAlign      || 'center');
       setAlign('globalAlignBtns',   d.headerAlign   || 'center');
     }
 
@@ -769,6 +779,7 @@
     function syncAlignDisabled() {
       document.getElementById('headerAlignBtns').classList.toggle('disabled', !document.getElementById('showHeader').checked);
       document.getElementById('bodyAlignBtns').classList.toggle('disabled',   !document.getElementById('showBody').checked);
+      document.getElementById('btnAlignBtns').classList.toggle('disabled',    !document.getElementById('showBtn').checked);
     }
 
     function readAlign(groupId) {
@@ -817,12 +828,14 @@
         setAlign('headerAlignBtns', align);
         setAlign('bodyAlignBtns',   align);
         setAlign('iconTextAlignBtns', align);
+        setAlign('btnAlignBtns',    align);
         onChange();
       });
     });
     bindAlignGroup('headerAlignBtns');
     bindAlignGroup('bodyAlignBtns');
     bindAlignGroup('iconTextAlignBtns');
+    bindAlignGroup('btnAlignBtns');
 
     /* ─── Swatch active state ─── */
     function updateSwatchActive(color) {

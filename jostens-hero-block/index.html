@@ -350,7 +350,14 @@
   <div class="field">
     <div class="field-header">
       <label for="ctaLabel">Button Label</label>
-      <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="btnAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showBtn" checked> Show</label>
+      </div>
     </div>
     <input type="text" id="ctaLabel" placeholder="LET'S PARTNER TOGETHER" />
   </div>
@@ -524,7 +531,8 @@
       showBtn:      true,
       showHero:     true,
       headerAlign:  'center',
-      bodyAlign:    'center'
+      bodyAlign:    'center',
+      btnAlign:     'center'
     };
 
     /* ─── Init SDK ─── */
@@ -631,7 +639,7 @@
 
       var btnRow = d.showBtn ? [
         '<tr>',
-        '  <td align="' + d.headerAlign + '" style="padding:' + btnTopPad + ' 0 28px; text-align:' + d.headerAlign + ';">',
+        '  <td align="' + d.btnAlign + '" style="padding:' + btnTopPad + ' 20px 28px; text-align:' + d.btnAlign + ';">',
         '    <div>',
         '    <!--[if mso]>',
         '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
@@ -723,7 +731,7 @@
       ) : '';
 
       var btnHtml = d.showBtn ? (
-        '<tr><td align="' + d.headerAlign + '" style="padding:16px 0 28px; text-align:' + d.headerAlign + ';">' +
+        '<tr><td align="' + d.btnAlign + '" style="padding:16px 20px 28px; text-align:' + d.btnAlign + ';">' +
         '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' +
         d.ctaLabel + '</a></td></tr>'
       ) : '';
@@ -775,7 +783,8 @@
         showBtn:      document.getElementById('showBtn').checked,
         showHero:     document.getElementById('showHero').checked,
         headerAlign:  readAlign('headerAlignBtns'),
-        bodyAlign:    readAlign('bodyAlignBtns')
+        bodyAlign:    readAlign('bodyAlignBtns'),
+        btnAlign:     readAlign('btnAlignBtns')
       };
     }
 
@@ -821,6 +830,7 @@
 
       setAlign('headerAlignBtns', d.headerAlign || 'center');
       setAlign('bodyAlignBtns',   d.bodyAlign   || 'center');
+      setAlign('btnAlignBtns',    d.btnAlign    || 'center');
       setAlign('globalAlignBtns', d.headerAlign || 'center');
     }
 
@@ -846,6 +856,7 @@
     function syncAlignDisabled() {
       document.getElementById('headerAlignBtns').classList.toggle('disabled', !document.getElementById('showHeader').checked);
       document.getElementById('bodyAlignBtns').classList.toggle('disabled',   !document.getElementById('showBody').checked);
+      document.getElementById('btnAlignBtns').classList.toggle('disabled',    !document.getElementById('showBtn').checked);
     }
 
     function readAlign(groupId) {
@@ -908,11 +919,13 @@
         setAlign('globalAlignBtns', align);
         setAlign('headerAlignBtns', align);
         setAlign('bodyAlignBtns',   align);
+        setAlign('btnAlignBtns',    align);
         onChange();
       });
     });
     bindAlignGroup('headerAlignBtns');
     bindAlignGroup('bodyAlignBtns');
+    bindAlignGroup('btnAlignBtns');
 
     /* ─── Swatch active state ─── */
     function updateSwatchGroupActive(groupId, color) {
