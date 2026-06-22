@@ -470,7 +470,7 @@
         </td>
       </tr>
       <tr id="previewBtnRow">
-        <td align="center" style="padding:16px 0 28px;">
+        <td id="previewBtnTd" align="center" style="padding:16px 0 28px;">
           <a id="previewBtn" class="cta-button-preview" href="#" style="background-color:#212121; color:#ffffff;">LEARN MORE</a>
         </td>
       </tr>
@@ -615,7 +615,7 @@
       if (d.showBtn) {
         lines.push(
           '<tr>',
-          '  <td align="center" style="padding:0 0 40px;">',
+          '  <td align="' + d.headerAlign + '" style="padding:0 0 40px; text-align:' + d.headerAlign + ';">',
           '    <div>',
           '    <!--[if mso]>',
           '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
@@ -672,6 +672,8 @@
       btn.style.color           = d.btnTextColor;
       btn.textContent           = d.ctaLabel;
       btn.setAttribute('href', d.ctaUrl || '#');
+      document.getElementById('previewBtnTd').setAttribute('align', d.headerAlign);
+      document.getElementById('previewBtnTd').style.textAlign = d.headerAlign;
 
       document.getElementById('previewHeaderRow').style.display = d.showHeader ? '' : 'none';
       document.getElementById('previewBodyRow').style.display   = d.showBody   ? '' : 'none';
