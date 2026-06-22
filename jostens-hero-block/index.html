@@ -171,6 +171,7 @@
     .align-btn:last-child { border-right: none; }
     .align-btn:hover { background: #f0f0f0; color: #555; }
     .align-btn.active { background: #D22E7A; color: #fff; }
+    .align-btns.disabled { opacity: 0.35; pointer-events: none; }
 
     .bg-mode-tabs {
       display: flex;
@@ -742,6 +743,7 @@
       updateSwatchGroupActive('bgImageSwatches',  d.bgColor);
       updateSwatchGroupActive('bgGradFromSwatches', d.gradientFrom);
       updateSwatchGroupActive('bgGradToSwatches',   d.gradientTo);
+      syncAlignDisabled();
     }
 
     /* ─── Read all fields ─── */
@@ -841,6 +843,11 @@
     }
 
     /* ─── Alignment helpers ─── */
+    function syncAlignDisabled() {
+      document.getElementById('headerAlignBtns').classList.toggle('disabled', !document.getElementById('showHeader').checked);
+      document.getElementById('bodyAlignBtns').classList.toggle('disabled',   !document.getElementById('showBody').checked);
+    }
+
     function readAlign(groupId) {
       var active = document.querySelector('#' + groupId + ' .align-btn.active');
       return active ? active.getAttribute('data-align') : 'center';

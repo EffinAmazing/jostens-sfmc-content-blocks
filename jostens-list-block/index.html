@@ -171,6 +171,7 @@
     .align-btn:last-child { border-right: none; }
     .align-btn:hover { background: #f0f0f0; color: #555; }
     .align-btn.active { background: #D22E7A; color: #fff; }
+    .align-btns.disabled { opacity: 0.35; pointer-events: none; }
 
     .layout-tabs {
       display: flex;
@@ -196,6 +197,35 @@
     .layout-tab:hover { border-color: #aaa; color: #555; }
 
     .layout-tab.active {
+      background: #D22E7A;
+      color: #fff;
+      border-color: #D22E7A;
+    }
+
+    .liststyle-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 0;
+    }
+
+    .liststyle-tab {
+      flex: 1;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .liststyle-tab:hover { border-color: #aaa; color: #555; }
+
+    .liststyle-tab.active {
       background: #D22E7A;
       color: #fff;
       border-color: #D22E7A;
@@ -290,6 +320,16 @@
 
   <div class="field">
     <label>List Style</label>
+    <div class="liststyle-tabs">
+      <button class="liststyle-tab active" data-liststyle="icon">Icon</button>
+      <button class="liststyle-tab" data-liststyle="checkbox">Checkbox</button>
+      <button class="liststyle-tab" data-liststyle="bullet">Bullet</button>
+      <button class="liststyle-tab" data-liststyle="numbered">Numbered</button>
+    </div>
+  </div>
+
+  <div class="field" id="orientationField">
+    <label>Orientation</label>
     <div class="layout-tabs">
       <button class="layout-tab active" data-layout="horizontal">Horizontal</button>
       <button class="layout-tab" data-layout="vertical">Vertical</button>
@@ -315,7 +355,7 @@
     </div>
   </div>
 
-  <div class="field">
+  <div class="field" id="showIconsField">
     <label class="toggle-check" style="font-size:12px; font-weight:600; color:#444; gap:6px;">
       <input type="checkbox" id="showIcons" checked> Show Icons
     </label>
@@ -333,7 +373,7 @@
 
   <div class="item-group" id="itemGroup1">
     <div class="item-group-title">Item 1</div>
-    <div class="field">
+    <div class="field" id="item1IconUrlField">
       <label for="item1IconUrl">Icon URL</label>
       <input type="text" id="item1IconUrl" placeholder="https://..." />
     </div>
@@ -345,22 +385,24 @@
       <label for="item1Body">Body</label>
       <textarea id="item1Body" placeholder="Item description..."></textarea>
     </div>
-    <div class="field">
-      <div class="field-header">
-        <label for="item1BtnLabel">Button Label</label>
-        <label class="toggle-check"><input type="checkbox" id="item1ShowBtn" checked> Show</label>
+    <div id="item1BtnFields">
+      <div class="field">
+        <div class="field-header">
+          <label for="item1BtnLabel">Button Label</label>
+          <label class="toggle-check"><input type="checkbox" id="item1ShowBtn" checked> Show</label>
+        </div>
+        <input type="text" id="item1BtnLabel" placeholder="Learn More" />
       </div>
-      <input type="text" id="item1BtnLabel" placeholder="Learn More" />
-    </div>
-    <div class="field">
-      <label for="item1BtnUrl">Button URL</label>
-      <input type="text" id="item1BtnUrl" placeholder="https://..." />
+      <div class="field">
+        <label for="item1BtnUrl">Button URL</label>
+        <input type="text" id="item1BtnUrl" placeholder="https://..." />
+      </div>
     </div>
   </div>
 
   <div class="item-group" id="itemGroup2">
     <div class="item-group-title">Item 2</div>
-    <div class="field">
+    <div class="field" id="item2IconUrlField">
       <label for="item2IconUrl">Icon URL</label>
       <input type="text" id="item2IconUrl" placeholder="https://..." />
     </div>
@@ -372,22 +414,24 @@
       <label for="item2Body">Body</label>
       <textarea id="item2Body" placeholder="Item description..."></textarea>
     </div>
-    <div class="field">
-      <div class="field-header">
-        <label for="item2BtnLabel">Button Label</label>
-        <label class="toggle-check"><input type="checkbox" id="item2ShowBtn" checked> Show</label>
+    <div id="item2BtnFields">
+      <div class="field">
+        <div class="field-header">
+          <label for="item2BtnLabel">Button Label</label>
+          <label class="toggle-check"><input type="checkbox" id="item2ShowBtn" checked> Show</label>
+        </div>
+        <input type="text" id="item2BtnLabel" placeholder="Learn More" />
       </div>
-      <input type="text" id="item2BtnLabel" placeholder="Learn More" />
-    </div>
-    <div class="field">
-      <label for="item2BtnUrl">Button URL</label>
-      <input type="text" id="item2BtnUrl" placeholder="https://..." />
+      <div class="field">
+        <label for="item2BtnUrl">Button URL</label>
+        <input type="text" id="item2BtnUrl" placeholder="https://..." />
+      </div>
     </div>
   </div>
 
   <div class="item-group" id="itemGroup3" style="display:none;">
     <div class="item-group-title">Item 3</div>
-    <div class="field">
+    <div class="field" id="item3IconUrlField">
       <label for="item3IconUrl">Icon URL</label>
       <input type="text" id="item3IconUrl" placeholder="https://..." />
     </div>
@@ -399,22 +443,24 @@
       <label for="item3Body">Body</label>
       <textarea id="item3Body" placeholder="Item description..."></textarea>
     </div>
-    <div class="field">
-      <div class="field-header">
-        <label for="item3BtnLabel">Button Label</label>
-        <label class="toggle-check"><input type="checkbox" id="item3ShowBtn" checked> Show</label>
+    <div id="item3BtnFields">
+      <div class="field">
+        <div class="field-header">
+          <label for="item3BtnLabel">Button Label</label>
+          <label class="toggle-check"><input type="checkbox" id="item3ShowBtn" checked> Show</label>
+        </div>
+        <input type="text" id="item3BtnLabel" placeholder="Learn More" />
       </div>
-      <input type="text" id="item3BtnLabel" placeholder="Learn More" />
-    </div>
-    <div class="field">
-      <label for="item3BtnUrl">Button URL</label>
-      <input type="text" id="item3BtnUrl" placeholder="https://..." />
+      <div class="field">
+        <label for="item3BtnUrl">Button URL</label>
+        <input type="text" id="item3BtnUrl" placeholder="https://..." />
+      </div>
     </div>
   </div>
 
   <div class="item-group" id="itemGroup4" style="display:none;">
     <div class="item-group-title">Item 4</div>
-    <div class="field">
+    <div class="field" id="item4IconUrlField">
       <label for="item4IconUrl">Icon URL</label>
       <input type="text" id="item4IconUrl" placeholder="https://..." />
     </div>
@@ -426,16 +472,18 @@
       <label for="item4Body">Body</label>
       <textarea id="item4Body" placeholder="Item description..."></textarea>
     </div>
-    <div class="field">
-      <div class="field-header">
-        <label for="item4BtnLabel">Button Label</label>
-        <label class="toggle-check"><input type="checkbox" id="item4ShowBtn" checked> Show</label>
+    <div id="item4BtnFields">
+      <div class="field">
+        <div class="field-header">
+          <label for="item4BtnLabel">Button Label</label>
+          <label class="toggle-check"><input type="checkbox" id="item4ShowBtn" checked> Show</label>
+        </div>
+        <input type="text" id="item4BtnLabel" placeholder="Learn More" />
       </div>
-      <input type="text" id="item4BtnLabel" placeholder="Learn More" />
-    </div>
-    <div class="field">
-      <label for="item4BtnUrl">Button URL</label>
-      <input type="text" id="item4BtnUrl" placeholder="https://..." />
+      <div class="field">
+        <label for="item4BtnUrl">Button URL</label>
+        <input type="text" id="item4BtnUrl" placeholder="https://..." />
+      </div>
     </div>
   </div>
 
@@ -505,6 +553,8 @@
     var DEFAULTS = {
       itemCount:    2,
       layout:       'horizontal',
+      listStyle:    'icon',
+      checkboxIconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/7704aa8d-6599-4c15-8373-1b72bb2d4617.png',
       showIcons:      true,
       showItemBodies: true,
       showHeader:   true,
@@ -532,8 +582,28 @@
 
     /* ─── Layout helpers ─── */
     function readLayout() {
-      var active = document.querySelector('.layout-tab.active');
+      var active = document.querySelector('#orientationField .layout-tab.active');
       return active ? active.getAttribute('data-layout') : 'horizontal';
+    }
+
+    function readListStyle() {
+      var active = document.querySelector('.liststyle-tab.active');
+      return active ? active.getAttribute('data-liststyle') : 'icon';
+    }
+
+    function showListStyleControls(style) {
+      var isIcon = style === 'icon';
+      document.getElementById('orientationField').style.display  = isIcon ? '' : 'none';
+      document.getElementById('showIconsField').style.display    = isIcon ? '' : 'none';
+      for (var n = 1; n <= 4; n++) {
+        var iconField = document.getElementById('item' + n + 'IconUrlField');
+        var btnFields = document.getElementById('item' + n + 'BtnFields');
+        if (iconField) iconField.style.display = isIcon ? '' : 'none';
+        if (btnFields) btnFields.style.display = isIcon ? '' : 'none';
+      }
+      document.querySelectorAll('.liststyle-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-liststyle') === style);
+      });
     }
 
     function listColClass(count) {
@@ -577,7 +647,7 @@
       if (!item.showBtn || !item.btnLabel) return '';
       var btnWidth = Math.max(140, item.btnLabel.length * 9 + 60);
       return [
-        '<div>',
+        '<div style="text-align:' + (d.itemAlign || 'center') + ';">',
         '<!--[if mso]>',
         '<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '  href="' + item.btnUrl + '"',
@@ -628,7 +698,7 @@
 
       if (item.showBtn && item.btnLabel) {
         rows.push(
-          '<tr><td align="center" style="padding:0 0 10px;">',
+          '<tr><td align="' + d.itemAlign + '" style="padding:0 0 10px; text-align:' + d.itemAlign + ';">',
           buildBtn(item, d),
           '</td></tr>'
         );
@@ -740,36 +810,93 @@
         );
       }
 
-      if (layout === 'horizontal') {
+      if (d.listStyle === 'checkbox') {
         lines.push(
           '<tr>',
-          '  <td align="center" style="padding:0; margin:0;">',
-          '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
-          '      <tr>'
-        );
-        items.forEach(function(item) {
-          lines.push(buildHorizontalCell(item, count, d));
-        });
-        lines.push(
-          '      </tr>',
-          '    </table>',
-          '  </td>',
-          '</tr>'
-        );
-      } else {
-        lines.push(
-          '<tr>',
-          '  <td style="padding:20px;">',
+          '  <td style="padding:16px 20px;">',
           '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">'
         );
         items.forEach(function(item, i) {
-          lines.push(buildVerticalRow(item, i === 0, d));
+          var topPad = i === 0 ? '0' : '16px';
+          lines.push(
+            '<tr><td style="padding:' + topPad + ' 0 0;">',
+            '<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%"><tr>',
+            '<td width="36" valign="top" style="width:36px; padding:0 12px 0 0;">',
+            '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" width="24" height="24" style="display:block; border:0; width:24px; height:24px;" />',
+            '</td>',
+            '<td valign="top">'
+          );
+          if (item.header) {
+            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>');
+          }
+          if (d.showItemBodies !== false && item.body) {
+            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</div>');
+          }
+          lines.push('</td>', '</tr></table>', '</td></tr>');
         });
         lines.push(
           '    </table>',
           '  </td>',
           '</tr>'
         );
+
+      } else if (d.listStyle === 'bullet' || d.listStyle === 'numbered') {
+        var tag = d.listStyle === 'bullet' ? 'ul' : 'ol';
+        var listStyleType = d.listStyle === 'bullet' ? 'disc' : 'decimal';
+        lines.push(
+          '<tr>',
+          '  <td style="padding:16px 20px;">',
+          '    <' + tag + ' style="margin:0; padding:0 0 0 22px; mso-padding-alt:0 0 0 22px; list-style-type:' + listStyleType + ';">'
+        );
+        items.forEach(function(item) {
+          lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; mso-line-height-rule:exactly;">');
+          if (item.header) {
+            lines.push('<strong style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.header + '</strong>');
+          }
+          if (d.showItemBodies !== false && item.body) {
+            lines.push('<span style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</span>');
+          }
+          lines.push('</li>');
+        });
+        lines.push(
+          '    </' + tag + '>',
+          '  </td>',
+          '</tr>'
+        );
+
+      } else {
+        // listStyle === 'icon' (horizontal/vertical)
+        if (layout === 'horizontal') {
+          lines.push(
+            '<tr>',
+            '  <td align="center" style="padding:0; margin:0;">',
+            '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse;" width="100%">',
+            '      <tr>'
+          );
+          items.forEach(function(item) {
+            lines.push(buildHorizontalCell(item, count, d));
+          });
+          lines.push(
+            '      </tr>',
+            '    </table>',
+            '  </td>',
+            '</tr>'
+          );
+        } else {
+          lines.push(
+            '<tr>',
+            '  <td style="padding:20px;">',
+            '    <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">'
+          );
+          items.forEach(function(item, i) {
+            lines.push(buildVerticalRow(item, i === 0, d));
+          });
+          lines.push(
+            '    </table>',
+            '  </td>',
+            '</tr>'
+          );
+        }
       }
 
       lines.push('</table>');
@@ -800,43 +927,73 @@
         );
       }
 
-      if (layout === 'horizontal') {
-        var colWidth = Math.floor(100 / count) + '%';
-        var cells = items.map(function(item) {
-          var c = '<td align="center" style="width:' + colWidth + '; padding:8px; vertical-align:top;">';
-          if (d.showIcons && item.iconUrl) {
-            c += '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; margin:0 auto 8px; width:60px; height:60px; border:0;" />';
-          }
-          if (item.header) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:6px;">' + item.header + '</div>';
-          if (d.showItemBodies !== false && item.body) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
-          if (item.showBtn && item.btnLabel) c += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
-          c += '</td>';
-          return c;
-        });
-        html.push('<tr><td style="padding:0;"><table width="100%" style="border-collapse:collapse;"><tr>' + cells.join('') + '</tr></table></td></tr>');
-      } else {
+      if (d.listStyle === 'checkbox') {
         items.forEach(function(item, i) {
           var topPad = i === 0 ? '12px' : '16px';
           var r = '<tr><td style="padding:' + topPad + ' 12px 0;"><table width="100%"><tr>';
-          if (d.showIcons) {
-            r += '<td width="70" valign="top" style="width:70px; padding-right:12px;">';
-            r += item.iconUrl
-              ? '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; width:60px; height:60px; border:0;" />'
-              : '<div style="width:60px; height:60px; background:rgba(255,255,255,0.15); border-radius:4px;"></div>';
-            r += '</td>';
-          }
-          r += '<td valign="top">';
-          if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
-          if (d.showItemBodies !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
-          if (item.showBtn && item.btnLabel) r += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
+          r += '<td width="40" valign="top" style="width:40px; padding-right:10px;">';
+          r += '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" width="24" height="24" style="display:block; width:24px; height:24px; border:0;" />';
+          r += '</td><td valign="top" style="text-align:' + d.itemAlign + ';">';
+          if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
+          if (d.showItemBodies !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + ';">' + item.body + '</div>';
           r += '</td></tr></table></td></tr>';
           html.push(r);
         });
         html.push('<tr><td style="height:12px;"></td></tr>');
+
+      } else if (d.listStyle === 'bullet' || d.listStyle === 'numbered') {
+        var listTag = d.listStyle === 'bullet' ? 'ul' : 'ol';
+        var previewList = '<tr><td style="padding:12px 16px;"><' + listTag + ' style="margin:0; padding:0 0 0 20px;">';
+        items.forEach(function(item) {
+          previewList += '<li style="font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:' + d.textColor + '; margin-bottom:10px;">';
+          if (item.header) previewList += '<strong style="display:block; color:' + d.textColor + ';">' + item.header + '</strong>';
+          if (d.showItemBodies !== false && item.body) previewList += '<span style="display:block; font-size:12px; color:' + d.textColor + ';">' + item.body + '</span>';
+          previewList += '</li>';
+        });
+        previewList += '</' + listTag + '></td></tr>';
+        html.push(previewList);
+
+      } else {
+        // listStyle === 'icon' (horizontal/vertical)
+        if (layout === 'horizontal') {
+          var colWidth = Math.floor(100 / count) + '%';
+          var cells = items.map(function(item) {
+            var c = '<td align="' + d.itemAlign + '" style="width:' + colWidth + '; padding:8px; vertical-align:top; text-align:' + d.itemAlign + ';">';
+            if (d.showIcons && item.iconUrl) {
+              c += '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; margin:0 auto 8px; width:60px; height:60px; border:0;" />';
+            }
+            if (item.header) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:6px;">' + item.header + '</div>';
+            if (d.showItemBodies !== false && item.body) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+            if (item.showBtn && item.btnLabel) c += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
+            c += '</td>';
+            return c;
+          });
+          html.push('<tr><td style="padding:0;"><table width="100%" style="border-collapse:collapse;"><tr>' + cells.join('') + '</tr></table></td></tr>');
+        } else {
+          items.forEach(function(item, i) {
+            var topPad = i === 0 ? '12px' : '16px';
+            var r = '<tr><td style="padding:' + topPad + ' 12px 0;"><table width="100%"><tr>';
+            if (d.showIcons) {
+              r += '<td width="70" valign="top" style="width:70px; padding-right:12px;">';
+              r += item.iconUrl
+                ? '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; width:60px; height:60px; border:0;" />'
+                : '<div style="width:60px; height:60px; background:rgba(255,255,255,0.15); border-radius:4px;"></div>';
+              r += '</td>';
+            }
+            r += '<td valign="top" style="text-align:' + d.itemAlign + ';">';
+            if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
+            if (d.showItemBodies !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+            if (item.showBtn && item.btnLabel) r += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
+            r += '</td></tr></table></td></tr>';
+            html.push(r);
+          });
+          html.push('<tr><td style="height:12px;"></td></tr>');
+        }
       }
 
       tbody.innerHTML = html.join('');
       updateSwatchActive(d.bgColor);
+      syncAlignDisabled();
     }
 
     /* ─── Read all fields ─── */
@@ -844,6 +1001,7 @@
       var d = {
         itemCount:    parseInt(document.getElementById('itemCount').value) || 2,
         layout:       readLayout(),
+        listStyle:    readListStyle(),
         showIcons:      document.getElementById('showIcons').checked,
         showItemBodies: document.getElementById('showItemBodies').checked,
         showHeader:   document.getElementById('showHeader').checked,
@@ -878,8 +1036,10 @@
       document.getElementById('showIcons').checked      = d.showIcons      !== false;
       document.getElementById('showItemBodies').checked = d.showItemBodies !== false;
 
+      showListStyleControls(d.listStyle || 'icon');
+
       var layout = d.layout || 'horizontal';
-      document.querySelectorAll('.layout-tab').forEach(function(btn) {
+      document.getElementById('orientationField').querySelectorAll('.layout-tab').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-layout') === layout);
       });
 
@@ -943,6 +1103,11 @@
     }
 
     /* ─── Alignment helpers ─── */
+    function syncAlignDisabled() {
+      document.getElementById('headerAlignBtns').classList.toggle('disabled', !document.getElementById('showHeader').checked);
+      document.getElementById('bodyAlignBtns').classList.toggle('disabled',   !document.getElementById('showBody').checked);
+    }
+
     function readAlign(groupId) {
       var active = document.querySelector('#' + groupId + ' .align-btn.active');
       return active ? active.getAttribute('data-align') : 'center';
@@ -1012,10 +1177,20 @@
       });
     });
 
-    /* ─── Layout tabs ─── */
-    document.querySelectorAll('.layout-tab').forEach(function(btn) {
+    /* ─── List style tabs ─── */
+    document.querySelectorAll('.liststyle-tab').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        document.querySelectorAll('.layout-tab').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.liststyle-tab').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        showListStyleControls(this.getAttribute('data-liststyle'));
+        onChange();
+      });
+    });
+
+    /* ─── Layout tabs ─── */
+    document.getElementById('orientationField').querySelectorAll('.layout-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.getElementById('orientationField').querySelectorAll('.layout-tab').forEach(function(b) { b.classList.remove('active'); });
         this.classList.add('active');
         onChange();
       });
@@ -1049,6 +1224,7 @@
     /* ─── On load ─── */
     updateItemGroups(DEFAULTS.itemCount);
     updatePreview(DEFAULTS);
+    showListStyleControls(DEFAULTS.listStyle);
     sdk.getData(function(savedData) {
       var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
       populateFields(d);
