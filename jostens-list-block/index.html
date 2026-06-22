@@ -362,12 +362,6 @@
     <div class="hint">80×80px. Upload to SFMC Content Builder and paste the URL in each item.</div>
   </div>
 
-  <div class="field">
-    <label class="toggle-check" style="font-size:12px; font-weight:600; color:#444; gap:6px;">
-      <input type="checkbox" id="showItemBodies" checked> Show Item Bodies
-    </label>
-  </div>
-
   <!-- ─── Items ─── -->
   <div class="section-title">Items</div>
 
@@ -378,11 +372,17 @@
       <input type="text" id="item1IconUrl" placeholder="https://..." />
     </div>
     <div class="field">
-      <label for="item1Header">Header</label>
+      <div class="field-header">
+        <label for="item1Header">Header</label>
+        <label class="toggle-check"><input type="checkbox" id="item1ShowHeader" checked> Show</label>
+      </div>
       <input type="text" id="item1Header" placeholder="Item Header" />
     </div>
     <div class="field">
-      <label for="item1Body">Body</label>
+      <div class="field-header">
+        <label for="item1Body">Body</label>
+        <label class="toggle-check"><input type="checkbox" id="item1ShowBody" checked> Show</label>
+      </div>
       <textarea id="item1Body" placeholder="Item description..."></textarea>
     </div>
     <div id="item1BtnFields">
@@ -407,11 +407,17 @@
       <input type="text" id="item2IconUrl" placeholder="https://..." />
     </div>
     <div class="field">
-      <label for="item2Header">Header</label>
+      <div class="field-header">
+        <label for="item2Header">Header</label>
+        <label class="toggle-check"><input type="checkbox" id="item2ShowHeader" checked> Show</label>
+      </div>
       <input type="text" id="item2Header" placeholder="Item Header" />
     </div>
     <div class="field">
-      <label for="item2Body">Body</label>
+      <div class="field-header">
+        <label for="item2Body">Body</label>
+        <label class="toggle-check"><input type="checkbox" id="item2ShowBody" checked> Show</label>
+      </div>
       <textarea id="item2Body" placeholder="Item description..."></textarea>
     </div>
     <div id="item2BtnFields">
@@ -436,11 +442,17 @@
       <input type="text" id="item3IconUrl" placeholder="https://..." />
     </div>
     <div class="field">
-      <label for="item3Header">Header</label>
+      <div class="field-header">
+        <label for="item3Header">Header</label>
+        <label class="toggle-check"><input type="checkbox" id="item3ShowHeader" checked> Show</label>
+      </div>
       <input type="text" id="item3Header" placeholder="Item Header" />
     </div>
     <div class="field">
-      <label for="item3Body">Body</label>
+      <div class="field-header">
+        <label for="item3Body">Body</label>
+        <label class="toggle-check"><input type="checkbox" id="item3ShowBody" checked> Show</label>
+      </div>
       <textarea id="item3Body" placeholder="Item description..."></textarea>
     </div>
     <div id="item3BtnFields">
@@ -465,11 +477,17 @@
       <input type="text" id="item4IconUrl" placeholder="https://..." />
     </div>
     <div class="field">
-      <label for="item4Header">Header</label>
+      <div class="field-header">
+        <label for="item4Header">Header</label>
+        <label class="toggle-check"><input type="checkbox" id="item4ShowHeader" checked> Show</label>
+      </div>
       <input type="text" id="item4Header" placeholder="Item Header" />
     </div>
     <div class="field">
-      <label for="item4Body">Body</label>
+      <div class="field-header">
+        <label for="item4Body">Body</label>
+        <label class="toggle-check"><input type="checkbox" id="item4ShowBody" checked> Show</label>
+      </div>
       <textarea id="item4Body" placeholder="Item description..."></textarea>
     </div>
     <div id="item4BtnFields">
@@ -556,7 +574,6 @@
       listStyle:    'icon',
       checkboxIconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/7704aa8d-6599-4c15-8373-1b72bb2d4617.png',
       showIcons:      true,
-      showItemBodies: true,
       showHeader:   true,
       showBody:     false,
       headerText:   'THE JOSTENS DIFFERENCE',
@@ -568,10 +585,10 @@
       headerAlign:  'center',
       bodyAlign:    'center',
       itemAlign:    'center',
-      item1IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item1Header: 'Item One',   item1Body: 'Description text for this list item goes here.', item1BtnLabel: 'Learn More', item1BtnUrl: '#', item1ShowBtn: true,
-      item2IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item2Header: 'Item Two',   item2Body: 'Description text for this list item goes here.', item2BtnLabel: 'Learn More', item2BtnUrl: '#', item2ShowBtn: true,
-      item3IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item3Header: 'Item Three', item3Body: 'Description text for this list item goes here.', item3BtnLabel: 'Learn More', item3BtnUrl: '#', item3ShowBtn: true,
-      item4IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item4Header: 'Item Four',  item4Body: 'Description text for this list item goes here.', item4BtnLabel: 'Learn More', item4BtnUrl: '#', item4ShowBtn: true
+      item1IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item1Header: 'Item One',   item1ShowHeader: true, item1Body: 'Description text for this list item goes here.', item1ShowBody: true, item1BtnLabel: 'Learn More', item1BtnUrl: '#', item1ShowBtn: true,
+      item2IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item2Header: 'Item Two',   item2ShowHeader: true, item2Body: 'Description text for this list item goes here.', item2ShowBody: true, item2BtnLabel: 'Learn More', item2BtnUrl: '#', item2ShowBtn: true,
+      item3IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item3Header: 'Item Three', item3ShowHeader: true, item3Body: 'Description text for this list item goes here.', item3ShowBody: true, item3BtnLabel: 'Learn More', item3BtnUrl: '#', item3ShowBtn: true,
+      item4IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item4Header: 'Item Four',  item4ShowHeader: true, item4Body: 'Description text for this list item goes here.', item4ShowBody: true, item4BtnLabel: 'Learn More', item4BtnUrl: '#', item4ShowBtn: true
     };
 
     var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
@@ -631,12 +648,14 @@
       var items = [];
       for (var i = 1; i <= count; i++) {
         items.push({
-          iconUrl:  d['item' + i + 'IconUrl']  || '',
-          header:   d['item' + i + 'Header']   || '',
-          body:     d['item' + i + 'Body']     || '',
-          btnLabel: d['item' + i + 'BtnLabel'] || '',
-          btnUrl:   d['item' + i + 'BtnUrl']   || '#',
-          showBtn:  d['item' + i + 'ShowBtn']  !== false
+          iconUrl:     d['item' + i + 'IconUrl']     || '',
+          header:      d['item' + i + 'Header']      || '',
+          showHeader:  d['item' + i + 'ShowHeader']  !== false,
+          body:        d['item' + i + 'Body']        || '',
+          showBody:    d['item' + i + 'ShowBody']    !== false,
+          btnLabel:    d['item' + i + 'BtnLabel']    || '',
+          btnUrl:      d['item' + i + 'BtnUrl']      || '#',
+          showBtn:     d['item' + i + 'ShowBtn']     !== false
         });
       }
       return items;
@@ -680,7 +699,7 @@
         );
       }
 
-      if (item.header) {
+      if (item.showHeader !== false && item.header) {
         rows.push(
           '<tr><td align="' + d.itemAlign + '" style="padding:0 0 8px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
           item.header,
@@ -688,7 +707,7 @@
         );
       }
 
-      if (d.showItemBodies !== false && item.body) {
+      if (item.showBody !== false && item.body) {
         rows.push(
           '<tr><td align="' + d.itemAlign + '" style="padding:0 4px 12px; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
           item.body,
@@ -729,10 +748,10 @@
       }
 
       var textContent = [];
-      if (item.header) {
+      if (item.showHeader !== false && item.header) {
         textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:8px;">' + item.header + '</div>');
       }
-      if (d.showItemBodies !== false && item.body) {
+      if (item.showBody !== false && item.body) {
         textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:12px;">' + item.body + '</div>');
       }
       if (item.showBtn && item.btnLabel) {
@@ -826,10 +845,10 @@
             '</td>',
             '<td valign="top">'
           );
-          if (item.header) {
+          if (item.showHeader !== false && item.header) {
             lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>');
           }
-          if (d.showItemBodies !== false && item.body) {
+          if (item.showBody !== false && item.body) {
             lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</div>');
           }
           lines.push('</td>', '</tr></table>', '</td></tr>');
@@ -850,10 +869,10 @@
         );
         items.forEach(function(item) {
           lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; mso-line-height-rule:exactly;">');
-          if (item.header) {
+          if (item.showHeader !== false && item.header) {
             lines.push('<strong style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.header + '</strong>');
           }
-          if (d.showItemBodies !== false && item.body) {
+          if (item.showBody !== false && item.body) {
             lines.push('<span style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</span>');
           }
           lines.push('</li>');
@@ -934,8 +953,8 @@
           r += '<td width="40" valign="top" style="width:40px; padding-right:10px;">';
           r += '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" width="24" height="24" style="display:block; width:24px; height:24px; border:0;" />';
           r += '</td><td valign="top" style="text-align:' + d.itemAlign + ';">';
-          if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
-          if (d.showItemBodies !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + ';">' + item.body + '</div>';
+          if (item.showHeader !== false && item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
+          if (item.showBody !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + ';">' + item.body + '</div>';
           r += '</td></tr></table></td></tr>';
           html.push(r);
         });
@@ -946,8 +965,8 @@
         var previewList = '<tr><td style="padding:12px 16px;"><' + listTag + ' style="margin:0; padding:0 0 0 20px;">';
         items.forEach(function(item) {
           previewList += '<li style="font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:' + d.textColor + '; margin-bottom:10px;">';
-          if (item.header) previewList += '<strong style="display:block; color:' + d.textColor + ';">' + item.header + '</strong>';
-          if (d.showItemBodies !== false && item.body) previewList += '<span style="display:block; font-size:12px; color:' + d.textColor + ';">' + item.body + '</span>';
+          if (item.showHeader !== false && item.header) previewList += '<strong style="display:block; color:' + d.textColor + ';">' + item.header + '</strong>';
+          if (item.showBody !== false && item.body) previewList += '<span style="display:block; font-size:12px; color:' + d.textColor + ';">' + item.body + '</span>';
           previewList += '</li>';
         });
         previewList += '</' + listTag + '></td></tr>';
@@ -962,8 +981,8 @@
             if (d.showIcons && item.iconUrl) {
               c += '<img src="' + item.iconUrl + '" width="60" height="60" style="display:block; margin:0 auto 8px; width:60px; height:60px; border:0;" />';
             }
-            if (item.header) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:6px;">' + item.header + '</div>';
-            if (d.showItemBodies !== false && item.body) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+            if (item.showHeader !== false && item.header) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:6px;">' + item.header + '</div>';
+            if (item.showBody !== false && item.body) c += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
             if (item.showBtn && item.btnLabel) c += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
             c += '</td>';
             return c;
@@ -981,8 +1000,8 @@
               r += '</td>';
             }
             r += '<td valign="top" style="text-align:' + d.itemAlign + ';">';
-            if (item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
-            if (d.showItemBodies !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
+            if (item.showHeader !== false && item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
+            if (item.showBody !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; padding-bottom:8px;">' + item.body + '</div>';
             if (item.showBtn && item.btnLabel) r += '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + item.btnLabel + '</a>';
             r += '</td></tr></table></td></tr>';
             html.push(r);
@@ -1002,8 +1021,7 @@
         itemCount:    parseInt(document.getElementById('itemCount').value) || 2,
         layout:       readLayout(),
         listStyle:    readListStyle(),
-        showIcons:      document.getElementById('showIcons').checked,
-        showItemBodies: document.getElementById('showItemBodies').checked,
+        showIcons:    document.getElementById('showIcons').checked,
         showHeader:   document.getElementById('showHeader').checked,
         showBody:     document.getElementById('showBody').checked,
         headerText:   document.getElementById('headerText').value || DEFAULTS.headerText,
@@ -1017,12 +1035,14 @@
         itemAlign:    readAlign('itemAlignBtns')
       };
       for (var i = 1; i <= 4; i++) {
-        d['item' + i + 'IconUrl']  = document.getElementById('item' + i + 'IconUrl').value  || '';
-        d['item' + i + 'Header']   = document.getElementById('item' + i + 'Header').value   || '';
-        d['item' + i + 'Body']     = document.getElementById('item' + i + 'Body').value     || '';
-        d['item' + i + 'BtnLabel'] = document.getElementById('item' + i + 'BtnLabel').value || '';
-        d['item' + i + 'BtnUrl']   = document.getElementById('item' + i + 'BtnUrl').value   || '#';
-        d['item' + i + 'ShowBtn']  = document.getElementById('item' + i + 'ShowBtn').checked;
+        d['item' + i + 'IconUrl']    = document.getElementById('item' + i + 'IconUrl').value    || '';
+        d['item' + i + 'Header']     = document.getElementById('item' + i + 'Header').value     || '';
+        d['item' + i + 'ShowHeader'] = document.getElementById('item' + i + 'ShowHeader').checked;
+        d['item' + i + 'Body']       = document.getElementById('item' + i + 'Body').value       || '';
+        d['item' + i + 'ShowBody']   = document.getElementById('item' + i + 'ShowBody').checked;
+        d['item' + i + 'BtnLabel']   = document.getElementById('item' + i + 'BtnLabel').value   || '';
+        d['item' + i + 'BtnUrl']     = document.getElementById('item' + i + 'BtnUrl').value     || '#';
+        d['item' + i + 'ShowBtn']    = document.getElementById('item' + i + 'ShowBtn').checked;
       }
       return d;
     }
@@ -1033,8 +1053,7 @@
       document.getElementById('bodyText').value     = d.bodyText   || DEFAULTS.bodyText;
       document.getElementById('showHeader').checked = d.showHeader !== false;
       document.getElementById('showBody').checked   = d.showBody   !== false;
-      document.getElementById('showIcons').checked      = d.showIcons      !== false;
-      document.getElementById('showItemBodies').checked = d.showItemBodies !== false;
+      document.getElementById('showIcons').checked = d.showIcons !== false;
 
       showListStyleControls(d.listStyle || 'icon');
 
@@ -1061,12 +1080,14 @@
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
 
       for (var i = 1; i <= 4; i++) {
-        document.getElementById('item' + i + 'IconUrl').value   = d['item' + i + 'IconUrl']  || '';
-        document.getElementById('item' + i + 'Header').value    = d['item' + i + 'Header']   || '';
-        document.getElementById('item' + i + 'Body').value      = d['item' + i + 'Body']     || '';
-        document.getElementById('item' + i + 'BtnLabel').value  = d['item' + i + 'BtnLabel'] || '';
-        document.getElementById('item' + i + 'BtnUrl').value    = d['item' + i + 'BtnUrl']   || '';
-        document.getElementById('item' + i + 'ShowBtn').checked = d['item' + i + 'ShowBtn']  !== false;
+        document.getElementById('item' + i + 'IconUrl').value      = d['item' + i + 'IconUrl']    || '';
+        document.getElementById('item' + i + 'Header').value       = d['item' + i + 'Header']     || '';
+        document.getElementById('item' + i + 'ShowHeader').checked = d['item' + i + 'ShowHeader']  !== false;
+        document.getElementById('item' + i + 'Body').value         = d['item' + i + 'Body']        || '';
+        document.getElementById('item' + i + 'ShowBody').checked   = d['item' + i + 'ShowBody']    !== false;
+        document.getElementById('item' + i + 'BtnLabel').value     = d['item' + i + 'BtnLabel']    || '';
+        document.getElementById('item' + i + 'BtnUrl').value       = d['item' + i + 'BtnUrl']      || '';
+        document.getElementById('item' + i + 'ShowBtn').checked    = d['item' + i + 'ShowBtn']     !== false;
       }
 
       setAlign('headerAlignBtns', d.headerAlign || 'center');
@@ -1207,7 +1228,7 @@
       document.getElementById(id).addEventListener('input', onChange);
     });
 
-    ['showHeader', 'showBody', 'showIcons', 'showItemBodies'].forEach(function(id) {
+    ['showHeader', 'showBody', 'showIcons'].forEach(function(id) {
       document.getElementById(id).addEventListener('change', onChange);
     });
 
@@ -1217,6 +1238,8 @@
         ['item' + i + 'IconUrl', 'item' + i + 'Header', 'item' + i + 'Body', 'item' + i + 'BtnLabel', 'item' + i + 'BtnUrl'].forEach(function(id) {
           document.getElementById(id).addEventListener('input', onChange);
         });
+        document.getElementById('item' + i + 'ShowHeader').addEventListener('change', onChange);
+        document.getElementById('item' + i + 'ShowBody').addEventListener('change', onChange);
         document.getElementById('item' + i + 'ShowBtn').addEventListener('change', onChange);
       })(n);
     }
