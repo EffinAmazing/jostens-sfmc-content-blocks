@@ -151,6 +151,31 @@
       margin-top: 3px;
     }
 
+    .align-btns {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .align-btn {
+      padding: 3px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      border-right: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .align-btn:last-child { border-right: none; }
+    .align-btn:hover { background: #f0f0f0; color: #555; }
+    .align-btn.active { background: #D22E7A; color: #fff; }
+
     .icon-group {
       border: 1px solid #e8e8e8;
       border-radius: 4px;
@@ -223,7 +248,14 @@
   <div class="field">
     <div class="field-header">
       <label for="headerText">Headline</label>
-      <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="headerAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+      </div>
     </div>
     <textarea id="headerText" class="short" placeholder="SUPPORT FOR&lt;br&gt;REAL CLASSROOMS"></textarea>
     <div class="hint">HTML supported — use &lt;br&gt; for a line break.</div>
@@ -232,7 +264,14 @@
   <div class="field">
     <div class="field-header">
       <label for="bodyText">Body Text</label>
-      <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="bodyAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+      </div>
     </div>
     <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
   </div>
@@ -248,6 +287,15 @@
       <option value="3">3</option>
       <option value="4" selected>4</option>
     </select>
+  </div>
+
+  <div class="field">
+    <label>Icon Caption Alignment</label>
+    <div class="align-btns" id="iconTextAlignBtns">
+      <button class="align-btn" data-align="left">L</button>
+      <button class="align-btn active" data-align="center">C</button>
+      <button class="align-btn" data-align="right">R</button>
+    </div>
   </div>
 
   <div class="icon-group" id="iconGroup1">
@@ -333,6 +381,15 @@
 
   <!-- ─── Style Fields ─── -->
   <div class="section-title">Style</div>
+
+  <div class="field">
+    <label>Global Alignment</label>
+    <div class="align-btns" id="globalAlignBtns">
+      <button class="align-btn" data-align="left">Left</button>
+      <button class="align-btn active" data-align="center">Center</button>
+      <button class="align-btn" data-align="right">Right</button>
+    </div>
+  </div>
 
   <div class="field">
     <label>Background Color</label>
@@ -445,7 +502,10 @@
       btnTextColor: '#ffffff',
       showHeader:   true,
       showBody:     true,
-      showBtn:      true
+      showBtn:      true,
+      headerAlign:   'center',
+      bodyAlign:     'center',
+      iconTextAlign: 'center'
     };
 
     /* ─── Init SDK ─── */
@@ -485,7 +545,7 @@
         '            <tr><td align="center" style="padding:0 0 10px;">',
         '              <img alt="' + d['icon' + n + 'Alt'] + '" src="' + d['icon' + n + 'Url'] + '" style="border:none; display:block; margin:0 auto;" width="40">',
         '            </td></tr>',
-        '            <tr><td align="center" style="padding:0 0 20px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+        '            <tr><td align="' + d.iconTextAlign + '" style="padding:0 0 20px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; text-align:' + d.iconTextAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
         '              <div class="body-text">' + d['icon' + n + 'Text'] + '</div>',
         '            </td></tr>',
         '          </table>',
@@ -516,7 +576,7 @@
       if (d.showHeader) {
         lines.push(
           '<tr>',
-          '  <td align="center" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; letter-spacing:0; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '  <td align="' + d.headerAlign + '" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; letter-spacing:0; text-align:' + d.headerAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
           '    <div class="header-text">' + d.headerText + '</div>',
           '  </td>',
           '</tr>'
@@ -526,7 +586,7 @@
       if (d.showBody) {
         lines.push(
           '<tr>',
-          '  <td align="center" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '  <td align="' + d.bodyAlign + '" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; text-align:' + d.bodyAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
           '    <div class="body-text">' + d.bodyText + '</div>',
           '  </td>',
           '</tr>'
@@ -587,8 +647,10 @@
 
       document.getElementById('previewTable').style.backgroundColor = d.bgColor !== 'transparent' ? d.bgColor : '';
       document.getElementById('previewHeader').style.color = d.textColor;
+      document.getElementById('previewHeader').style.textAlign = d.headerAlign;
       document.getElementById('previewHeader').innerHTML   = d.headerText;
       document.getElementById('previewBody').style.color  = d.textColor;
+      document.getElementById('previewBody').style.textAlign = d.bodyAlign;
       document.getElementById('previewBody').innerHTML    = d.bodyText;
 
       var colWidth = iconColWidth(count);
@@ -600,6 +662,7 @@
         document.getElementById('previewIcon' + n + 'Img').alt     = d['icon' + n + 'Alt'] || '';
         document.getElementById('previewIcon' + n + 'Text').innerHTML    = d['icon' + n + 'Text'] || '';
         document.getElementById('previewIcon' + n + 'Text').style.color  = d.textColor;
+        document.getElementById('previewIcon' + n + 'Text').style.textAlign = d.iconTextAlign;
       });
 
       var btn = document.getElementById('previewBtn');
@@ -627,7 +690,10 @@
         btnTextColor: document.getElementById('btnTextColor').value || DEFAULTS.btnTextColor,
         showHeader:   document.getElementById('showHeader').checked,
         showBody:     document.getElementById('showBody').checked,
-        showBtn:      document.getElementById('showBtn').checked
+        showBtn:      document.getElementById('showBtn').checked,
+        headerAlign:   readAlign('headerAlignBtns'),
+        bodyAlign:     readAlign('bodyAlignBtns'),
+        iconTextAlign: readAlign('iconTextAlignBtns')
       };
       [1, 2, 3, 4].forEach(function(n) {
         d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
@@ -670,6 +736,11 @@
       document.getElementById('showHeader').checked = d.showHeader !== false;
       document.getElementById('showBody').checked   = d.showBody   !== false;
       document.getElementById('showBtn').checked    = d.showBtn    !== false;
+
+      setAlign('headerAlignBtns',   d.headerAlign   || 'center');
+      setAlign('bodyAlignBtns',     d.bodyAlign     || 'center');
+      setAlign('iconTextAlignBtns', d.iconTextAlign || 'center');
+      setAlign('globalAlignBtns',   d.headerAlign   || 'center');
     }
 
     function setColor(hexId, pickerId, value) {
@@ -687,6 +758,27 @@
           ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
         });
         sdk.setSuperContent(buildContent(previewData));
+      });
+    }
+
+    /* ─── Alignment helpers ─── */
+    function readAlign(groupId) {
+      var active = document.querySelector('#' + groupId + ' .align-btn.active');
+      return active ? active.getAttribute('data-align') : 'center';
+    }
+
+    function setAlign(groupId, value) {
+      document.querySelectorAll('#' + groupId + ' .align-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-align') === (value || 'center'));
+      });
+    }
+
+    function bindAlignGroup(groupId) {
+      document.querySelectorAll('#' + groupId + ' .align-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setAlign(groupId, this.getAttribute('data-align'));
+          onChange();
+        });
       });
     }
 
@@ -708,6 +800,20 @@
     bindColorPair('textColorPicker',    'textColor');
     bindColorPair('btnColorPicker',     'btnColor');
     bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    document.querySelectorAll('#globalAlignBtns .align-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var align = this.getAttribute('data-align');
+        setAlign('globalAlignBtns', align);
+        setAlign('headerAlignBtns', align);
+        setAlign('bodyAlignBtns',   align);
+        setAlign('iconTextAlignBtns', align);
+        onChange();
+      });
+    });
+    bindAlignGroup('headerAlignBtns');
+    bindAlignGroup('bodyAlignBtns');
+    bindAlignGroup('iconTextAlignBtns');
 
     /* ─── Swatch active state ─── */
     function updateSwatchActive(color) {

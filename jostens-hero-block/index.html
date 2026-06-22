@@ -147,6 +147,31 @@
       margin-top: 3px;
     }
 
+    .align-btns {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .align-btn {
+      padding: 3px 7px;
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      border-right: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .align-btn:last-child { border-right: none; }
+    .align-btn:hover { background: #f0f0f0; color: #555; }
+    .align-btn.active { background: #D22E7A; color: #fff; }
+
     .bg-mode-tabs {
       display: flex;
       gap: 4px;
@@ -240,7 +265,14 @@
   <div class="field">
     <div class="field-header">
       <label for="headerText">Header Text</label>
-      <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="headerAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showHeader" checked> Show</label>
+      </div>
     </div>
     <input type="text" id="headerText" placeholder="THE JOSTENS DIFFERENCE" />
   </div>
@@ -248,7 +280,14 @@
   <div class="field">
     <div class="field-header">
       <label for="bodyText">Body Text</label>
-      <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="bodyAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showBody" checked> Show</label>
+      </div>
     </div>
     <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
   </div>
@@ -416,6 +455,15 @@
   <div class="section-title">Style</div>
 
   <div class="field">
+    <label>Global Alignment</label>
+    <div class="align-btns" id="globalAlignBtns">
+      <button class="align-btn" data-align="left">Left</button>
+      <button class="align-btn active" data-align="center">Center</button>
+      <button class="align-btn" data-align="right">Right</button>
+    </div>
+  </div>
+
+  <div class="field">
     <label>Text Color</label>
     <div class="color-row">
       <input type="color" id="textColorPicker" value="#ffffff" />
@@ -473,7 +521,9 @@
       showHeader:   true,
       showBody:     true,
       showBtn:      true,
-      showHero:     true
+      showHero:     true,
+      headerAlign:  'center',
+      bodyAlign:    'center'
     };
 
     /* ─── Init SDK ─── */
@@ -564,7 +614,7 @@
 
       var headerRow = d.showHeader ? [
         '<tr>',
-        '  <td align="center" style="padding:32px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '  <td align="' + d.headerAlign + '" style="padding:32px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; text-align:' + d.headerAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
         '    <div class="header-text">' + d.headerText + '</div>',
         '  </td>',
         '</tr>'
@@ -572,7 +622,7 @@
 
       var bodyRow = d.showBody ? [
         '<tr>',
-        '  <td align="center" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+        '  <td align="' + d.bodyAlign + '" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; text-align:' + d.bodyAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
         '    <div class="body-text">' + d.bodyText + '</div>',
         '  </td>',
         '</tr>'
@@ -662,12 +712,12 @@
       ) : '';
 
       var headerHtml = d.showHeader ? (
-        '<tr><td align="center" style="padding:32px 20px 10px; font-family:Helvetica,Arial,sans-serif; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; color:' + d.textColor + ';">' +
+        '<tr><td align="' + d.headerAlign + '" style="padding:32px 20px 10px; font-family:Helvetica,Arial,sans-serif; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; text-align:' + d.headerAlign + '; color:' + d.textColor + ';">' +
         d.headerText + '</td></tr>'
       ) : '';
 
       var bodyHtml = d.showBody ? (
-        '<tr><td align="center" style="padding:0 20px 20px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:' + d.textColor + ';">' +
+        '<tr><td align="' + d.bodyAlign + '" style="padding:0 20px 20px; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; text-align:' + d.bodyAlign + '; color:' + d.textColor + ';">' +
         d.bodyText + '</td></tr>'
       ) : '';
 
@@ -721,7 +771,9 @@
         showHeader:   document.getElementById('showHeader').checked,
         showBody:     document.getElementById('showBody').checked,
         showBtn:      document.getElementById('showBtn').checked,
-        showHero:     document.getElementById('showHero').checked
+        showHero:     document.getElementById('showHero').checked,
+        headerAlign:  readAlign('headerAlignBtns'),
+        bodyAlign:    readAlign('bodyAlignBtns')
       };
     }
 
@@ -764,6 +816,10 @@
       document.getElementById('showBody').checked   = d.showBody   !== false;
       document.getElementById('showBtn').checked    = d.showBtn    !== false;
       document.getElementById('showHero').checked   = d.showHero   !== false;
+
+      setAlign('headerAlignBtns', d.headerAlign || 'center');
+      setAlign('bodyAlignBtns',   d.bodyAlign   || 'center');
+      setAlign('globalAlignBtns', d.headerAlign || 'center');
     }
 
     function setColor(hexId, pickerId, value) {
@@ -781,6 +837,27 @@
           ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
         });
         sdk.setSuperContent(buildContent(previewData));
+      });
+    }
+
+    /* ─── Alignment helpers ─── */
+    function readAlign(groupId) {
+      var active = document.querySelector('#' + groupId + ' .align-btn.active');
+      return active ? active.getAttribute('data-align') : 'center';
+    }
+
+    function setAlign(groupId, value) {
+      document.querySelectorAll('#' + groupId + ' .align-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-align') === (value || 'center'));
+      });
+    }
+
+    function bindAlignGroup(groupId) {
+      document.querySelectorAll('#' + groupId + ' .align-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          setAlign(groupId, this.getAttribute('data-align'));
+          onChange();
+        });
       });
     }
 
@@ -817,6 +894,18 @@
     bindColorPair('textColorPicker',    'textColor');
     bindColorPair('btnColorPicker',     'btnColor');
     bindColorPair('btnTextColorPicker', 'btnTextColor');
+
+    document.querySelectorAll('#globalAlignBtns .align-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var align = this.getAttribute('data-align');
+        setAlign('globalAlignBtns', align);
+        setAlign('headerAlignBtns', align);
+        setAlign('bodyAlignBtns',   align);
+        onChange();
+      });
+    });
+    bindAlignGroup('headerAlignBtns');
+    bindAlignGroup('bodyAlignBtns');
 
     /* ─── Swatch active state ─── */
     function updateSwatchGroupActive(groupId, color) {
