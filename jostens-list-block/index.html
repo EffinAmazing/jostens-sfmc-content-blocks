@@ -591,14 +591,49 @@
 
   <div class="field">
     <div class="field-header">
-      <label>Padding</label>
-      <label class="toggle-check"><input type="checkbox" id="paddingPerSide"> Per side</label>
+      <label>Mobile Alignment</label>
+      <label class="toggle-check"><input type="checkbox" id="mobileAlignEnabled"> Override</label>
     </div>
-    <div id="paddingAllWrap">
+    <div id="mobileAlignWrap" style="display:none;">
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:11px; color:#888; font-weight:600;">Header</span>
+          <div class="align-btns" id="mobileHeaderAlignBtns">
+            <button class="align-btn" data-align="left">L</button>
+            <button class="align-btn active" data-align="center">C</button>
+            <button class="align-btn" data-align="right">R</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:11px; color:#888; font-weight:600;">Body</span>
+          <div class="align-btns" id="mobileBodyAlignBtns">
+            <button class="align-btn" data-align="left">L</button>
+            <button class="align-btn active" data-align="center">C</button>
+            <button class="align-btn" data-align="right">R</button>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:11px; color:#888; font-weight:600;">Item Text</span>
+          <div class="align-btns" id="mobileItemAlignBtns">
+            <button class="align-btn" data-align="left">L</button>
+            <button class="align-btn active" data-align="center">C</button>
+            <button class="align-btn" data-align="right">R</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <div class="field-header">
+      <label>Padding</label>
+      <label class="toggle-check"><input type="checkbox" id="paddingUniform"> All sides</label>
+    </div>
+    <div id="paddingAllWrap" style="display:none;">
       <input type="number" id="paddingAll" min="0" value="0" placeholder="0" />
       <div class="hint">px — applied to all sides.</div>
     </div>
-    <div id="paddingSidesWrap" style="display:none;">
+    <div id="paddingSidesWrap">
       <div class="padding-grid">
         <div class="padding-cell"><label>Top</label><input type="number" id="paddingTop" min="0" value="0" /></div>
         <div class="padding-cell"><label>Right</label><input type="number" id="paddingRight" min="0" value="0" /></div>
@@ -635,12 +670,16 @@
       headerAlign:  'center',
       bodyAlign:    'center',
       itemAlign:    'center',
+      mobileAlignEnabled:  false,
+      mobileHeaderAlign:   'center',
+      mobileBodyAlign:     'center',
+      mobileItemAlign:     'center',
       item1IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item1Header: 'Item One',   item1ShowHeader: true, item1Body: 'Description text for this list item goes here.', item1ShowBody: true, item1BtnLabel: 'Learn More', item1BtnUrl: '#', item1ShowBtn: true,
       item2IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item2Header: 'Item Two',   item2ShowHeader: true, item2Body: 'Description text for this list item goes here.', item2ShowBody: true, item2BtnLabel: 'Learn More', item2BtnUrl: '#', item2ShowBtn: true,
       item3IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item3Header: 'Item Three', item3ShowHeader: true, item3Body: 'Description text for this list item goes here.', item3ShowBody: true, item3BtnLabel: 'Learn More', item3BtnUrl: '#', item3ShowBtn: true,
       item4IconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/1eeb0025-4030-45b0-9dad-5e7ed38f9ea7.png', item4Header: 'Item Four',  item4ShowHeader: true, item4Body: 'Description text for this list item goes here.', item4ShowBody: true, item4BtnLabel: 'Learn More', item4BtnUrl: '#', item4ShowBtn: true,
       paddingAll:     0,
-      paddingPerSide: false,
+      paddingUniform: false,
       paddingTop:     0,
       paddingRight:   0,
       paddingBottom:  0,
@@ -722,7 +761,7 @@
       if (!item.showBtn || !item.btnLabel) return '';
       var btnWidth = Math.max(140, item.btnLabel.length * 9 + 60);
       return [
-        '<div style="text-align:' + (d.itemAlign || 'center') + ';">',
+        '<div class="lst-mob-item" style="text-align:' + (d.itemAlign || 'center') + ';">',
         '<!--[if mso]>',
         '<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '  href="' + item.btnUrl + '"',
@@ -757,7 +796,7 @@
 
       if (item.showHeader !== false && item.header) {
         rows.push(
-          '<tr><td align="' + d.itemAlign + '" style="padding:0 0 8px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+          '<tr><td class="lst-mob-item" align="' + d.itemAlign + '" style="padding:0 0 8px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
           item.header,
           '</td></tr>'
         );
@@ -765,7 +804,7 @@
 
       if (item.showBody !== false && item.body) {
         rows.push(
-          '<tr><td align="' + d.itemAlign + '" style="padding:0 4px 12px; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
+          '<tr><td class="lst-mob-item" align="' + d.itemAlign + '" style="padding:0 4px 12px; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
           item.body,
           '</td></tr>'
         );
@@ -773,7 +812,7 @@
 
       if (item.showBtn && item.btnLabel) {
         rows.push(
-          '<tr><td align="' + d.itemAlign + '" style="padding:0 0 10px; text-align:' + d.itemAlign + ';">',
+          '<tr><td class="lst-mob-item" align="' + d.itemAlign + '" style="padding:0 0 10px; text-align:' + d.itemAlign + ';">',
           buildBtn(item, d),
           '</td></tr>'
         );
@@ -805,10 +844,10 @@
 
       var textContent = [];
       if (item.showHeader !== false && item.header) {
-        textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:8px;">' + item.header + '</div>');
+        textContent.push('<div class="lst-mob-item" style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:8px;">' + item.header + '</div>');
       }
       if (item.showBody !== false && item.body) {
-        textContent.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:12px;">' + item.body + '</div>');
+        textContent.push('<div class="lst-mob-item" style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:12px;">' + item.body + '</div>');
       }
       if (item.showBtn && item.btnLabel) {
         textContent.push(buildBtn(item, d));
@@ -835,15 +874,15 @@
 
     /* ─── Padding helper ─── */
     function buildPaddingStyle(d) {
-      if (d.paddingPerSide) {
+      if (d.paddingUniform) {
+        var p = d.paddingAll || 0;
+        if (p) return p + 'px';
+      } else {
         var t = d.paddingTop    || 0;
         var r = d.paddingRight  || 0;
         var b = d.paddingBottom || 0;
         var l = d.paddingLeft   || 0;
         if (t || r || b || l) return t + 'px ' + r + 'px ' + b + 'px ' + l + 'px';
-      } else {
-        var p = d.paddingAll || 0;
-        if (p) return p + 'px';
       }
       return '';
     }
@@ -875,6 +914,11 @@
         '[data-ogsb] .list-section .list-header { color: ' + d.textColor + ' !important; }',
         '[data-ogsb] .list-section .list-body { color: ' + d.textColor + ' !important; }',
         '[data-ogsb] .list-section .list-btn { background-color: ' + d.btnColor + ' !important; color: ' + d.btnTextColor + ' !important; }',
+        d.mobileAlignEnabled ? '@media only screen and (max-width:480px) {' : '',
+        d.mobileAlignEnabled ? '  .lst-mob-hdr { text-align:' + d.mobileHeaderAlign + ' !important; }' : '',
+        d.mobileAlignEnabled ? '  .lst-mob-body { text-align:' + d.mobileBodyAlign + ' !important; }' : '',
+        d.mobileAlignEnabled ? '  .lst-mob-item { text-align:' + d.mobileItemAlign + ' !important; }' : '',
+        d.mobileAlignEnabled ? '}' : '',
         '</style>',
         '<table class="list-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + bgStyle + '" width="100%">'
       );
@@ -882,7 +926,7 @@
       if (d.showHeader && d.headerText) {
         lines.push(
           '<tr>',
-          '  <td align="' + d.headerAlign + '" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; text-align:' + d.headerAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '  <td class="lst-mob-hdr" align="' + d.headerAlign + '" style="padding:30px 20px 10px; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:24px; line-height:32px; font-weight:bold; text-align:' + d.headerAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
           '    <div class="list-header">' + d.headerText + '</div>',
           '  </td>',
           '</tr>'
@@ -893,7 +937,7 @@
         var bodyTopPad = d.showHeader ? '0' : '30px';
         lines.push(
           '<tr>',
-          '  <td align="' + d.bodyAlign + '" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; text-align:' + d.bodyAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
+          '  <td class="lst-mob-body" align="' + d.bodyAlign + '" style="padding:' + bodyTopPad + ' 20px 20px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:24px; text-align:' + d.bodyAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">',
           '    <div class="list-body">' + d.bodyText + '</div>',
           '  </td>',
           '</tr>'
@@ -1109,8 +1153,12 @@
         headerAlign:  readAlign('headerAlignBtns'),
         bodyAlign:    readAlign('bodyAlignBtns'),
         itemAlign:    readAlign('itemAlignBtns'),
+        mobileAlignEnabled: document.getElementById('mobileAlignEnabled').checked,
+        mobileHeaderAlign:  readAlign('mobileHeaderAlignBtns'),
+        mobileBodyAlign:    readAlign('mobileBodyAlignBtns'),
+        mobileItemAlign:    readAlign('mobileItemAlignBtns'),
         paddingAll:     parseInt(document.getElementById('paddingAll').value)     || 0,
-        paddingPerSide: document.getElementById('paddingPerSide').checked,
+        paddingUniform: document.getElementById('paddingUniform').checked,
         paddingTop:     parseInt(document.getElementById('paddingTop').value)     || 0,
         paddingRight:   parseInt(document.getElementById('paddingRight').value)   || 0,
         paddingBottom:  parseInt(document.getElementById('paddingBottom').value)  || 0,
@@ -1177,13 +1225,18 @@
       setAlign('itemAlignBtns',   d.itemAlign   || 'center');
       setAlign('globalAlignBtns', d.headerAlign || 'center');
       document.getElementById('paddingAll').value       = d.paddingAll    !== undefined ? d.paddingAll    : 0;
-      document.getElementById('paddingPerSide').checked = !!d.paddingPerSide;
+      document.getElementById('paddingUniform').checked = !!d.paddingUniform;
       document.getElementById('paddingTop').value       = d.paddingTop    !== undefined ? d.paddingTop    : 0;
       document.getElementById('paddingRight').value     = d.paddingRight  !== undefined ? d.paddingRight  : 0;
       document.getElementById('paddingBottom').value    = d.paddingBottom !== undefined ? d.paddingBottom : 0;
       document.getElementById('paddingLeft').value      = d.paddingLeft   !== undefined ? d.paddingLeft   : 0;
-      document.getElementById('paddingAllWrap').style.display   = d.paddingPerSide ? 'none' : '';
-      document.getElementById('paddingSidesWrap').style.display = d.paddingPerSide ? '' : 'none';
+      document.getElementById('paddingAllWrap').style.display   = d.paddingUniform ? '' : 'none';
+      document.getElementById('paddingSidesWrap').style.display = d.paddingUniform ? 'none' : '';
+      document.getElementById('mobileAlignEnabled').checked    = !!d.mobileAlignEnabled;
+      document.getElementById('mobileAlignWrap').style.display = d.mobileAlignEnabled ? '' : 'none';
+      setAlign('mobileHeaderAlignBtns', d.mobileHeaderAlign || 'center');
+      setAlign('mobileBodyAlignBtns',   d.mobileBodyAlign   || 'center');
+      setAlign('mobileItemAlignBtns',   d.mobileItemAlign   || 'center');
     }
 
     function setColor(hexId, pickerId, value) {
@@ -1272,6 +1325,14 @@
     bindAlignGroup('bodyAlignBtns');
     bindAlignGroup('itemAlignBtns');
 
+    document.getElementById('mobileAlignEnabled').addEventListener('change', function() {
+      document.getElementById('mobileAlignWrap').style.display = this.checked ? '' : 'none';
+      onChange();
+    });
+    bindAlignGroup('mobileHeaderAlignBtns');
+    bindAlignGroup('mobileBodyAlignBtns');
+    bindAlignGroup('mobileItemAlignBtns');
+
     /* ─── Swatch clicks ─── */
     document.getElementById('bgSwatches').querySelectorAll('.swatch').forEach(function(swatch) {
       swatch.addEventListener('click', function() {
@@ -1313,9 +1374,9 @@
       onChange();
     });
 
-    document.getElementById('paddingPerSide').addEventListener('change', function() {
-      document.getElementById('paddingAllWrap').style.display   = this.checked ? 'none' : '';
-      document.getElementById('paddingSidesWrap').style.display = this.checked ? '' : 'none';
+    document.getElementById('paddingUniform').addEventListener('change', function() {
+      document.getElementById('paddingAllWrap').style.display   = this.checked ? '' : 'none';
+      document.getElementById('paddingSidesWrap').style.display = this.checked ? 'none' : '';
       onChange();
     });
     ['paddingAll', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].forEach(function(id) {
