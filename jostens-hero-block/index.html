@@ -756,6 +756,7 @@
         '</tr>'
       ].join('\n') : '';
 
+      var vmlBtnHAlign = d.btnAlign === 'left' ? 'left' : d.btnAlign === 'right' ? 'right' : 'center';
       var btnRow = d.showBtn ? [
         '<tr>',
         '  <td class="hero-mob-btn" align="' + d.btnAlign + '" style="padding:' + btnTopPad + ' 20px 28px; text-align:' + d.btnAlign + ';">',
@@ -763,7 +764,7 @@
         '    <!--[if mso]>',
         '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '      href="' + d.ctaUrl + '"',
-        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px; mso-position-horizontal:' + vmlBtnHAlign + ';"',
         '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
         '      <w:anchorlock/>',
         '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
