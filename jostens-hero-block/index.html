@@ -756,22 +756,39 @@
         '</tr>'
       ].join('\n') : '';
 
-      var vmlBtnHAlign = d.btnAlign === 'left' ? 'left' : d.btnAlign === 'right' ? 'right' : 'center';
-      var btnRow = d.showBtn ? [
-        '<tr>',
-        '  <td class="hero-mob-btn" align="' + d.btnAlign + '" style="padding:' + btnTopPad + ' 20px 28px; text-align:' + d.btnAlign + ';">',
-        '    <div>',
+      var btnOutlookHtml = (d.bgMode === 'image') ? [
         '    <!--[if mso]>',
+        '    <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>',
+        '    <td align="' + d.btnAlign + '">',
         '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '      href="' + d.ctaUrl + '"',
-        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px; mso-position-horizontal:' + vmlBtnHAlign + ';"',
+        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
         '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
         '      <w:anchorlock/>',
         '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
         '        ' + d.ctaLabel,
         '      </center>',
         '    </v:roundrect>',
-        '    <![endif]-->',
+        '    </td></tr></table>',
+        '    <![endif]-->'
+      ].join('\n') : [
+        '    <!--[if mso]>',
+        '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+        '      href="' + d.ctaUrl + '"',
+        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
+        '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+        '      <w:anchorlock/>',
+        '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
+        '        ' + d.ctaLabel,
+        '      </center>',
+        '    </v:roundrect>',
+        '    <![endif]-->'
+      ].join('\n');
+      var btnRow = d.showBtn ? [
+        '<tr>',
+        '  <td class="hero-mob-btn" align="' + d.btnAlign + '" style="padding:' + btnTopPad + ' 20px 28px; text-align:' + d.btnAlign + ';">',
+        '    <div>',
+        btnOutlookHtml,
         '    <!--[if !mso]><!-->',
         '    <a alias="Button_CTA_Link" class="cta-button" href="' + d.ctaUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:12px 24px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center;">' + d.ctaLabel + '</span></a>',
         '    <!--<![endif]-->',
