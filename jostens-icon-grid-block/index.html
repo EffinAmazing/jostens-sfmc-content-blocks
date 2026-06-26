@@ -584,16 +584,16 @@
       headerText:   'SUPPORT FOR<br>REAL CLASSROOMS',
       bodyText:     'Beyond lesson planning, the Digital Classroom includes:',
       icon1Url:     'https://cdn.jostens.com/apps/shop/images/email/2026/Yearbook/B2B/Aircover/Icon/light-bulb.png',
-      icon1Alt:     'Light Bulb',
+      icon1Alt:     '',
       icon1Text:    'creative inspiration galleries for theme, writing, design and social media.',
       icon2Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/3e01cd9f-ff16-4c22-a8ca-56612bbf1afc.png',
-      icon2Alt:     'Presentation',
+      icon2Alt:     '',
       icon2Text:    'video libraries for page creation and technology support for independent student learning.',
       icon3Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51344fe9-fc2b-4737-9977-8712e858cae4.png',
-      icon3Alt:     'Cards',
+      icon3Alt:     '',
       icon3Text:    'guidance on building project management systems and grading expectations.',
       icon4Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51555df1-8e16-430d-be9a-9c6179efb2a1.png',
-      icon4Alt:     'Chat Bubbles',
+      icon4Alt:     '',
       icon4Text:    'practical support you can use to fill skill gaps and build confidence with your staff.',
       ctaLabel:     'LEARN MORE',
       ctaUrl:       '%%=RedirectTo(@JYBKProspectFormURL)=%%',
@@ -851,7 +851,7 @@
       };
       [1, 2, 3, 4].forEach(function(n) {
         d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
-        d['icon' + n + 'Alt']  = document.getElementById('icon' + n + 'Alt').value  || DEFAULTS['icon' + n + 'Alt'];
+        d['icon' + n + 'Alt']  = document.getElementById('icon' + n + 'Alt').value;
         d['icon' + n + 'Text'] = document.getElementById('icon' + n + 'Text').value || DEFAULTS['icon' + n + 'Text'];
       });
       return d;
@@ -870,7 +870,7 @@
 
       [1, 2, 3, 4].forEach(function(n) {
         document.getElementById('icon' + n + 'Url').value  = d['icon' + n + 'Url']  || DEFAULTS['icon' + n + 'Url'];
-        document.getElementById('icon' + n + 'Alt').value  = d['icon' + n + 'Alt']  || DEFAULTS['icon' + n + 'Alt'];
+        document.getElementById('icon' + n + 'Alt').value  = ('icon' + n + 'Alt' in d) ? d['icon' + n + 'Alt'] : DEFAULTS['icon' + n + 'Alt'];
         document.getElementById('icon' + n + 'Text').value = d['icon' + n + 'Text'] || DEFAULTS['icon' + n + 'Text'];
       });
 

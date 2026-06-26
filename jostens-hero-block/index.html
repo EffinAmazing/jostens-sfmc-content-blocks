@@ -336,6 +336,11 @@
   </div>
 
   <div class="field">
+    <label for="heroImageAlt">Image Alt Text</label>
+    <input type="text" id="heroImageAlt" placeholder="Describe the image for screen readers" />
+  </div>
+
+  <div class="field">
     <label for="heroPosition">Image Position</label>
     <select id="heroPosition">
       <option value="top">Top</option>
@@ -596,6 +601,7 @@
       ctaLabel:     "LET'S PARTNER TOGETHER",
       ctaUrl:       '%%=RedirectTo(@JYBKProspectFormURL)=%%',
       heroImageUrl:    '',
+      heroImageAlt:    '',
       heroPosition:    'top',
       imageWidth:      768,
       imgPaddingTop:    0,
@@ -726,7 +732,7 @@
       var heroRow = hasHero ? [
         '<tr>',
         '  <td align="center" style="padding:' + imgTdPadding + '; font-size:0; line-height:0; border:0;">',
-        '    <img src="' + d.heroImageUrl + '" width="' + effectiveImgWidth + '" style="display:block; width:100%; max-width:' + effectiveImgWidth + 'px; height:auto; border:0;" />',
+        '    <img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" width="' + effectiveImgWidth + '" style="display:block; width:100%; max-width:' + effectiveImgWidth + 'px; height:auto; border:0;" />',
         '  </td>',
         '</tr>'
       ].join('\n') : '';
@@ -837,7 +843,7 @@
       document.getElementById('effectiveWidthDisplay').textContent = dispWidth + 'px';
       var heroHtml = hasHero ? (
         '<tr><td style="padding:' + previewImgPad + '; font-size:0; line-height:0;">' +
-        '<img src="' + d.heroImageUrl + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>'
+        '<img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>'
       ) : '';
 
       var headerHtml = d.showHeader ? (
@@ -883,6 +889,7 @@
         ctaLabel:     document.getElementById('ctaLabel').value     || DEFAULTS.ctaLabel,
         ctaUrl:       document.getElementById('ctaUrl').value       || DEFAULTS.ctaUrl,
         heroImageUrl:    document.getElementById('heroImageUrl').value || '',
+        heroImageAlt:    document.getElementById('heroImageAlt').value,
         heroPosition:    document.getElementById('heroPosition').value || DEFAULTS.heroPosition,
         imageWidth:      parseInt(document.getElementById('imageWidth').value)      || DEFAULTS.imageWidth,
         imgPaddingTop:   parseInt(document.getElementById('imgPaddingTop').value)   || 0,
@@ -925,6 +932,7 @@
       document.getElementById('ctaLabel').value     = d.ctaLabel     || DEFAULTS.ctaLabel;
       document.getElementById('ctaUrl').value       = d.ctaUrl       || DEFAULTS.ctaUrl;
       document.getElementById('heroImageUrl').value    = d.heroImageUrl || '';
+      document.getElementById('heroImageAlt').value    = ('heroImageAlt' in d) ? d.heroImageAlt : '';
       document.getElementById('heroPosition').value    = d.heroPosition || DEFAULTS.heroPosition;
       document.getElementById('imageWidth').value      = d.imageWidth      !== undefined ? d.imageWidth      : DEFAULTS.imageWidth;
       document.getElementById('imgPaddingTop').value    = d.imgPaddingTop    !== undefined ? d.imgPaddingTop    : 0;
@@ -1136,7 +1144,7 @@
     });
 
     /* ─── Text / select fields ─── */
-    ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl', 'heroImageUrl', 'heroPosition', 'bgImageUrl', 'gradientDir',
+    ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl', 'heroImageUrl', 'heroImageAlt', 'heroPosition', 'bgImageUrl', 'gradientDir',
      'imageWidth', 'imgPaddingTop', 'imgPaddingRight', 'imgPaddingBottom', 'imgPaddingLeft'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
       document.getElementById(id).addEventListener('change', onChange);
