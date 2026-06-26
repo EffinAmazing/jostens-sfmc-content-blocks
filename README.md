@@ -129,6 +129,7 @@ A flexible hero section that supports a header, body, hero image, and CTA button
 | Field | Notes |
 |---|---|
 | Image URL | Upload to SFMC Content Manager and paste the URL |
+| Image Alt Text | Screen reader description for the hero image |
 | Show | Toggle to hide the image without removing the URL |
 | Image Position | Where the image appears: **Top**, **After Header**, **After Body**, **Bottom** |
 | Image Width | Pixel width for Outlook sizing (default: 768). See recommended widths by layout below |
@@ -158,7 +159,7 @@ Set the Image Width field to the value for your column layout. Use the T/R/B/L P
 | Mode | Description |
 |---|---|
 | **Solid** | Single color (brand swatches or custom hex). Strikethrough swatch = transparent |
-| **Image** | Background image URL plus an Outlook fallback solid color |
+| **Image** | Background image URL plus an Outlook Fallback Color. Outlook does not render CSS background images; recipients see the fallback color instead |
 | **Gradient** | From/To colors plus direction. Outlook shows the "From" color as a solid fallback |
 
 Gradient directions available: Top to Bottom, Bottom to Top, Left to Right, Right to Left, Diagonal down-right, Diagonal up-right.
@@ -181,9 +182,9 @@ Gradient directions available: Top to Bottom, Bottom to Top, Left to Right, Righ
 - Image position: Top
 
 ### Email Client Notes
-- Background images use VML (`<v:rect>`) for Outlook rendering
+- Outlook does not render CSS background images. In Image mode, Outlook recipients see the **Outlook Fallback Color** — a solid color set via inline `background-color` on the block table. Choose a brand color that provides readable contrast for your text
 - Gradient backgrounds degrade gracefully to the "From" solid color in Outlook
-- The "Outlook Fallback Color" in Image mode is the color shown in Outlook and other clients that do not support background images
+- The rounded CTA button uses a VML `<v:roundrect>` for Outlook across all background modes
 
 ---
 
@@ -263,6 +264,7 @@ A flexible list section that supports four different list styles and 1–4 confi
 | Field | Notes |
 |---|---|
 | Icon URL | Upload to SFMC Content Manager and paste the URL. Icon style only |
+| Icon Alt Text | Screen reader description for the icon image. Icon style only |
 | Header | Item title (show/hide toggle) |
 | Body | Item description (show/hide toggle) |
 | Button Label | Per-item CTA label (show/hide toggle). Icon style only |
@@ -311,11 +313,9 @@ Solid colors are set as `background-color` inline on the table element. Outlook 
 
 ### Background Images (Hero Block)
 
-CSS `background-image` is not supported in Outlook. When the Hero Block is set to **Image** background mode, a VML `<v:rect>` with `<v:fill type="frame">` wraps the entire content area, rendering the background image natively in Outlook. The **Outlook Fallback Color** field sets the color Outlook displays if the image fails to load or is blocked.
+CSS `background-image` is not supported in Outlook. The Hero Block does not attempt to render background images in Outlook via VML. Instead, in **Image** mode, the block sets `background-color` inline on the table to the **Outlook Fallback Color**. Outlook recipients see this solid color; all other clients apply the CSS `background-image` and see the full background image.
 
-Non-Outlook clients use the CSS `background-image` on the table element and ignore the VML entirely.
-
-In practice: set the Outlook Fallback Color to a brand color that provides readable contrast for your text in case the image is blocked.
+In practice: set the Outlook Fallback Color to a brand color that provides readable contrast for your text. The rounded CTA button renders correctly in Outlook in all background modes.
 
 ### Gradient Backgrounds (Hero Block)
 
