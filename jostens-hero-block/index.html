@@ -702,8 +702,11 @@
           tableBgStyle   = 'background-color:' + d.bgColor + ';';
           darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.bgColor + ' !important; }';
         }
-      } else if (d.bgMode === 'image' && d.bgImageUrl) {
-        tableBgStyle   = 'background-color:' + d.bgColor + '; background-image:url(' + d.bgImageUrl + '); background-size:cover; background-position:center center;';
+      } else if (d.bgMode === 'image') {
+        tableBgStyle   = 'background-color:' + d.bgColor + ';';
+        if (d.bgImageUrl) {
+          tableBgStyle += ' background-image:url(' + d.bgImageUrl + '); background-size:cover; background-position:center center;';
+        }
         darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.bgColor + ' !important; }';
       } else if (d.bgMode === 'gradient') {
         tableBgStyle   = 'background-color:' + d.gradientFrom + '; background-image:linear-gradient(' + d.gradientDir + ', ' + d.gradientFrom + ', ' + d.gradientTo + ');';
