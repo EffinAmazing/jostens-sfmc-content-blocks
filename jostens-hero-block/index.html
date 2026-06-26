@@ -713,23 +713,9 @@
         darkModeBgRule = '[data-ogsb] .hero-section { background-color: ' + d.gradientFrom + ' !important; }';
       }
 
-      /* --- VML background image wrapper for Outlook --- */
+      /* --- No VML wrapper for Outlook in image mode --- */
+      /* Outlook falls back to the solid background-color already on the table. */
       var vmlOpen = '', vmlClose = '';
-      if (d.bgMode === 'image' && d.bgImageUrl) {
-        vmlOpen = [
-          '<!--[if mso]>',
-          '<v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:768px;">',
-          '  <v:fill type="frame" src="' + d.bgImageUrl + '" color="' + d.bgColor + '"/>',
-          '  <v:textbox style="mso-fit-shape-to-text:true" inset="0,0,0,0">',
-          '<![endif]-->'
-        ].join('\n');
-        vmlClose = [
-          '<!--[if mso]>',
-          '  </v:textbox>',
-          '</v:rect>',
-          '<![endif]-->'
-        ].join('\n');
-      }
 
       /* --- Build rows --- */
       var heroRow = hasHero ? [
@@ -756,22 +742,7 @@
         '</tr>'
       ].join('\n') : '';
 
-      var btnOutlookHtml = (d.bgMode === 'image') ? [
-        '    <!--[if mso]>',
-        '    <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>',
-        '    <td align="' + d.btnAlign + '">',
-        '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
-        '      href="' + d.ctaUrl + '"',
-        '      style="height:44px; v-text-anchor:middle; width:' + btnWidth + 'px;"',
-        '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
-        '      <w:anchorlock/>',
-        '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
-        '        ' + d.ctaLabel,
-        '      </center>',
-        '    </v:roundrect>',
-        '    </td></tr></table>',
-        '    <![endif]-->'
-      ].join('\n') : [
+      var btnOutlookHtml = [
         '    <!--[if mso]>',
         '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
         '      href="' + d.ctaUrl + '"',
