@@ -323,7 +323,7 @@ Note that Outlook's own dark mode implementation has known incompatibilities wit
 
 **Before sending:**
 1. Always check the **live preview** at the bottom of each block editor before saving
-2. If your Button URL uses AMPscript (e.g., `%%=RedirectTo(@JYBKProspectFormURL)=%%`), the canvas will show `#` as the href. This is expected and correct; the real URL resolves at send time
+2. Make sure you check your AMPscript URLs before sending — confirm the variable is defined in your send workflow and resolves to the correct destination
 3. For Hero Block background images, Outlook recipients will see the **Outlook Fallback Color**, not the image. Make sure the fallback color provides enough contrast for your text
 
 **Dark mode:**
