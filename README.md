@@ -332,4 +332,3 @@ Note that Outlook's own dark mode implementation has known incompatibilities wit
 
 **Padding between blocks:**
 - Use the **Padding** control (Top/Bottom) to create visual spacing between adjacent blocks
-- If two blocks share the same background color, they will appear seamless. Add padding to create a gap or use a different background color on the next block
