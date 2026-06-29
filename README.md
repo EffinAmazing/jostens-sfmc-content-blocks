@@ -259,7 +259,7 @@ A flexible list section that supports four different list styles and 1–4 confi
 ### List Styles
 
 **Icon (Horizontal)**
-Items render as equal-width columns with icon above, then header, body, and button. On mobile (550px and below): 1-up for 1 item, 2-up for 2 or 4 items, 1-up for 3 items.
+Items render as equal-width columns with icon above, then header, body, and button. On mobile (480px and below): 1-up for 1 item, 2-up for 2 or 4 items, 1-up for 3 items.
 
 **Icon (Vertical)**
 Items stack as rows with the icon on the left and text/button on the right.
