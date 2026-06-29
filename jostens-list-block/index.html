@@ -977,7 +977,7 @@
             '<td width="43" valign="top" style="width:43px; padding:0 12px 0 0;">',
             '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" alt="" width="43" height="43" style="display:block; border:0; width:43px; height:43px;" />',
             '</td>',
-            '<td valign="top" style="padding-top:6px;">'
+            '<td valign="top" style="' + (item.showHeader !== false && item.header ? '' : 'padding-top:6px;') + '">'
           );
           if (item.showHeader !== false && item.header) {
             lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>');
@@ -1091,7 +1091,8 @@
           var r = '<tr><td style="padding:' + topPad + ' 12px 0;"><table width="100%"><tr>';
           r += '<td width="43" valign="top" style="width:43px; padding-right:10px;">';
           r += '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" alt="" width="43" height="43" style="display:block; width:43px; height:43px; border:0;" />';
-          r += '</td><td valign="top" style="padding-top:6px; text-align:' + d.itemAlign + ';">';
+          var hasHeader = item.showHeader !== false && item.header;
+          r += '</td><td valign="top" style="' + (hasHeader ? '' : 'padding-top:6px; ') + 'text-align:' + d.itemAlign + ';">';
           if (item.showHeader !== false && item.header) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>';
           if (item.showBody !== false && item.body) r += '<div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:18px; color:' + d.textColor + ';">' + item.body + '</div>';
           r += '</td></tr></table></td></tr>';
