@@ -22,16 +22,6 @@ Each block folder contains:
 
 ---
 
-## Installing a Block in SFMC
-
-1. In Content Builder, go to **Content** > **Blocks** > **Custom Blocks**
-2. Click **Create Block**
-3. Give the block a name and upload `icon.png` / `dragIcon.png`
-4. Set the **Endpoint URL** to the hosted URL of `index.html` (must be publicly accessible)
-5. Save and the block will appear in your drag-and-drop editor
-
----
-
 ## Common Controls (All Blocks)
 
 All four blocks share these UI patterns:
