@@ -52,14 +52,8 @@ All button URL fields accept both plain URLs and AMPscript expressions:
 - Plain: `https://jostens.com/yearbooks`
 - AMPscript: `%%=RedirectTo(@JYBKProspectFormURL)=%%`
 
-AMPscript URLs are replaced with `#` in the Content Builder canvas preview so the block renders cleanly, but resolve correctly at send time.
-
-> **Default AMPscript variable:** The CTA, Hero, and Icon Grid blocks default to `%%=RedirectTo(@JYBKProspectFormURL)=%%` as the button URL. This variable should be set the same way URLs are currently managed in your send workflow.
-
 ### Images
-Upload all images to SFMC Content Manager and paste the URL into the block. All image URLs must be hosted in SFMC Content Manager.
-
-> **Note:** Some blocks ship with default images already hosted in SFMC Content Manager (icon grid campaign assets, the checkbox style checkmark icon). These can be replaced at any time by uploading new images and pasting the new URL.
+Upload all images to SFMC Content Manager and paste the URL into the block. All image URLs should be hosted in SFMC Content Manager.
 
 ### Show/Hide Toggles
 Every text element and the button have a **Show** checkbox next to their field label. Unchecking it removes that element from the rendered email entirely.
@@ -220,7 +214,7 @@ A section with an optional headline and body text above a 1–4 icon grid, with 
 - Background: Green (`#79BB2F`), Text: Dark (`#212121`), Button: Dark with white text
 
 ### Mobile Layout
-| Icon Count | Mobile behavior (550px and below) |
+| Icon Count | Mobile behavior (480px and below) |
 |---|---|
 | 1 | Full width |
 | 2 | Side by side (2 columns) |
