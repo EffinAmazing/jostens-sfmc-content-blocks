@@ -734,6 +734,9 @@
       document.querySelectorAll('.liststyle-tab').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-liststyle') === style);
       });
+      var isBulletOrNumbered = (style === 'bullet' || style === 'numbered');
+      document.getElementById('itemAlignBtns').classList.toggle('disabled', isBulletOrNumbered);
+      if (isBulletOrNumbered) setAlign('itemAlignBtns', 'left');
     }
 
     function listColClass(count) {
@@ -1247,7 +1250,7 @@
 
       setAlign('headerAlignBtns', d.headerAlign || 'center');
       setAlign('bodyAlignBtns',   d.bodyAlign   || 'center');
-      setAlign('itemAlignBtns',   d.itemAlign   || 'center');
+      setAlign('itemAlignBtns', (d.listStyle === 'bullet' || d.listStyle === 'numbered') ? 'left' : (d.itemAlign || 'center'));
       setAlign('globalAlignBtns', d.headerAlign || 'center');
       document.getElementById('paddingAll').value       = d.paddingAll    !== undefined ? d.paddingAll    : 0;
       document.getElementById('paddingUniform').checked = !!d.paddingUniform;
