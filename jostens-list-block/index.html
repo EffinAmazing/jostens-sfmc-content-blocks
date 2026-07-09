@@ -806,9 +806,10 @@
       var rows  = [];
 
       if (d.showIcons && item.iconUrl) {
+        var imgMargin = d.itemAlign === 'center' ? '0 auto' : d.itemAlign === 'right' ? '0 0 0 auto' : '0';
         rows.push(
-          '<tr><td align="center" style="padding:0 0 10px;">',
-          '<img src="' + item.iconUrl + '" alt="' + (item.altText || '') + '" width="80" height="80" style="display:block; width:80px; height:80px; border:0;" />',
+          '<tr><td align="' + d.itemAlign + '" style="padding:0 0 10px; text-align:' + d.itemAlign + ';">',
+          '<img src="' + item.iconUrl + '" alt="' + (item.altText || '') + '" width="80" height="80" style="display:block; width:80px; height:80px; border:0; margin:' + imgMargin + ';" />',
           '</td></tr>'
         );
       }
@@ -980,13 +981,13 @@
             '<td width="43" valign="top" style="width:43px; padding:0 12px 0 0;">',
             '<img src="' + (d.checkboxIconUrl || DEFAULTS.checkboxIconUrl) + '" alt="" width="43" height="43" style="display:block; border:0; width:43px; height:43px;" />',
             '</td>',
-            '<td valign="top" style="' + (item.showHeader !== false && item.header ? '' : 'padding-top:6px;') + '">'
+            '<td valign="top" style="text-align:' + d.itemAlign + ';' + (item.showHeader !== false && item.header ? '' : ' padding-top:6px;') + '">'
           );
           if (item.showHeader !== false && item.header) {
-            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>');
+            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; padding-bottom:4px;">' + item.header + '</div>');
           }
           if (item.showBody !== false && item.body) {
-            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</div>');
+            lines.push('<div style="font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</div>');
           }
           lines.push('</td>', '</tr></table>', '</td></tr>');
         });
@@ -1001,16 +1002,16 @@
         var listStyleType = d.listStyle === 'bullet' ? 'disc' : 'decimal';
         lines.push(
           '<tr>',
-          '  <td style="padding:16px 20px;">',
+          '  <td style="padding:16px 20px; text-align:' + d.itemAlign + ';">',
           '    <' + tag + ' style="margin:0; padding:0 0 0 22px; mso-padding-alt:0 0 0 22px; list-style-type:' + listStyleType + ';">'
         );
         items.forEach(function(item) {
-          lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; mso-line-height-rule:exactly;">');
+          lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; mso-line-height-rule:exactly;">');
           if (item.showHeader !== false && item.header) {
-            lines.push('<strong style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.header + '</strong>');
+            lines.push('<strong style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.header + '</strong>');
           }
           if (item.showBody !== false && item.body) {
-            lines.push('<span style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</span>');
+            lines.push('<span style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:14px; line-height:20px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.body + '</span>');
           }
           lines.push('</li>');
         });
