@@ -344,7 +344,7 @@
     <label>Image Type</label>
     <div class="bg-mode-tabs">
       <button class="bg-tab image-type-tab active" data-imagetype="hero">Hero</button>
-      <button class="bg-tab image-type-tab" data-imagetype="icon">Icon</button>
+      <button class="bg-tab image-type-tab" data-imagetype="inline">Inline</button>
     </div>
   </div>
 
@@ -388,29 +388,28 @@
       <input type="text" id="imageWidth" placeholder="768" value="768" />
       <div class="hint">Effective width for Outlook: <strong id="effectiveWidthDisplay">768px</strong></div>
     </div>
-  </div>
-
-  <div class="field">
-    <label>Image Padding (px)</label>
-    <div class="pad-grid">
-      <div class="pad-field">
-        <label for="imgPaddingTop">Top</label>
-        <input type="text" id="imgPaddingTop" placeholder="0" value="0" />
+    <div class="field">
+      <label>Image Padding (px)</label>
+      <div class="pad-grid">
+        <div class="pad-field">
+          <label for="imgPaddingTop">Top</label>
+          <input type="text" id="imgPaddingTop" placeholder="0" value="0" />
+        </div>
+        <div class="pad-field">
+          <label for="imgPaddingRight">Right</label>
+          <input type="text" id="imgPaddingRight" placeholder="0" value="0" />
+        </div>
+        <div class="pad-field">
+          <label for="imgPaddingBottom">Bottom</label>
+          <input type="text" id="imgPaddingBottom" placeholder="0" value="0" />
+        </div>
+        <div class="pad-field">
+          <label for="imgPaddingLeft">Left</label>
+          <input type="text" id="imgPaddingLeft" placeholder="0" value="0" />
+        </div>
       </div>
-      <div class="pad-field">
-        <label for="imgPaddingRight">Right</label>
-        <input type="text" id="imgPaddingRight" placeholder="0" value="0" />
-      </div>
-      <div class="pad-field">
-        <label for="imgPaddingBottom">Bottom</label>
-        <input type="text" id="imgPaddingBottom" placeholder="0" value="0" />
-      </div>
-      <div class="pad-field">
-        <label for="imgPaddingLeft">Left</label>
-        <input type="text" id="imgPaddingLeft" placeholder="0" value="0" />
-      </div>
+      <div class="hint">Effective img width = Image Width − Left − Right</div>
     </div>
-    <div id="heroWidthHint" class="hint">Effective img width = Image Width − Left − Right</div>
   </div>
 
   <!-- ─── Button ─── -->
@@ -710,8 +709,7 @@
 
     function showImageTypeControls(type) {
       document.getElementById('heroOnlyControls').style.display = type === 'hero' ? '' : 'none';
-      document.getElementById('iconOnlyControls').style.display = type === 'icon'  ? '' : 'none';
-      document.getElementById('heroWidthHint').style.display    = type === 'hero' ? '' : 'none';
+      document.getElementById('iconOnlyControls').style.display = type === 'inline' ? '' : 'none';
       document.querySelectorAll('.image-type-tab').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-imagetype') === type);
       });
@@ -738,7 +736,7 @@
       var hasHero          = d.showHero && d.heroImageUrl;
       var imgWidth         = d.imageWidth || 768;
       var effectiveImgWidth = Math.max(1, imgWidth - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
-      var imgTdPadding     = (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
+      var imgTdPadding     = d.imageType === 'inline' ? '0' : (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
 
       /* --- Padding logic --- */
       var heroAboveBody = hasHero && d.heroPosition === 'afterHeader';
@@ -774,7 +772,7 @@
       /* --- Build rows --- */
       var heroRow = '';
       if (hasHero) {
-        if (d.imageType === 'icon') {
+        if (d.imageType === 'inline') {
           var iw = parseInt(d.iconWidth) || 80;
           var ih = parseInt(d.iconHeight) || 80;
           var ia = d.iconAlign || 'center';
@@ -903,12 +901,12 @@
       }
 
       /* Build preview rows */
-      var previewImgPad = (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
+      var previewImgPad = d.imageType === 'inline' ? '0' : (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
       var dispWidth = Math.max(1, (d.imageWidth || 768) - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
       document.getElementById('effectiveWidthDisplay').textContent = dispWidth + 'px';
       var heroHtml = '';
       if (hasHero) {
-        if (d.imageType === 'icon') {
+        if (d.imageType === 'inline') {
           var piw = parseInt(d.iconWidth) || 80;
           var pih = parseInt(d.iconHeight) || 80;
           var pia = d.iconAlign || 'center';
