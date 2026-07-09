@@ -716,6 +716,7 @@
       /* --- No VML wrapper for Outlook in image mode --- */
       /* Outlook falls back to the solid background-color already on the table. */
       var vmlOpen = '', vmlClose = '';
+      var paddingStyle = buildPaddingStyle(d);
 
       /* --- Build rows --- */
       var heroRow = hasHero ? [
@@ -791,14 +792,16 @@
         d.mobileAlignEnabled ? '}' : '',
         '</style>',
         vmlOpen,
-        '<table class="hero-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + (tableBgStyle ? ' ' + tableBgStyle : '') + '" width="100%">',
+        paddingStyle
+          ? '<table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;" width="100%">'
+          : '<table class="hero-section" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + (tableBgStyle ? ' ' + tableBgStyle : '') + '" width="100%">',
         rows.join('\n'),
         '</table>',
         vmlClose
       ].join('\n');
-      var paddingStyle = buildPaddingStyle(d);
       if (paddingStyle) {
-        return '<table role="presentation" border="0" cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;" width="100%"><tr><td style="padding:' + paddingStyle + ';">' + html + '</td></tr></table>';
+        var outerBgStyle = tableBgStyle ? ' ' + tableBgStyle : '';
+        return '<table class="hero-section" role="presentation" border="0" cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0;' + outerBgStyle + '" width="100%"><tr><td style="padding:' + paddingStyle + ';' + outerBgStyle + '">' + html + '</td></tr></table>';
       }
       return html;
     }
