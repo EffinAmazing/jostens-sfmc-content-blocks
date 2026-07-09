@@ -386,7 +386,7 @@
     <div class="field">
       <label for="imageWidth">Image Width (px)</label>
       <input type="text" id="imageWidth" placeholder="768" value="768" />
-      <div class="hint">Effective width for Outlook: <strong id="effectiveWidthDisplay">768px</strong></div>
+      <div class="hint">Outlook-safe width: <strong id="effectiveWidthDisplay">768px</strong> — image width minus image padding and block padding</div>
     </div>
     <div class="field">
       <label>Image Padding (px)</label>
@@ -408,7 +408,7 @@
           <input type="text" id="imgPaddingLeft" placeholder="0" value="0" />
         </div>
       </div>
-      <div class="hint">Effective img width = Image Width − Left − Right</div>
+      <div class="hint">Left/Right values reduce the Outlook-safe width shown above.</div>
     </div>
   </div>
 
@@ -902,7 +902,9 @@
 
       /* Build preview rows */
       var previewImgPad = d.imageType === 'inline' ? '0' : (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
-      var dispWidth = Math.max(1, (d.imageWidth || 768) - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
+      var globalPadL = d.paddingUniform ? (d.paddingAll || 0) : (d.paddingLeft || 0);
+      var globalPadR = d.paddingUniform ? (d.paddingAll || 0) : (d.paddingRight || 0);
+      var dispWidth = Math.max(1, (d.imageWidth || 768) - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0) - globalPadL - globalPadR);
       document.getElementById('effectiveWidthDisplay').textContent = dispWidth + 'px';
       var heroHtml = '';
       if (hasHero) {
