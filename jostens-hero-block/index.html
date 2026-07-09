@@ -332,12 +332,44 @@
       <label class="toggle-check"><input type="checkbox" id="showHero" checked> Show</label>
     </div>
     <input type="text" id="heroImageUrl" placeholder="https://..." />
-    <div class="hint">Upload to SFMC Content Builder, then paste the URL here. Designed for full-width (1-column) slots at 768px.</div>
+    <div class="hint">Upload to SFMC Content Builder, then paste the URL here.</div>
   </div>
 
   <div class="field">
     <label for="heroImageAlt">Image Alt Text</label>
     <input type="text" id="heroImageAlt" placeholder="Describe the image for screen readers" />
+  </div>
+
+  <div class="field">
+    <label>Image Type</label>
+    <div class="bg-mode-tabs">
+      <button class="bg-tab image-type-tab active" data-imagetype="hero">Hero</button>
+      <button class="bg-tab image-type-tab" data-imagetype="icon">Icon</button>
+    </div>
+  </div>
+
+  <div id="iconOnlyControls" style="display:none;">
+    <div class="field">
+      <label>Icon Alignment</label>
+      <div class="align-btns" id="iconAlignBtns">
+        <button class="align-btn" data-align="left">L</button>
+        <button class="align-btn active" data-align="center">C</button>
+        <button class="align-btn" data-align="right">R</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Icon Size (px)</label>
+      <div class="pad-grid">
+        <div class="pad-field">
+          <label for="iconWidth">Width</label>
+          <input type="text" id="iconWidth" placeholder="80" value="80" />
+        </div>
+        <div class="pad-field">
+          <label for="iconHeight">Height</label>
+          <input type="text" id="iconHeight" placeholder="80" value="80" />
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="field">
@@ -350,10 +382,12 @@
     </select>
   </div>
 
-  <div class="field">
-    <label for="imageWidth">Image Width (px)</label>
-    <input type="text" id="imageWidth" placeholder="768" value="768" />
-    <div class="hint">Effective width for Outlook: <strong id="effectiveWidthDisplay">768px</strong></div>
+  <div id="heroOnlyControls">
+    <div class="field">
+      <label for="imageWidth">Image Width (px)</label>
+      <input type="text" id="imageWidth" placeholder="768" value="768" />
+      <div class="hint">Effective width for Outlook: <strong id="effectiveWidthDisplay">768px</strong></div>
+    </div>
   </div>
 
   <div class="field">
@@ -376,7 +410,7 @@
         <input type="text" id="imgPaddingLeft" placeholder="0" value="0" />
       </div>
     </div>
-    <div class="hint">Effective img width = Image Width − Left − Right</div>
+    <div id="heroWidthHint" class="hint">Effective img width = Image Width − Left − Right</div>
   </div>
 
   <!-- ─── Button ─── -->
@@ -608,6 +642,10 @@
       imgPaddingRight:  0,
       imgPaddingBottom: 0,
       imgPaddingLeft:   0,
+      imageType:    'hero',
+      iconWidth:    80,
+      iconHeight:   80,
+      iconAlign:    'center',
       bgMode:       'solid',
       bgColor:      '#D22E7A',
       bgImageUrl:   '',
@@ -649,7 +687,7 @@
       document.getElementById('bgSolidControls').style.display    = mode === 'solid'    ? '' : 'none';
       document.getElementById('bgImageControls').style.display    = mode === 'image'    ? '' : 'none';
       document.getElementById('bgGradientControls').style.display = mode === 'gradient' ? '' : 'none';
-      document.querySelectorAll('.bg-tab').forEach(function(btn) {
+      document.querySelectorAll('.bg-tab:not(.image-type-tab)').forEach(function(btn) {
         btn.classList.toggle('active', btn.getAttribute('data-mode') === mode);
       });
       if (mode !== 'solid') {
@@ -660,8 +698,23 @@
 
     /* ─── Read current bg mode from active tab ─── */
     function readBgMode() {
-      var active = document.querySelector('.bg-tab.active');
+      var active = document.querySelector('.bg-tab:not(.image-type-tab).active');
       return active ? active.getAttribute('data-mode') : 'solid';
+    }
+
+    /* ─── Image type helpers ─── */
+    function readImageType() {
+      var active = document.querySelector('.image-type-tab.active');
+      return active ? active.getAttribute('data-imagetype') : 'hero';
+    }
+
+    function showImageTypeControls(type) {
+      document.getElementById('heroOnlyControls').style.display = type === 'hero' ? '' : 'none';
+      document.getElementById('iconOnlyControls').style.display = type === 'icon'  ? '' : 'none';
+      document.getElementById('heroWidthHint').style.display    = type === 'hero' ? '' : 'none';
+      document.querySelectorAll('.image-type-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-imagetype') === type);
+      });
     }
 
     /* ─── Padding helper ─── */
@@ -719,13 +772,30 @@
       var paddingStyle = buildPaddingStyle(d);
 
       /* --- Build rows --- */
-      var heroRow = hasHero ? [
-        '<tr>',
-        '  <td align="center" style="padding:' + imgTdPadding + '; font-size:0; line-height:0; border:0;">',
-        '    <img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" width="' + effectiveImgWidth + '" style="display:block; width:100%; max-width:' + effectiveImgWidth + 'px; height:auto; border:0;" />',
-        '  </td>',
-        '</tr>'
-      ].join('\n') : '';
+      var heroRow = '';
+      if (hasHero) {
+        if (d.imageType === 'icon') {
+          var iw = parseInt(d.iconWidth) || 80;
+          var ih = parseInt(d.iconHeight) || 80;
+          var ia = d.iconAlign || 'center';
+          var iconMargin = ia === 'center' ? '0 auto' : ia === 'right' ? '0 0 0 auto' : '0';
+          heroRow = [
+            '<tr>',
+            '  <td align="' + ia + '" style="padding:' + imgTdPadding + '; font-size:0; line-height:0; border:0; text-align:' + ia + ';">',
+            '    <img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" width="' + iw + '" height="' + ih + '" style="display:block; width:' + iw + 'px; height:' + ih + 'px; border:0; margin:' + iconMargin + ';" />',
+            '  </td>',
+            '</tr>'
+          ].join('\n');
+        } else {
+          heroRow = [
+            '<tr>',
+            '  <td align="center" style="padding:' + imgTdPadding + '; font-size:0; line-height:0; border:0;">',
+            '    <img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" width="' + effectiveImgWidth + '" style="display:block; width:100%; max-width:' + effectiveImgWidth + 'px; height:auto; border:0;" />',
+            '  </td>',
+            '</tr>'
+          ].join('\n');
+        }
+      }
 
       var headerRow = d.showHeader ? [
         '<tr>',
@@ -836,10 +906,20 @@
       var previewImgPad = (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
       var dispWidth = Math.max(1, (d.imageWidth || 768) - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
       document.getElementById('effectiveWidthDisplay').textContent = dispWidth + 'px';
-      var heroHtml = hasHero ? (
-        '<tr><td style="padding:' + previewImgPad + '; font-size:0; line-height:0;">' +
-        '<img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>'
-      ) : '';
+      var heroHtml = '';
+      if (hasHero) {
+        if (d.imageType === 'icon') {
+          var piw = parseInt(d.iconWidth) || 80;
+          var pih = parseInt(d.iconHeight) || 80;
+          var pia = d.iconAlign || 'center';
+          var pIconMargin = pia === 'center' ? '0 auto' : pia === 'right' ? '0 0 0 auto' : '0';
+          heroHtml = '<tr><td style="padding:' + previewImgPad + '; text-align:' + pia + ';">' +
+            '<img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" style="display:block; width:' + piw + 'px; height:' + pih + 'px; border:0; margin:' + pIconMargin + ';" /></td></tr>';
+        } else {
+          heroHtml = '<tr><td style="padding:' + previewImgPad + '; font-size:0; line-height:0;">' +
+            '<img src="' + d.heroImageUrl + '" alt="' + (d.heroImageAlt || '') + '" style="display:block; width:100%; height:auto; border:0;" /></td></tr>';
+        }
+      }
 
       var headerHtml = d.showHeader ? (
         '<tr><td align="' + d.headerAlign + '" style="padding:32px 20px 10px; font-family:Helvetica,Arial,sans-serif; font-size:20px; line-height:26px; font-weight:bold; letter-spacing:1px; text-align:' + d.headerAlign + '; color:' + d.textColor + ';">' +
@@ -887,6 +967,10 @@
         heroImageAlt:    document.getElementById('heroImageAlt').value,
         heroPosition:    document.getElementById('heroPosition').value || DEFAULTS.heroPosition,
         imageWidth:      parseInt(document.getElementById('imageWidth').value)      || DEFAULTS.imageWidth,
+        imageType:       readImageType(),
+        iconWidth:       parseInt(document.getElementById('iconWidth').value)       || 80,
+        iconHeight:      parseInt(document.getElementById('iconHeight').value)      || 80,
+        iconAlign:       readAlign('iconAlignBtns'),
         imgPaddingTop:   parseInt(document.getElementById('imgPaddingTop').value)   || 0,
         imgPaddingRight: parseInt(document.getElementById('imgPaddingRight').value) || 0,
         imgPaddingBottom:parseInt(document.getElementById('imgPaddingBottom').value)|| 0,
@@ -930,6 +1014,10 @@
       document.getElementById('heroImageAlt').value    = ('heroImageAlt' in d) ? d.heroImageAlt : '';
       document.getElementById('heroPosition').value    = d.heroPosition || DEFAULTS.heroPosition;
       document.getElementById('imageWidth').value      = d.imageWidth      !== undefined ? d.imageWidth      : DEFAULTS.imageWidth;
+      showImageTypeControls(d.imageType || 'hero');
+      document.getElementById('iconWidth').value  = d.iconWidth  !== undefined ? d.iconWidth  : 80;
+      document.getElementById('iconHeight').value = d.iconHeight !== undefined ? d.iconHeight : 80;
+      setAlign('iconAlignBtns', d.iconAlign || 'center');
       document.getElementById('imgPaddingTop').value    = d.imgPaddingTop    !== undefined ? d.imgPaddingTop    : 0;
       document.getElementById('imgPaddingRight').value  = d.imgPaddingRight  !== undefined ? d.imgPaddingRight  : 0;
       document.getElementById('imgPaddingBottom').value = d.imgPaddingBottom !== undefined ? d.imgPaddingBottom : 0;
@@ -1080,6 +1168,15 @@
     bindAlignGroup('mobileHeaderAlignBtns');
     bindAlignGroup('mobileBodyAlignBtns');
     bindAlignGroup('mobileBtnAlignBtns');
+    bindAlignGroup('iconAlignBtns');
+
+    /* ─── Image type tabs ─── */
+    document.querySelectorAll('.image-type-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showImageTypeControls(this.getAttribute('data-imagetype'));
+        onChange();
+      });
+    });
 
     /* ─── Swatch active state ─── */
     function updateSwatchGroupActive(groupId, color) {
@@ -1131,7 +1228,7 @@
     });
 
     /* ─── Background mode tabs ─── */
-    document.querySelectorAll('.bg-tab').forEach(function(btn) {
+    document.querySelectorAll('.bg-tab:not(.image-type-tab)').forEach(function(btn) {
       btn.addEventListener('click', function() {
         showBgControls(this.getAttribute('data-mode'));
         onChange();
@@ -1140,7 +1237,8 @@
 
     /* ─── Text / select fields ─── */
     ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl', 'heroImageUrl', 'heroImageAlt', 'heroPosition', 'bgImageUrl', 'gradientDir',
-     'imageWidth', 'imgPaddingTop', 'imgPaddingRight', 'imgPaddingBottom', 'imgPaddingLeft'].forEach(function(id) {
+     'imageWidth', 'imgPaddingTop', 'imgPaddingRight', 'imgPaddingBottom', 'imgPaddingLeft',
+     'iconWidth', 'iconHeight'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
       document.getElementById(id).addEventListener('change', onChange);
     });
