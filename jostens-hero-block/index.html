@@ -735,7 +735,9 @@
       var btnWidth         = Math.max(180, d.ctaLabel.length * 9 + 96);
       var hasHero          = d.showHero && d.heroImageUrl;
       var imgWidth         = d.imageWidth || 768;
-      var effectiveImgWidth = Math.max(1, imgWidth - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0));
+      var globalPadL       = d.paddingUniform ? (d.paddingAll || 0) : (d.paddingLeft || 0);
+      var globalPadR       = d.paddingUniform ? (d.paddingAll || 0) : (d.paddingRight || 0);
+      var effectiveImgWidth = Math.max(1, imgWidth - (d.imgPaddingLeft || 0) - (d.imgPaddingRight || 0) - globalPadL - globalPadR);
       var imgTdPadding     = d.imageType === 'inline' ? '0' : (d.imgPaddingTop || 0) + 'px ' + (d.imgPaddingRight || 0) + 'px ' + (d.imgPaddingBottom || 0) + 'px ' + (d.imgPaddingLeft || 0) + 'px';
 
       /* --- Padding logic --- */
