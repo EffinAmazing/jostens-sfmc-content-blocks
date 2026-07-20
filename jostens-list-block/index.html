@@ -328,6 +328,7 @@
       </div>
     </div>
     <input type="text" id="headerText" placeholder="Section Header" />
+    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —.</div>
   </div>
 
   <div class="field">
@@ -343,6 +344,7 @@
       </div>
     </div>
     <textarea id="bodyText" placeholder="Optional section intro text..."></textarea>
+    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —.</div>
   </div>
 
   <!-- ─── Layout ─── -->
@@ -551,6 +553,30 @@
     </div>
   </div>
 
+  <!-- ─── CTA Button ─── -->
+  <div class="section-title">CTA Button</div>
+
+  <div class="field">
+    <div class="field-header">
+      <label for="ctaBtnLabel">Button Label</label>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="align-btns" id="ctaBtnAlignBtns">
+          <button class="align-btn" data-align="left">L</button>
+          <button class="align-btn active" data-align="center">C</button>
+          <button class="align-btn" data-align="right">R</button>
+        </div>
+        <label class="toggle-check"><input type="checkbox" id="showCtaBtn"> Show</label>
+      </div>
+    </div>
+    <input type="text" id="ctaBtnLabel" placeholder="Learn More" />
+  </div>
+
+  <div class="field">
+    <label for="ctaBtnUrl">Button URL</label>
+    <input type="text" id="ctaBtnUrl" placeholder="%%=RedirectTo(@URL)=%% or https://..." />
+    <div class="hint">Accepts plain URLs or AMPscript expressions.</div>
+  </div>
+
   <!-- ─── Background ─── -->
   <div class="section-title">Background</div>
 
@@ -699,7 +725,11 @@
       paddingTop:     0,
       paddingRight:   0,
       paddingBottom:  0,
-      paddingLeft:    0
+      paddingLeft:    0,
+      showCtaBtn:    false,
+      ctaBtnLabel:   'Learn More',
+      ctaBtnUrl:     '%%=RedirectTo(@JYBKProspectFormURL)=%%',
+      ctaBtnAlign:   'center'
     };
 
     var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
@@ -1059,6 +1089,30 @@
         }
       }
 
+      if (d.showCtaBtn && d.ctaBtnLabel) {
+        var ctaBtnWidth = Math.max(180, d.ctaBtnLabel.length * 9 + 96);
+        lines.push(
+          '<tr>',
+          '  <td align="' + d.ctaBtnAlign + '" style="padding:20px 20px 28px; text-align:' + d.ctaBtnAlign + ';">',
+          '    <!--[if mso]>',
+          '    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"',
+          '      href="' + d.ctaBtnUrl + '"',
+          '      style="height:44px; v-text-anchor:middle; width:' + ctaBtnWidth + 'px;"',
+          '      arcsize="50%" strokecolor="' + d.btnColor + '" fillcolor="' + d.btnColor + '">',
+          '      <w:anchorlock/>',
+          '      <center style="color:' + d.btnTextColor + '; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif; font-size:14px; font-weight:bold;">',
+          '        ' + d.ctaBtnLabel,
+          '      </center>',
+          '    </v:roundrect>',
+          '    <![endif]-->',
+          '    <!--[if !mso]><!-->',
+          '    <a alias="Button_List_CTA_Link" class="list-btn" href="' + d.ctaBtnUrl + '" style="display:inline-block; background-color:' + d.btnColor + '; text-decoration:none; padding:12px 24px; border-radius:24px;"><span style="color:' + d.btnTextColor + ' !important; mso-color-alt:' + d.btnTextColor + '; font-family:Helvetica, Arial, sans-serif, Roboto; font-size:14px; line-height:18px; font-weight:bold; text-align:center;">' + d.ctaBtnLabel + '</span></a>',
+          '    <!--<![endif]-->',
+          '  </td>',
+          '</tr>'
+        );
+      }
+
       lines.push('</table>');
       var html = lines.join('\n');
       if (paddingStyle) {
@@ -1156,6 +1210,14 @@
         }
       }
 
+      if (d.showCtaBtn && d.ctaBtnLabel) {
+        html.push(
+          '<tr><td align="' + d.ctaBtnAlign + '" style="padding:16px 12px 20px; text-align:' + d.ctaBtnAlign + ';">',
+          '<a class="preview-btn" style="background-color:' + d.btnColor + '; color:' + d.btnTextColor + ';">' + d.ctaBtnLabel + '</a>',
+          '</td></tr>'
+        );
+      }
+
       tbody.innerHTML = html.join('');
       updateSwatchActive(d.bgColor);
       syncAlignDisabled();
@@ -1188,7 +1250,11 @@
         paddingTop:     parseInt(document.getElementById('paddingTop').value)     || 0,
         paddingRight:   parseInt(document.getElementById('paddingRight').value)   || 0,
         paddingBottom:  parseInt(document.getElementById('paddingBottom').value)  || 0,
-        paddingLeft:    parseInt(document.getElementById('paddingLeft').value)    || 0
+        paddingLeft:    parseInt(document.getElementById('paddingLeft').value)    || 0,
+        showCtaBtn:    document.getElementById('showCtaBtn').checked,
+        ctaBtnLabel:   document.getElementById('ctaBtnLabel').value || '',
+        ctaBtnUrl:     document.getElementById('ctaBtnUrl').value   || '#',
+        ctaBtnAlign:   readAlign('ctaBtnAlignBtns')
       };
       for (var i = 1; i <= 4; i++) {
         d['item' + i + 'IconUrl']    = document.getElementById('item' + i + 'IconUrl').value    || '';
@@ -1265,6 +1331,10 @@
       setAlign('mobileHeaderAlignBtns', d.mobileHeaderAlign || 'center');
       setAlign('mobileBodyAlignBtns',   d.mobileBodyAlign   || 'center');
       setAlign('mobileItemAlignBtns',   d.mobileItemAlign   || 'center');
+      document.getElementById('showCtaBtn').checked  = !!d.showCtaBtn;
+      document.getElementById('ctaBtnLabel').value   = d.ctaBtnLabel || '';
+      document.getElementById('ctaBtnUrl').value     = d.ctaBtnUrl   || '';
+      setAlign('ctaBtnAlignBtns', d.ctaBtnAlign || 'center');
     }
 
     function setColor(hexId, pickerId, value) {
@@ -1298,6 +1368,7 @@
     function syncAlignDisabled() {
       document.getElementById('headerAlignBtns').classList.toggle('disabled', !document.getElementById('showHeader').checked);
       document.getElementById('bodyAlignBtns').classList.toggle('disabled',   !document.getElementById('showBody').checked);
+      document.getElementById('ctaBtnAlignBtns').classList.toggle('disabled', !document.getElementById('showCtaBtn').checked);
     }
 
     function readAlign(groupId) {
@@ -1416,9 +1487,14 @@
       document.getElementById(id).addEventListener('input', onChange);
     });
 
-    ['showHeader', 'showBody', 'showIcons'].forEach(function(id) {
+    ['showHeader', 'showBody', 'showIcons', 'showCtaBtn'].forEach(function(id) {
       document.getElementById(id).addEventListener('change', onChange);
     });
+
+    ['ctaBtnLabel', 'ctaBtnUrl'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', onChange);
+    });
+    bindAlignGroup('ctaBtnAlignBtns');
 
     /* ─── Per-item field bindings ─── */
     for (var n = 1; n <= 4; n++) {
