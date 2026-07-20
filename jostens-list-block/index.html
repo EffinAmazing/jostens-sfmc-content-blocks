@@ -1332,8 +1332,8 @@
       setAlign('mobileBodyAlignBtns',   d.mobileBodyAlign   || 'center');
       setAlign('mobileItemAlignBtns',   d.mobileItemAlign   || 'center');
       document.getElementById('showCtaBtn').checked  = !!d.showCtaBtn;
-      document.getElementById('ctaBtnLabel').value   = d.ctaBtnLabel || '';
-      document.getElementById('ctaBtnUrl').value     = d.ctaBtnUrl   || '';
+      document.getElementById('ctaBtnLabel').value   = d.ctaBtnLabel || DEFAULTS.ctaBtnLabel;
+      document.getElementById('ctaBtnUrl').value     = d.ctaBtnUrl   || DEFAULTS.ctaBtnUrl;
       setAlign('ctaBtnAlignBtns', d.ctaBtnAlign || 'center');
     }
 
