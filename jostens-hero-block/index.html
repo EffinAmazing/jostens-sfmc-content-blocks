@@ -307,7 +307,7 @@
       </div>
     </div>
     <input type="text" id="headerText" placeholder="THE JOSTENS DIFFERENCE" />
-    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —.</div>
+    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —, &lt;a href="https://..."&gt;link text&lt;/a&gt; for links; AMPscript URLs like %%emailaddr%% are supported.</div>
   </div>
 
   <div class="field">
@@ -323,7 +323,7 @@
       </div>
     </div>
     <textarea id="bodyText" placeholder="Enter body copy..."></textarea>
-    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —.</div>
+    <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —, &lt;a href="https://..."&gt;link text&lt;/a&gt; for links; AMPscript URLs like %%emailaddr%% are supported.</div>
   </div>
 
   <!-- ─── Hero Image ─── -->
@@ -1103,13 +1103,19 @@
     }
 
     /* ─── Push to SDK ─── */
+    function sanitizePreviewHrefs(text) {
+      return typeof text === 'string' ? text.replace(/href="[^"]*%%[^"]*"/gi, 'href="#"') : text;
+    }
+
     function onChange() {
       var d = readFields();
       updatePreview(d);
       sdk.setData(d, function() {
         sdk.setContent(buildContent(d));
         var previewData = Object.assign({}, d, {
-          ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+          ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#',
+          headerText: sanitizePreviewHrefs(d.headerText),
+          bodyText: sanitizePreviewHrefs(d.bodyText)
         });
         sdk.setSuperContent(buildContent(previewData));
       });
@@ -1294,7 +1300,9 @@
       updatePreview(d);
       sdk.setContent(buildContent(d));
       var previewData = Object.assign({}, d, {
-        ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#'
+        ctaUrl: d.ctaUrl.indexOf('%%') === -1 ? d.ctaUrl : '#',
+        headerText: sanitizePreviewHrefs(d.headerText),
+        bodyText: sanitizePreviewHrefs(d.bodyText)
       });
       sdk.setSuperContent(buildContent(previewData));
     });
