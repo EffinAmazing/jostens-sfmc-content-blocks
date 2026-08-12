@@ -171,6 +171,31 @@
       border-color: #ddd;
     }
 
+    .palette-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .palette-tab {
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      line-height: 1.4;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .palette-tab.active {
+      background: #D22E7A;
+      color: #fff;
+      border-color: #D22E7A;
+    }
+
     .bg-color-row-disabled {
       opacity: 0.4;
       pointer-events: none;
@@ -342,6 +367,10 @@
       <input type="text" id="icon1Alt" />
     </div>
     <div class="field">
+      <label for="icon1Subhead">Subheadline</label>
+      <input type="text" id="icon1Subhead" placeholder="Optional subheadline..." />
+    </div>
+    <div class="field">
       <label for="icon1Text">Caption</label>
       <textarea id="icon1Text" class="short"></textarea>
       <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —, &lt;a href="https://..."&gt;link text&lt;/a&gt; for links; AMPscript URLs like %%=RedirectTo(@URL)=%% are supported.</div>
@@ -357,6 +386,10 @@
     <div class="field">
       <label for="icon2Alt">Alt Text</label>
       <input type="text" id="icon2Alt" />
+    </div>
+    <div class="field">
+      <label for="icon2Subhead">Subheadline</label>
+      <input type="text" id="icon2Subhead" placeholder="Optional subheadline..." />
     </div>
     <div class="field">
       <label for="icon2Text">Caption</label>
@@ -376,6 +409,10 @@
       <input type="text" id="icon3Alt" />
     </div>
     <div class="field">
+      <label for="icon3Subhead">Subheadline</label>
+      <input type="text" id="icon3Subhead" placeholder="Optional subheadline..." />
+    </div>
+    <div class="field">
       <label for="icon3Text">Caption</label>
       <textarea id="icon3Text" class="short"></textarea>
       <div class="hint">Supports HTML: &lt;b&gt;bold&lt;/b&gt;, &lt;i&gt;italic&lt;/i&gt;, &lt;br&gt; for line break, &amp;amp; for &amp;, &amp;mdash; for —, &lt;a href="https://..."&gt;link text&lt;/a&gt; for links; AMPscript URLs like %%=RedirectTo(@URL)=%% are supported.</div>
@@ -391,6 +428,10 @@
     <div class="field">
       <label for="icon4Alt">Alt Text</label>
       <input type="text" id="icon4Alt" />
+    </div>
+    <div class="field">
+      <label for="icon4Subhead">Subheadline</label>
+      <input type="text" id="icon4Subhead" placeholder="Optional subheadline..." />
     </div>
     <div class="field">
       <label for="icon4Text">Caption</label>
@@ -437,7 +478,11 @@
 
   <div class="field">
     <label>Background Color</label>
-    <div class="swatch-row">
+    <div class="palette-tabs">
+      <button class="palette-tab active" data-palette="jostens">Jostens</button>
+      <button class="palette-tab" data-palette="jpix">JPIX</button>
+    </div>
+    <div class="swatch-row" id="swatchJostens">
       <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
       <button class="swatch" data-color="#1E439B" style="background:#1E439B;" title="Navy Blue"></button>
       <button class="swatch" data-color="#A4238E" style="background:#A4238E;" title="Purple"></button>
@@ -449,6 +494,16 @@
       <button class="swatch" data-color="#E80C7A" style="background:#E80C7A;" title="Pink"></button>
       <button class="swatch" data-color="#F5F4F3" style="background:#F5F4F3;" title="Light Gray"></button>
       <button class="swatch" data-color="#031D40" style="background:#031D40;" title="Dark Navy"></button>
+    </div>
+    <div class="swatch-row" id="swatchJpix" style="display:none;">
+      <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
+      <button class="swatch" data-color="#031D40" style="background:#031D40;" title="Dark Navy"></button>
+      <button class="swatch" data-color="#6658A6" style="background:#6658A6;" title="Purple"></button>
+      <button class="swatch" data-color="#729E40" style="background:#729E40;" title="Green"></button>
+      <button class="swatch" data-color="#EE692C" style="background:#EE692C;" title="Orange"></button>
+      <button class="swatch" data-color="#F5F4F3" style="background:#F5F4F3;" title="Light Gray"></button>
+      <button class="swatch" data-color="#1A1A1A" style="background:#1A1A1A;" title="Near Black"></button>
+      <button class="swatch" data-color="#F0EEF6" style="background:#F0EEF6;" title="Lavender Tint"></button>
     </div>
     <div class="color-row" id="bgColorRow">
       <input type="color" id="bgColorPicker" value="#79BB2F" />
@@ -563,18 +618,22 @@
             <tr>
               <td class="preview-icon-col" id="previewIconCol1" style="width:25%;">
                 <img id="previewIcon1Img" src="" alt="" width="32">
+                <div id="previewIcon1Subhead" style="font-weight:bold; font-size:13px; line-height:18px; margin-bottom:2px;"></div>
                 <div id="previewIcon1Text"></div>
               </td>
               <td class="preview-icon-col" id="previewIconCol2" style="width:25%;">
                 <img id="previewIcon2Img" src="" alt="" width="32">
+                <div id="previewIcon2Subhead" style="font-weight:bold; font-size:13px; line-height:18px; margin-bottom:2px;"></div>
                 <div id="previewIcon2Text"></div>
               </td>
               <td class="preview-icon-col" id="previewIconCol3" style="width:25%;">
                 <img id="previewIcon3Img" src="" alt="" width="32">
+                <div id="previewIcon3Subhead" style="font-weight:bold; font-size:13px; line-height:18px; margin-bottom:2px;"></div>
                 <div id="previewIcon3Text"></div>
               </td>
               <td class="preview-icon-col" id="previewIconCol4" style="width:25%;">
                 <img id="previewIcon4Img" src="" alt="" width="32">
+                <div id="previewIcon4Subhead" style="font-weight:bold; font-size:13px; line-height:18px; margin-bottom:2px;"></div>
                 <div id="previewIcon4Text"></div>
               </td>
             </tr>
@@ -597,15 +656,19 @@
       bodyText:     'Beyond lesson planning, the Digital Classroom includes:',
       icon1Url:     'https://cdn.jostens.com/apps/shop/images/email/2026/Yearbook/B2B/Aircover/Icon/light-bulb.png',
       icon1Alt:     '',
+      icon1Subhead: '',
       icon1Text:    'creative inspiration galleries for theme, writing, design and social media.',
       icon2Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/3e01cd9f-ff16-4c22-a8ca-56612bbf1afc.png',
       icon2Alt:     '',
+      icon2Subhead: '',
       icon2Text:    'video libraries for page creation and technology support for independent student learning.',
       icon3Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51344fe9-fc2b-4737-9977-8712e858cae4.png',
       icon3Alt:     '',
+      icon3Subhead: '',
       icon3Text:    'guidance on building project management systems and grading expectations.',
       icon4Url:     'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/51555df1-8e16-430d-be9a-9c6179efb2a1.png',
       icon4Alt:     '',
+      icon4Subhead: '',
       icon4Text:    'practical support you can use to fill skill gaps and build confidence with your staff.',
       ctaLabel:     'LEARN MORE',
       ctaUrl:       '%%=RedirectTo(@JYBKProspectFormURL)=%%',
@@ -613,6 +676,7 @@
       textColor:    '#212121',
       btnColor:     '#212121',
       btnTextColor: '#ffffff',
+      swatchPalette: 'jostens',
       showHeader:   true,
       showBody:     true,
       showBtn:      true,
@@ -638,6 +702,7 @@
     if (!BlockSDK) console.error('BlockSDK failed to load - check CDN URL');
     var sdk = new BlockSDK();
     var bgIsTransparent = false;
+    var currentPalette = 'jostens';
 
     /* ─── Show/hide icon editor groups based on count ─── */
     function updateIconGroups(count) {
@@ -664,12 +729,17 @@
     function iconCell(d, n, count) {
       var cls   = iconColClass(count);
       var width = iconColWidth(count);
+      var subhead = d['icon' + n + 'Subhead'];
+      var subheadRow = subhead
+        ? '            <tr><td class="ig-mob-icon" align="' + d.iconTextAlign + '" style="padding:0 0 8px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; font-weight:bold; text-align:' + d.iconTextAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">' + subhead + '</td></tr>'
+        : '';
       return [
         '        <td align="center" class="' + cls + '" style="width:' + width + '; padding:10px;" valign="top">',
         '          <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">',
         '            <tr><td align="center" style="padding:0 0 10px;">',
         '              <img alt="' + d['icon' + n + 'Alt'] + '" src="' + d['icon' + n + 'Url'] + '" style="border:none; display:block; margin:0 auto;" width="40">',
         '            </td></tr>',
+        subheadRow,
         '            <tr><td class="ig-mob-icon" align="' + d.iconTextAlign + '" style="padding:0 0 20px; font-family:Helvetica, Arial, sans-serif; font-size:16px; line-height:20px; text-align:' + d.iconTextAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';" valign="top">',
         '              <div class="body-text">' + d['icon' + n + 'Text'] + '</div>',
         '            </td></tr>',
@@ -813,8 +883,11 @@
         var col = document.getElementById('previewIconCol' + n);
         col.style.display = n <= count ? '' : 'none';
         col.style.width   = n <= count ? colWidth : '';
-        document.getElementById('previewIcon' + n + 'Img').src     = d['icon' + n + 'Url'] || '';
-        document.getElementById('previewIcon' + n + 'Img').alt     = d['icon' + n + 'Alt'] || '';
+        document.getElementById('previewIcon' + n + 'Img').src          = d['icon' + n + 'Url'] || '';
+        document.getElementById('previewIcon' + n + 'Img').alt          = d['icon' + n + 'Alt'] || '';
+        document.getElementById('previewIcon' + n + 'Subhead').textContent  = d['icon' + n + 'Subhead'] || '';
+        document.getElementById('previewIcon' + n + 'Subhead').style.color  = d.textColor;
+        document.getElementById('previewIcon' + n + 'Subhead').style.textAlign = d.iconTextAlign;
         document.getElementById('previewIcon' + n + 'Text').innerHTML    = d['icon' + n + 'Text'] || '';
         document.getElementById('previewIcon' + n + 'Text').style.color  = d.textColor;
         document.getElementById('previewIcon' + n + 'Text').style.textAlign = d.iconTextAlign;
@@ -862,12 +935,14 @@
         paddingTop:     parseInt(document.getElementById('paddingTop').value)     || 0,
         paddingRight:   parseInt(document.getElementById('paddingRight').value)   || 0,
         paddingBottom:  parseInt(document.getElementById('paddingBottom').value)  || 0,
-        paddingLeft:    parseInt(document.getElementById('paddingLeft').value)    || 0
+        paddingLeft:    parseInt(document.getElementById('paddingLeft').value)    || 0,
+        swatchPalette:  currentPalette
       };
       [1, 2, 3, 4].forEach(function(n) {
-        d['icon' + n + 'Url']  = document.getElementById('icon' + n + 'Url').value  || DEFAULTS['icon' + n + 'Url'];
-        d['icon' + n + 'Alt']  = document.getElementById('icon' + n + 'Alt').value;
-        d['icon' + n + 'Text'] = document.getElementById('icon' + n + 'Text').value || DEFAULTS['icon' + n + 'Text'];
+        d['icon' + n + 'Url']    = document.getElementById('icon' + n + 'Url').value    || DEFAULTS['icon' + n + 'Url'];
+        d['icon' + n + 'Alt']    = document.getElementById('icon' + n + 'Alt').value;
+        d['icon' + n + 'Subhead'] = document.getElementById('icon' + n + 'Subhead').value;
+        d['icon' + n + 'Text']   = document.getElementById('icon' + n + 'Text').value   || DEFAULTS['icon' + n + 'Text'];
       });
       return d;
     }
@@ -884,9 +959,10 @@
       document.getElementById('ctaUrl').value     = d.ctaUrl     || DEFAULTS.ctaUrl;
 
       [1, 2, 3, 4].forEach(function(n) {
-        document.getElementById('icon' + n + 'Url').value  = d['icon' + n + 'Url']  || DEFAULTS['icon' + n + 'Url'];
-        document.getElementById('icon' + n + 'Alt').value  = ('icon' + n + 'Alt' in d) ? d['icon' + n + 'Alt'] : DEFAULTS['icon' + n + 'Alt'];
-        document.getElementById('icon' + n + 'Text').value = d['icon' + n + 'Text'] || DEFAULTS['icon' + n + 'Text'];
+        document.getElementById('icon' + n + 'Url').value    = d['icon' + n + 'Url']    || DEFAULTS['icon' + n + 'Url'];
+        document.getElementById('icon' + n + 'Alt').value    = ('icon' + n + 'Alt' in d) ? d['icon' + n + 'Alt'] : DEFAULTS['icon' + n + 'Alt'];
+        document.getElementById('icon' + n + 'Subhead').value = d['icon' + n + 'Subhead'] || '';
+        document.getElementById('icon' + n + 'Text').value   = d['icon' + n + 'Text']   || DEFAULTS['icon' + n + 'Text'];
       });
 
       if (d.bgColor === 'transparent') {
@@ -925,6 +1001,7 @@
       setAlign('mobileBodyAlignBtns',     d.mobileBodyAlign     || 'center');
       setAlign('mobileIconTextAlignBtns', d.mobileIconTextAlign || 'center');
       setAlign('mobileBtnAlignBtns',      d.mobileBtnAlign      || 'center');
+      showPalette(d.swatchPalette || 'jostens');
     }
 
     function setColor(hexId, pickerId, value) {
@@ -1026,6 +1103,23 @@
     bindAlignGroup('mobileIconTextAlignBtns');
     bindAlignGroup('mobileBtnAlignBtns');
 
+    /* ─── Palette toggle ─── */
+    function showPalette(palette) {
+      currentPalette = palette;
+      document.getElementById('swatchJostens').style.display = palette === 'jostens' ? '' : 'none';
+      document.getElementById('swatchJpix').style.display    = palette === 'jpix'    ? '' : 'none';
+      document.querySelectorAll('.palette-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-palette') === palette);
+      });
+    }
+
+    document.querySelectorAll('.palette-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showPalette(this.getAttribute('data-palette'));
+        onChange();
+      });
+    });
+
     /* ─── Swatch active state ─── */
     function updateSwatchActive(color) {
       var lc = (color || '').toLowerCase();
@@ -1059,7 +1153,7 @@
     /* ─── Text / textarea fields ─── */
     var textFields = ['headerText', 'bodyText', 'ctaLabel', 'ctaUrl'];
     [1, 2, 3, 4].forEach(function(n) {
-      textFields.push('icon' + n + 'Url', 'icon' + n + 'Alt', 'icon' + n + 'Text');
+      textFields.push('icon' + n + 'Url', 'icon' + n + 'Alt', 'icon' + n + 'Subhead', 'icon' + n + 'Text');
     });
     textFields.forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);

@@ -167,6 +167,31 @@
       border-color: #ddd;
     }
 
+    .palette-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .palette-tab {
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      line-height: 1.4;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .palette-tab.active {
+      background: #D22E7A;
+      color: #fff;
+      border-color: #D22E7A;
+    }
+
     .bg-color-row-disabled {
       opacity: 0.4;
       pointer-events: none;
@@ -395,6 +420,12 @@
     <div class="hint">80×80px. Upload to SFMC Content Builder and paste the URL in each item.</div>
   </div>
 
+  <div class="field" id="checkboxIconUrlField" style="display:none;">
+    <label for="checkboxIconUrl">Checkmark Image URL</label>
+    <input type="text" id="checkboxIconUrl" placeholder="https://..." />
+    <div class="hint">43×43px. Leave blank to use the default checkmark. Upload your image to SFMC Content Builder and paste the URL here.</div>
+  </div>
+
   <!-- ─── Items ─── -->
   <div class="section-title">Items</div>
 
@@ -591,18 +622,34 @@
 
   <div class="field">
     <label>Background Color</label>
-    <div class="swatch-row" id="bgSwatches">
-      <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
-      <button class="swatch" data-color="#1E439B" style="background:#1E439B;" title="Navy Blue"></button>
-      <button class="swatch" data-color="#A4238E" style="background:#A4238E;" title="Purple"></button>
-      <button class="swatch" data-color="#5FBB46" style="background:#5FBB46;" title="Green"></button>
-      <button class="swatch" data-color="#008ECC" style="background:#008ECC;" title="Blue"></button>
-      <button class="swatch" data-color="#08B4C1" style="background:#08B4C1;" title="Teal"></button>
-      <button class="swatch" data-color="#F66B47" style="background:#F66B47;" title="Orange"></button>
-      <button class="swatch" data-color="#FFD31A" style="background:#FFD31A;" title="Yellow"></button>
-      <button class="swatch" data-color="#E80C7A" style="background:#E80C7A;" title="Pink"></button>
-      <button class="swatch" data-color="#F5F4F3" style="background:#F5F4F3;" title="Light Gray"></button>
-      <button class="swatch" data-color="#031D40" style="background:#031D40;" title="Dark Navy"></button>
+    <div class="palette-tabs">
+      <button class="palette-tab active" data-palette="jostens">Jostens</button>
+      <button class="palette-tab" data-palette="jpix">JPIX</button>
+    </div>
+    <div id="bgSwatches">
+      <div class="swatch-row" id="swatchJostens">
+        <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
+        <button class="swatch" data-color="#1E439B" style="background:#1E439B;" title="Navy Blue"></button>
+        <button class="swatch" data-color="#A4238E" style="background:#A4238E;" title="Purple"></button>
+        <button class="swatch" data-color="#5FBB46" style="background:#5FBB46;" title="Green"></button>
+        <button class="swatch" data-color="#008ECC" style="background:#008ECC;" title="Blue"></button>
+        <button class="swatch" data-color="#08B4C1" style="background:#08B4C1;" title="Teal"></button>
+        <button class="swatch" data-color="#F66B47" style="background:#F66B47;" title="Orange"></button>
+        <button class="swatch" data-color="#FFD31A" style="background:#FFD31A;" title="Yellow"></button>
+        <button class="swatch" data-color="#E80C7A" style="background:#E80C7A;" title="Pink"></button>
+        <button class="swatch" data-color="#F5F4F3" style="background:#F5F4F3;" title="Light Gray"></button>
+        <button class="swatch" data-color="#031D40" style="background:#031D40;" title="Dark Navy"></button>
+      </div>
+      <div class="swatch-row" id="swatchJpix" style="display:none;">
+        <button class="swatch swatch-none" data-color="transparent" title="No background"></button>
+        <button class="swatch" data-color="#031D40" style="background:#031D40;" title="Dark Navy"></button>
+        <button class="swatch" data-color="#6658A6" style="background:#6658A6;" title="Purple"></button>
+        <button class="swatch" data-color="#729E40" style="background:#729E40;" title="Green"></button>
+        <button class="swatch" data-color="#EE692C" style="background:#EE692C;" title="Orange"></button>
+        <button class="swatch" data-color="#F5F4F3" style="background:#F5F4F3;" title="Light Gray"></button>
+        <button class="swatch" data-color="#1A1A1A" style="background:#1A1A1A;" title="Near Black"></button>
+        <button class="swatch" data-color="#F0EEF6" style="background:#F0EEF6;" title="Lavender Tint"></button>
+      </div>
     </div>
     <div class="color-row" id="bgColorRow">
       <input type="color" id="bgColorPicker" value="#D22E7A" />
@@ -627,6 +674,14 @@
     <div class="color-row">
       <input type="color" id="textColorPicker" value="#ffffff" />
       <input type="text" id="textColor" class="color-hex" placeholder="#ffffff" value="#ffffff" />
+    </div>
+  </div>
+
+  <div class="field" id="markerColorField" style="display:none;">
+    <label>Bullet / Number Color</label>
+    <div class="color-row">
+      <input type="color" id="markerColorPicker" value="#212121" />
+      <input type="text" id="markerColor" class="color-hex" placeholder="#212121" value="#212121" />
     </div>
   </div>
 
@@ -713,6 +768,7 @@
     var DEFAULTS = {
       itemCount:    2,
       layout:       'horizontal',
+      swatchPalette: 'jostens',
       listStyle:    'icon',
       checkboxIconUrl: 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/7704aa8d-6599-4c15-8373-1b72bb2d4617.png',
       showIcons:      true,
@@ -722,6 +778,7 @@
       bodyText:     'Optional section intro text.',
       bgColor:      '#D22E7A',
       textColor:    '#ffffff',
+      markerColor:  '#212121',
       btnColor:     '#000000',
       btnTextColor: '#ffffff',
       headerAlign:  'center',
@@ -752,6 +809,7 @@
     var sdk = new BlockSDK();
 
     var bgIsTransparent = false;
+    var currentPalette = 'jostens';
 
     /* ─── Layout helpers ─── */
     function readLayout() {
@@ -766,8 +824,10 @@
 
     function showListStyleControls(style) {
       var isIcon = style === 'icon';
-      document.getElementById('orientationField').style.display  = isIcon ? '' : 'none';
-      document.getElementById('showIconsField').style.display    = isIcon ? '' : 'none';
+      var isCheckbox = style === 'checkbox';
+      document.getElementById('orientationField').style.display     = isIcon ? '' : 'none';
+      document.getElementById('showIconsField').style.display       = isIcon ? '' : 'none';
+      document.getElementById('checkboxIconUrlField').style.display = isCheckbox ? '' : 'none';
       for (var n = 1; n <= 4; n++) {
         var iconField   = document.getElementById('item' + n + 'IconUrlField');
         var altField    = document.getElementById('item' + n + 'AltTextField');
@@ -780,6 +840,7 @@
         btn.classList.toggle('active', btn.getAttribute('data-liststyle') === style);
       });
       var isBulletOrNumbered = (style === 'bullet' || style === 'numbered');
+      document.getElementById('markerColorField').style.display = isBulletOrNumbered ? '' : 'none';
       document.getElementById('itemAlignBtns').classList.toggle('disabled', isBulletOrNumbered);
       if (isBulletOrNumbered) setAlign('itemAlignBtns', 'left');
     }
@@ -1054,7 +1115,7 @@
           '    <' + tag + ' style="margin:0; padding:0 0 0 22px; mso-padding-alt:0 0 0 22px; list-style-type:' + listStyleType + ';">'
         );
         items.forEach(function(item) {
-          lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + '; mso-line-height-rule:exactly;">');
+          lines.push('<li style="margin:0 0 14px; font-family:Helvetica, Arial, sans-serif; font-size:15px; line-height:22px; text-align:' + d.itemAlign + '; color:' + (d.markerColor || d.textColor) + '; mso-color-alt:' + (d.markerColor || d.textColor) + '; mso-line-height-rule:exactly;">');
           if (item.showHeader !== false && item.header) {
             lines.push('<strong style="display:block; font-family:Helvetica, Arial, sans-serif; font-size:16px; font-weight:bold; text-align:' + d.itemAlign + '; color:' + d.textColor + '; mso-color-alt:' + d.textColor + ';">' + item.header + '</strong>');
           }
@@ -1179,7 +1240,7 @@
         var listTag = d.listStyle === 'bullet' ? 'ul' : 'ol';
         var previewList = '<tr><td style="padding:12px 16px;"><' + listTag + ' style="margin:0; padding:0 0 0 20px;">';
         items.forEach(function(item) {
-          previewList += '<li style="font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:' + d.textColor + '; margin-bottom:10px;">';
+          previewList += '<li style="font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:' + (d.markerColor || d.textColor) + '; margin-bottom:10px;">';
           if (item.showHeader !== false && item.header) previewList += '<strong style="display:block; color:' + d.textColor + ';">' + item.header + '</strong>';
           if (item.showBody !== false && item.body) previewList += '<span style="display:block; font-size:12px; color:' + d.textColor + ';">' + item.body + '</span>';
           previewList += '</li>';
@@ -1243,8 +1304,9 @@
       var d = {
         itemCount:    parseInt(document.getElementById('itemCount').value) || 2,
         layout:       readLayout(),
-        listStyle:    readListStyle(),
-        showIcons:    document.getElementById('showIcons').checked,
+        listStyle:       readListStyle(),
+        showIcons:       document.getElementById('showIcons').checked,
+        checkboxIconUrl: document.getElementById('checkboxIconUrl').value || '',
         showHeader:   document.getElementById('showHeader').checked,
         showBody:     document.getElementById('showBody').checked,
         headerText:   document.getElementById('headerText').value || DEFAULTS.headerText,
@@ -1269,7 +1331,9 @@
         showCtaBtn:    document.getElementById('showCtaBtn').checked,
         ctaBtnLabel:   document.getElementById('ctaBtnLabel').value || '',
         ctaBtnUrl:     document.getElementById('ctaBtnUrl').value   || '#',
-        ctaBtnAlign:   readAlign('ctaBtnAlignBtns')
+        ctaBtnAlign:   readAlign('ctaBtnAlignBtns'),
+        swatchPalette: currentPalette,
+        markerColor:   document.getElementById('markerColor').value || DEFAULTS.markerColor
       };
       for (var i = 1; i <= 4; i++) {
         d['item' + i + 'IconUrl']    = document.getElementById('item' + i + 'IconUrl').value    || '';
@@ -1292,6 +1356,7 @@
       document.getElementById('showHeader').checked = d.showHeader !== false;
       document.getElementById('showBody').checked   = d.showBody   !== false;
       document.getElementById('showIcons').checked = d.showIcons !== false;
+      document.getElementById('checkboxIconUrl').value = d.checkboxIconUrl || '';
 
       showListStyleControls(d.listStyle || 'icon');
 
@@ -1314,6 +1379,7 @@
       }
 
       setColor('textColor',    'textColorPicker',    d.textColor    || DEFAULTS.textColor);
+      setColor('markerColor',  'markerColorPicker',  d.markerColor  || DEFAULTS.markerColor);
       setColor('btnColor',     'btnColorPicker',     d.btnColor     || DEFAULTS.btnColor);
       setColor('btnTextColor', 'btnTextColorPicker', d.btnTextColor || DEFAULTS.btnTextColor);
 
@@ -1350,12 +1416,30 @@
       document.getElementById('ctaBtnLabel').value   = d.ctaBtnLabel || DEFAULTS.ctaBtnLabel;
       document.getElementById('ctaBtnUrl').value     = d.ctaBtnUrl   || DEFAULTS.ctaBtnUrl;
       setAlign('ctaBtnAlignBtns', d.ctaBtnAlign || 'center');
+      showPalette(d.swatchPalette || 'jostens');
     }
 
     function setColor(hexId, pickerId, value) {
       document.getElementById(hexId).value    = value;
       document.getElementById(pickerId).value = value;
     }
+
+    /* ─── Palette toggle ─── */
+    function showPalette(palette) {
+      currentPalette = palette;
+      document.getElementById('swatchJostens').style.display = palette === 'jostens' ? '' : 'none';
+      document.getElementById('swatchJpix').style.display    = palette === 'jpix'    ? '' : 'none';
+      document.querySelectorAll('.palette-tab').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-palette') === palette);
+      });
+    }
+
+    document.querySelectorAll('.palette-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        showPalette(this.getAttribute('data-palette'));
+        onChange();
+      });
+    });
 
     /* ─── Swatch active state ─── */
     function updateSwatchActive(color) {
@@ -1433,6 +1517,7 @@
 
     bindColorPair('bgColorPicker',      'bgColor');
     bindColorPair('textColorPicker',    'textColor');
+    bindColorPair('markerColorPicker',  'markerColor');
     bindColorPair('btnColorPicker',     'btnColor');
     bindColorPair('btnTextColorPicker', 'btnTextColor');
 
@@ -1509,7 +1594,7 @@
     });
 
     /* ─── Text fields and toggles ─── */
-    ['headerText', 'bodyText'].forEach(function(id) {
+    ['headerText', 'bodyText', 'checkboxIconUrl'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
     });
 
