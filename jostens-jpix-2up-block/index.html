@@ -148,6 +148,7 @@
 
     .height-warn.visible { display: block; }
 
+    /* Position toggle (full width) */
     .toggle-btns {
       display: flex;
       border: 1px solid #ddd;
@@ -173,6 +174,34 @@
     .toggle-btn:hover { background: #f0f0f0; color: #555; }
     .toggle-btn.active { background: #D22E7A; color: #fff; }
 
+    /* Alignment toggle (compact L/C/R) */
+    .align-btns {
+      display: inline-flex;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .align-btn {
+      width: 32px;
+      padding: 4px 0;
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      border-right: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      color: #888;
+      text-align: center;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .align-btn:last-child { border-right: none; }
+    .align-btn:hover { background: #f0f0f0; color: #555; }
+    .align-btn.active { background: #D22E7A; color: #fff; }
+
+    /* Item cards */
     .item-field {
       background: #f5f5f5;
       border: 1px solid #e8e8e8;
@@ -184,6 +213,7 @@
     .item-field .field-header { margin-bottom: 6px; }
     .item-field label { font-size: 11px; color: #666; margin-bottom: 0; }
 
+    /* Preview */
     .preview-wrap {
       margin-top: 24px;
       border-top: 1px solid #e0e0e0;
@@ -236,9 +266,16 @@
   <div class="section-title">Content</div>
 
   <div class="field">
-    <label for="headlineText">Headline</label>
+    <div class="field-header">
+      <label for="headlineText">Headline</label>
+      <div class="align-btns" id="headlineAlignBtns">
+        <button class="align-btn active" data-align="left">L</button>
+        <button class="align-btn" data-align="center">C</button>
+        <button class="align-btn" data-align="right">R</button>
+      </div>
+    </div>
     <input type="text" id="headlineText" placeholder="The Jostens Difference" maxlength="70" />
-    <div class="hint"><span class="char-count" id="headlineCount">0</span> / 55 chars recommended — longer text wraps to a second line and reduces space for items</div>
+    <div class="hint"><span class="char-count" id="headlineCount">0</span> / 55 chars recommended — longer text wraps and reduces space for items</div>
   </div>
 
   <!-- CHECKLIST ITEMS -->
@@ -249,8 +286,8 @@
       <label>Item 1</label>
       <label class="toggle-check"><input type="checkbox" id="item1Show" checked> Show</label>
     </div>
-    <input type="text" id="item1Text" placeholder="Checkmark item text..." maxlength="100" />
-    <div class="hint"><span class="char-count" id="item1Count">0</span> / 75 chars recommended</div>
+    <input type="text" id="item1Text" placeholder="Checkmark item text..." maxlength="95" />
+    <div class="hint"><span class="char-count" id="item1Count">0</span> / 95 chars</div>
   </div>
 
   <div class="item-field">
@@ -258,8 +295,8 @@
       <label>Item 2</label>
       <label class="toggle-check"><input type="checkbox" id="item2Show" checked> Show</label>
     </div>
-    <input type="text" id="item2Text" placeholder="Checkmark item text..." maxlength="100" />
-    <div class="hint"><span class="char-count" id="item2Count">0</span> / 75 chars recommended</div>
+    <input type="text" id="item2Text" placeholder="Checkmark item text..." maxlength="95" />
+    <div class="hint"><span class="char-count" id="item2Count">0</span> / 95 chars</div>
   </div>
 
   <div class="item-field">
@@ -267,8 +304,8 @@
       <label>Item 3</label>
       <label class="toggle-check"><input type="checkbox" id="item3Show" checked> Show</label>
     </div>
-    <input type="text" id="item3Text" placeholder="Checkmark item text..." maxlength="100" />
-    <div class="hint"><span class="char-count" id="item3Count">0</span> / 75 chars recommended</div>
+    <input type="text" id="item3Text" placeholder="Checkmark item text..." maxlength="95" />
+    <div class="hint"><span class="char-count" id="item3Count">0</span> / 95 chars</div>
   </div>
 
   <div id="heightWarn" class="height-warn">Content height may exceed the 250px stripe — the image overflow effect will be reduced or lost on desktop. Shorten item text or hide the CTA.</div>
@@ -293,7 +330,14 @@
   </div>
 
   <div class="field">
-    <label for="ctaLabel">Button Label</label>
+    <div class="field-header">
+      <label for="ctaLabel">Button Label</label>
+      <div class="align-btns" id="ctaAlignBtns">
+        <button class="align-btn active" data-align="left">L</button>
+        <button class="align-btn" data-align="center">C</button>
+        <button class="align-btn" data-align="right">R</button>
+      </div>
+    </div>
     <input type="text" id="ctaLabel" placeholder="PARTNER WITH US" maxlength="40" />
     <div class="hint"><span class="char-count" id="ctaLabelCount">0</span> / 25 chars recommended</div>
   </div>
@@ -380,6 +424,7 @@
       imageUrl:           'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/d62a2b56-479b-4c0e-8bf7-b5de404262cf.png',
       imageAlt:           'Jostens Photographer',
       headlineText:       'The Jostens Difference',
+      headlineAlign:      'left',
       headlineColor:      '#6957AB',
       textColor:          '#555555',
       stripeColor:        '#F0F0F0',
@@ -389,10 +434,11 @@
       item1Show: true,
       item2Text: 'Background-checked photographers are trained for consistent, high-quality images',
       item2Show: true,
-      item3Text: 'There’s no waiting around — portraits are available to view about five days after picture day',
+      item3Text: 'There's no waiting around — portraits are available to view about five days after picture day',
       item3Show: true,
       showCta:   true,
       ctaLabel:  'PARTNER WITH US',
+      ctaAlign:  'left',
       ctaUrl:    '#',
       ctaColor:  '#729E40'
     };
@@ -407,6 +453,8 @@
     })();
 
     var imagePosition = 'left';
+    var headlineAlign = 'left';
+    var ctaAlign      = 'left';
 
     /* ── Color helpers ── */
     function setColor(hexId, pickerId, value) {
@@ -458,7 +506,7 @@
       if (!el || !counter) return;
       var len = el.value.length;
       counter.textContent = len;
-      counter.classList.toggle('over', len > limit);
+      if (limit) counter.classList.toggle('over', len > limit);
     }
 
     function bindCharCount(inputId, countId, limit) {
@@ -469,16 +517,16 @@
     }
 
     bindCharCount('headlineText', 'headlineCount', 55);
-    bindCharCount('item1Text',    'item1Count',    75);
-    bindCharCount('item2Text',    'item2Count',    75);
-    bindCharCount('item3Text',    'item3Count',    75);
+    bindCharCount('item1Text',    'item1Count',    null);
+    bindCharCount('item2Text',    'item2Count',    null);
+    bindCharCount('item3Text',    'item3Count',    null);
     bindCharCount('ctaLabel',     'ctaLabelCount', 25);
 
     /* ── Height estimator ── */
     function updateHeightWarning(d) {
       var h = 30; // 15px top + 15px bottom padding
       var hlChars = (d.headlineText || '').length;
-      h += (hlChars > 55 ? 56 : 28) + 8; // headline text + padding-bottom
+      h += (hlChars > 55 ? 56 : 28) + 8;
 
       var items = [
         { text: d.item1Text, show: d.item1Show },
@@ -488,12 +536,12 @@
 
       items.forEach(function(item, idx) {
         var isLast = idx === items.length - 1;
-        var lines  = Math.ceil((item.text || '').length / 43); // ~43 chars per line at this width
+        var lines  = Math.ceil((item.text || '').length / 43);
         var pb     = isLast ? (d.showCta ? 8 : 0) : 5;
-        h += Math.max(lines, 1) * 20 + 3 + pb; // text + icon top-pad + bottom-pad
+        h += Math.max(lines, 1) * 20 + 3 + pb;
       });
 
-      if (d.showCta) h += 38; // 10px top + 18px line-height + 10px bottom
+      if (d.showCta) h += 38;
 
       document.getElementById('heightWarn').classList.toggle('visible', h > 248);
     }
@@ -513,6 +561,35 @@
       });
     }
 
+    /* ── Alignment toggles ── */
+    document.querySelectorAll('#headlineAlignBtns .align-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setHeadlineAlign(this.getAttribute('data-align'));
+        onChange();
+      });
+    });
+
+    document.querySelectorAll('#ctaAlignBtns .align-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setCtaAlign(this.getAttribute('data-align'));
+        onChange();
+      });
+    });
+
+    function setHeadlineAlign(align) {
+      headlineAlign = align || 'left';
+      document.querySelectorAll('#headlineAlignBtns .align-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-align') === headlineAlign);
+      });
+    }
+
+    function setCtaAlign(align) {
+      ctaAlign = align || 'left';
+      document.querySelectorAll('#ctaAlignBtns .align-btn').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-align') === ctaAlign);
+      });
+    }
+
     /* ── Simple field listeners ── */
     ['imageUrl', 'imageAlt', 'customCheckmarkUrl', 'ctaUrl'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
@@ -529,6 +606,7 @@
         imageUrl:           document.getElementById('imageUrl').value           || DEFAULTS.imageUrl,
         imageAlt:           document.getElementById('imageAlt').value           || DEFAULTS.imageAlt,
         headlineText:       document.getElementById('headlineText').value       || DEFAULTS.headlineText,
+        headlineAlign:      headlineAlign,
         headlineColor:      document.getElementById('headlineColor').value      || DEFAULTS.headlineColor,
         textColor:          document.getElementById('textColor').value          || DEFAULTS.textColor,
         stripeColor:        document.getElementById('stripeColor').value        || DEFAULTS.stripeColor,
@@ -542,6 +620,7 @@
         item3Show: document.getElementById('item3Show').checked,
         showCta:   document.getElementById('showCta').checked,
         ctaLabel:  document.getElementById('ctaLabel').value || DEFAULTS.ctaLabel,
+        ctaAlign:  ctaAlign,
         ctaUrl:    document.getElementById('ctaUrl').value   || DEFAULTS.ctaUrl,
         ctaColor:  document.getElementById('ctaColor').value || DEFAULTS.ctaColor
       };
@@ -549,7 +628,9 @@
 
     /* ── populateFields ── */
     function populateFields(d) {
-      setImagePosition(d.imagePosition || 'left');
+      setImagePosition(d.imagePosition   || 'left');
+      setHeadlineAlign(d.headlineAlign   || 'left');
+      setCtaAlign(d.ctaAlign             || 'left');
 
       document.getElementById('imageUrl').value     = d.imageUrl     || DEFAULTS.imageUrl;
       document.getElementById('imageAlt').value     = d.imageAlt     || DEFAULTS.imageAlt;
@@ -578,9 +659,9 @@
       document.getElementById('ctaUrl').value    = d.ctaUrl   || DEFAULTS.ctaUrl;
 
       updateCharCount('headlineText', 'headlineCount', 55);
-      updateCharCount('item1Text',    'item1Count',    75);
-      updateCharCount('item2Text',    'item2Count',    75);
-      updateCharCount('item3Text',    'item3Count',    75);
+      updateCharCount('item1Text',    'item1Count',    null);
+      updateCharCount('item2Text',    'item2Count',    null);
+      updateCharCount('item3Text',    'item3Count',    null);
       updateCharCount('ctaLabel',     'ctaLabelCount', 25);
     }
 
@@ -594,6 +675,8 @@
       var stripeColor  = d.stripeColor  || DEFAULTS.stripeColor;
       var blockBgColor = d.blockBgColor || DEFAULTS.blockBgColor;
       var textColor    = d.textColor    || DEFAULTS.textColor;
+      var hlAlign      = d.headlineAlign || 'left';
+      var btnAlign     = d.ctaAlign     || 'left';
       var isRight      = d.imagePosition === 'right';
       var contentPad   = isRight ? '8px 8px 8px 12px' : '8px 12px 8px 8px';
 
@@ -603,7 +686,7 @@
         { text: d.item3Text, show: d.item3Show }
       ];
 
-      var inner = '<div style="font-size:11px;font-weight:bold;color:' + esc(d.headlineColor || '#6957AB') + ';margin-bottom:4px;">' + esc(d.headlineText || '') + '</div>';
+      var inner = '<div style="font-size:11px;font-weight:bold;color:' + esc(d.headlineColor || '#6957AB') + ';margin-bottom:4px;text-align:' + hlAlign + ';">' + esc(d.headlineText || '') + '</div>';
 
       items.forEach(function(item) {
         if (item.show && item.text) {
@@ -615,7 +698,7 @@
       });
 
       if (d.showCta) {
-        inner += '<div style="margin-top:5px;"><span style="display:inline-block;font-size:8px;font-weight:bold;color:#fff;background:' + esc(d.ctaColor || '#729E40') + ';padding:3px 10px;border-radius:10px;letter-spacing:0.5px;">' + esc(d.ctaLabel || '') + '</span></div>';
+        inner += '<div style="margin-top:5px;text-align:' + btnAlign + ';"><span style="display:inline-block;font-size:8px;font-weight:bold;color:#fff;background:' + esc(d.ctaColor || '#729E40') + ';padding:3px 10px;border-radius:10px;letter-spacing:0.5px;">' + esc(d.ctaLabel || '') + '</span></div>';
       }
 
       var imgSrc = d.imageUrl || DEFAULTS.imageUrl;
@@ -638,10 +721,12 @@
       var contentPad    = isRight ? '15px 15px 15px 25px' : '15px 25px 15px 15px';
       var imgUrl        = d.imageUrl        || DEFAULTS.imageUrl;
       var imgAlt        = d.imageAlt        || DEFAULTS.imageAlt;
+      var hlAlign       = d.headlineAlign   || 'left';
       var headlineColor = d.headlineColor   || DEFAULTS.headlineColor;
       var textColor     = d.textColor       || DEFAULTS.textColor;
       var stripeColor   = d.stripeColor     || DEFAULTS.stripeColor;
       var blockBgColor  = d.blockBgColor    || DEFAULTS.blockBgColor;
+      var btnAlign      = d.ctaAlign        || 'left';
       var ctaColor      = d.ctaColor        || DEFAULTS.ctaColor;
       var ctaUrl        = d.ctaUrl          || '#';
       var ctaLabel      = d.ctaLabel        || DEFAULTS.ctaLabel;
@@ -652,10 +737,10 @@
         { text: d.item3Text, show: d.item3Show }
       ].filter(function(it) { return it.show && it.text; });
 
-      function buildCtaBtn(url, label, color) {
+      function buildCtaBtn(url, label, color, align) {
         var btnWidth = Math.max(180, label.length * 9 + 96);
         return [
-          '<table cellpadding="0" cellspacing="0" border="0" role="presentation"><tr>',
+          '<table cellpadding="0" cellspacing="0" border="0" role="presentation" align="' + align + '"><tr>',
           '  <td align="center" bgcolor="' + color + '" style="border-radius:24px;">',
           '    <div>',
           '    <!--[if mso]>',
@@ -685,7 +770,7 @@
         var lines = ['<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%">'];
 
         lines.push('<tr>');
-        lines.push('  <td style="font-family:Helvetica,Arial,sans-serif;font-size:' + headFs + 'px;line-height:' + headLh + 'px;font-weight:bold;color:' + headlineColor + ';padding-bottom:' + headPb + 'px;">' + (d.headlineText || '') + '</td>');
+        lines.push('  <td style="font-family:Helvetica,Arial,sans-serif;font-size:' + headFs + 'px;line-height:' + headLh + 'px;font-weight:bold;color:' + headlineColor + ';padding-bottom:' + headPb + 'px;text-align:' + hlAlign + ';">' + (d.headlineText || '') + '</td>');
         lines.push('</tr>');
 
         visibleItems.forEach(function(item, idx) {
@@ -705,7 +790,7 @@
 
         if (d.showCta) {
           lines.push('<tr><td>');
-          lines.push(buildCtaBtn(ctaUrl, ctaLabel, ctaColor));
+          lines.push(buildCtaBtn(ctaUrl, ctaLabel, ctaColor, btnAlign));
           lines.push('</td></tr>');
         }
 
