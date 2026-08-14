@@ -65,6 +65,34 @@
       margin-bottom: 4px;
     }
 
+    input[type="number"] {
+      width: 70px;
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #333;
+      background: #fff;
+      transition: border-color 0.15s;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #D22E7A;
+    }
+
+    .spacing-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .spacing-row .spacing-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     input[type="text"],
     input[type="url"] {
       width: 100%;
@@ -408,6 +436,29 @@
     </div>
   </div>
 
+  <!-- SPACING -->
+  <div class="section-title">Spacing</div>
+
+  <div class="field">
+    <div class="spacing-row">
+      <div>
+        <label for="paddingTop">Top Padding</label>
+        <div class="spacing-field">
+          <input type="number" id="paddingTop" min="0" max="80" step="5" value="0" />
+          <span class="hint" style="margin-top:0;">px</span>
+        </div>
+      </div>
+      <div>
+        <label for="paddingBottom">Bottom Padding</label>
+        <div class="spacing-field">
+          <input type="number" id="paddingBottom" min="0" max="80" step="5" value="0" />
+          <span class="hint" style="margin-top:0;">px</span>
+        </div>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:8px;">Adds space above/below the block. Background color fills the padded area.</div>
+  </div>
+
   <!-- PREVIEW -->
   <div class="preview-wrap">
     <div class="preview-label">Preview</div>
@@ -436,11 +487,13 @@
       item2Show: true,
       item3Text: 'There's no waiting around — portraits are available to view about five days after picture day',
       item3Show: true,
-      showCta:   true,
-      ctaLabel:  'PARTNER WITH US',
-      ctaAlign:  'left',
-      ctaUrl:    '#',
-      ctaColor:  '#729E40'
+      showCta:      true,
+      ctaLabel:     'PARTNER WITH US',
+      ctaAlign:     'left',
+      ctaUrl:       '#',
+      ctaColor:     '#729E40',
+      paddingTop:    0,
+      paddingBottom: 0
     };
 
     var DEFAULT_CHECKMARK_URL = 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/8ec9a66f-a9e9-425b-b005-68f74819ee43.png';
@@ -595,6 +648,10 @@
       document.getElementById(id).addEventListener('input', onChange);
     });
 
+    ['paddingTop', 'paddingBottom'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', onChange);
+    });
+
     ['showCta', 'item1Show', 'item2Show', 'item3Show'].forEach(function(id) {
       document.getElementById(id).addEventListener('change', onChange);
     });
@@ -620,9 +677,11 @@
         item3Show: document.getElementById('item3Show').checked,
         showCta:   document.getElementById('showCta').checked,
         ctaLabel:  document.getElementById('ctaLabel').value || DEFAULTS.ctaLabel,
-        ctaAlign:  ctaAlign,
-        ctaUrl:    document.getElementById('ctaUrl').value   || DEFAULTS.ctaUrl,
-        ctaColor:  document.getElementById('ctaColor').value || DEFAULTS.ctaColor
+        ctaAlign:      ctaAlign,
+        ctaUrl:        document.getElementById('ctaUrl').value   || DEFAULTS.ctaUrl,
+        ctaColor:      document.getElementById('ctaColor').value || DEFAULTS.ctaColor,
+        paddingTop:    parseInt(document.getElementById('paddingTop').value,    10) || 0,
+        paddingBottom: parseInt(document.getElementById('paddingBottom').value, 10) || 0
       };
     }
 
@@ -654,9 +713,11 @@
       document.getElementById('item3Text').value   = d.item3Text !== undefined ? d.item3Text : DEFAULTS.item3Text;
       document.getElementById('item3Show').checked = d.item3Show !== false;
 
-      document.getElementById('showCta').checked = d.showCta !== false;
-      document.getElementById('ctaLabel').value  = d.ctaLabel || DEFAULTS.ctaLabel;
-      document.getElementById('ctaUrl').value    = d.ctaUrl   || DEFAULTS.ctaUrl;
+      document.getElementById('showCta').checked    = d.showCta !== false;
+      document.getElementById('ctaLabel').value     = d.ctaLabel || DEFAULTS.ctaLabel;
+      document.getElementById('ctaUrl').value       = d.ctaUrl   || DEFAULTS.ctaUrl;
+      document.getElementById('paddingTop').value    = d.paddingTop    !== undefined ? d.paddingTop    : 0;
+      document.getElementById('paddingBottom').value = d.paddingBottom !== undefined ? d.paddingBottom : 0;
 
       updateCharCount('headlineText', 'headlineCount', 55);
       updateCharCount('item1Text',    'item1Count',    null);
@@ -730,6 +791,9 @@
       var ctaColor      = d.ctaColor        || DEFAULTS.ctaColor;
       var ctaUrl        = d.ctaUrl          || '#';
       var ctaLabel      = d.ctaLabel        || DEFAULTS.ctaLabel;
+
+      var topPad    = parseInt(d.paddingTop,    10) || 0;
+      var bottomPad = parseInt(d.paddingBottom, 10) || 0;
 
       var visibleItems = [
         { text: d.item1Text, show: d.item1Show },
@@ -864,6 +928,7 @@
         '  }',
         '</style>',
         '<table width="768" cellpadding="0" cellspacing="0" border="0" role="presentation" align="center" style="background-color:' + blockBgColor + ';">',
+        topPad > 0    ? '<tr><td height="' + topPad    + '" style="font-size:0;line-height:0;height:' + topPad    + 'px;">&nbsp;</td></tr>' : '',
         '<tr><td>',
         mobileHtml,
         '<table class="tup-hide" width="768" cellpadding="0" cellspacing="0" border="0" role="presentation">',
@@ -872,6 +937,7 @@
         '</tr>',
         '</table>',
         '</td></tr>',
+        bottomPad > 0 ? '<tr><td height="' + bottomPad + '" style="font-size:0;line-height:0;height:' + bottomPad + 'px;">&nbsp;</td></tr>' : '',
         '</table>'
       ].join('\n');
     }
