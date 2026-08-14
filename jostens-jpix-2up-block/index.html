@@ -66,8 +66,7 @@
     }
 
     input[type="text"],
-    input[type="url"],
-    textarea {
+    input[type="url"] {
       width: 100%;
       padding: 7px 10px;
       border: 1px solid #ccc;
@@ -80,15 +79,9 @@
     }
 
     input[type="text"]:focus,
-    input[type="url"]:focus,
-    textarea:focus {
+    input[type="url"]:focus {
       outline: none;
       border-color: #D22E7A;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
     }
 
     .color-row {
@@ -128,6 +121,7 @@
       transition: border-color 0.15s;
     }
 
+    .swatch.light { border-color: #ddd; }
     .swatch:hover { border-color: #999; }
     .swatch.active { border-color: #333; }
 
@@ -140,7 +134,20 @@
     .char-count { font-weight: 600; }
     .char-count.over { color: #c00; }
 
-    /* Layout position toggle */
+    .height-warn {
+      background: #fff3f3;
+      border: 1px solid #f5c0c0;
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #c00;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .height-warn.visible { display: block; }
+
     .toggle-btns {
       display: flex;
       border: 1px solid #ddd;
@@ -166,7 +173,6 @@
     .toggle-btn:hover { background: #f0f0f0; color: #555; }
     .toggle-btn.active { background: #D22E7A; color: #fff; }
 
-    /* Item field cards */
     .item-field {
       background: #f5f5f5;
       border: 1px solid #e8e8e8;
@@ -178,7 +184,6 @@
     .item-field .field-header { margin-bottom: 6px; }
     .item-field label { font-size: 11px; color: #666; margin-bottom: 0; }
 
-    /* Preview */
     .preview-wrap {
       margin-top: 24px;
       border-top: 1px solid #e0e0e0;
@@ -198,7 +203,6 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       overflow: hidden;
-      background: #fff;
     }
 
     #previewOuter table { border-collapse: collapse; }
@@ -206,13 +210,13 @@
 </head>
 <body>
 
-  <!-- ─── Image ─── -->
+  <!-- IMAGE -->
   <div class="section-title">Image</div>
 
   <div class="field">
     <label for="imageUrl">Image URL</label>
     <input type="text" id="imageUrl" placeholder="https://..." />
-    <div class="hint">Square image recommended. Displays at 320×320px on desktop, 260×260px on mobile. Source should be 640px or larger for retina sharpness.</div>
+    <div class="hint">Square image recommended. Displays at 320×320px desktop / 260×260px mobile. Use a 640px+ source for retina sharpness.</div>
   </div>
 
   <div class="field">
@@ -228,53 +232,25 @@
     </div>
   </div>
 
-  <!-- ─── Content ─── -->
+  <!-- CONTENT -->
   <div class="section-title">Content</div>
 
   <div class="field">
     <label for="headlineText">Headline</label>
-    <input type="text" id="headlineText" placeholder="The Jostens Difference" maxlength="80" />
-    <div class="hint"><span class="char-count" id="headlineCount">0</span> / 55 chars recommended — longer text may wrap to a second line and push content height</div>
+    <input type="text" id="headlineText" placeholder="The Jostens Difference" maxlength="70" />
+    <div class="hint"><span class="char-count" id="headlineCount">0</span> / 55 chars recommended — longer text wraps to a second line and reduces space for items</div>
   </div>
 
-  <div class="field">
-    <label>Headline Color</label>
-    <div class="swatch-row">
-      <button class="swatch" data-target="headlineColor" data-color="#6957AB" style="background:#6957AB;" title="Purple (#6957AB)"></button>
-      <button class="swatch" data-target="headlineColor" data-color="#031D40" style="background:#031D40;" title="Dark Navy (#031D40)"></button>
-      <button class="swatch" data-target="headlineColor" data-color="#729E40" style="background:#729E40;" title="Green (#729E40)"></button>
-      <button class="swatch" data-target="headlineColor" data-color="#EE692C" style="background:#EE692C;" title="Orange (#EE692C)"></button>
-      <button class="swatch" data-target="headlineColor" data-color="#555555" style="background:#555555;" title="Gray (#555555)"></button>
-      <button class="swatch" data-target="headlineColor" data-color="#1A1A1A" style="background:#1A1A1A;" title="Near Black (#1A1A1A)"></button>
-    </div>
-    <div class="color-row">
-      <input type="color" id="headlineColorPicker" value="#6957AB" />
-      <input type="text" id="headlineColor" class="color-hex" placeholder="#6957AB" value="#6957AB" />
-    </div>
-  </div>
-
-  <div class="field">
-    <div class="field-header">
-      <label for="paragraphText">Paragraph (Optional)</label>
-      <label class="toggle-check"><input type="checkbox" id="showParagraph"> Show</label>
-    </div>
-    <div id="paragraphWrap" style="display:none;">
-      <textarea id="paragraphText" placeholder="Optional supporting copy below the headline..." rows="3" maxlength="200"></textarea>
-      <div class="hint"><span class="char-count" id="paragraphCount">0</span> / 120 chars recommended — very long paragraph may reduce the image overflow effect on desktop</div>
-    </div>
-  </div>
-
-  <!-- ─── Checklist Items ─── -->
+  <!-- CHECKLIST ITEMS -->
   <div class="section-title">Checklist Items</div>
-  <div class="hint" style="margin-bottom:10px;">Headline + 3 items + CTA fits the stripe best. Adding a 4th item or a paragraph may slightly reduce the image overflow at desktop.</div>
 
   <div class="item-field">
     <div class="field-header">
       <label>Item 1</label>
       <label class="toggle-check"><input type="checkbox" id="item1Show" checked> Show</label>
     </div>
-    <input type="text" id="item1Text" placeholder="Checkmark item text..." maxlength="120" />
-    <div class="hint"><span class="char-count" id="item1Count">0</span> / 80 chars recommended</div>
+    <input type="text" id="item1Text" placeholder="Checkmark item text..." maxlength="100" />
+    <div class="hint"><span class="char-count" id="item1Count">0</span> / 75 chars recommended</div>
   </div>
 
   <div class="item-field">
@@ -282,8 +258,8 @@
       <label>Item 2</label>
       <label class="toggle-check"><input type="checkbox" id="item2Show" checked> Show</label>
     </div>
-    <input type="text" id="item2Text" placeholder="Checkmark item text..." maxlength="120" />
-    <div class="hint"><span class="char-count" id="item2Count">0</span> / 80 chars recommended</div>
+    <input type="text" id="item2Text" placeholder="Checkmark item text..." maxlength="100" />
+    <div class="hint"><span class="char-count" id="item2Count">0</span> / 75 chars recommended</div>
   </div>
 
   <div class="item-field">
@@ -291,35 +267,22 @@
       <label>Item 3</label>
       <label class="toggle-check"><input type="checkbox" id="item3Show" checked> Show</label>
     </div>
-    <input type="text" id="item3Text" placeholder="Checkmark item text..." maxlength="120" />
-    <div class="hint"><span class="char-count" id="item3Count">0</span> / 80 chars recommended</div>
+    <input type="text" id="item3Text" placeholder="Checkmark item text..." maxlength="100" />
+    <div class="hint"><span class="char-count" id="item3Count">0</span> / 75 chars recommended</div>
   </div>
 
-  <div class="item-field">
-    <div class="field-header">
-      <label>Item 4</label>
-      <label class="toggle-check"><input type="checkbox" id="item4Show"> Show</label>
-    </div>
-    <input type="text" id="item4Text" placeholder="Checkmark item text..." maxlength="120" />
-    <div class="hint"><span class="char-count" id="item4Count">0</span> / 80 chars recommended</div>
-  </div>
+  <div id="heightWarn" class="height-warn">Content height may exceed the 250px stripe — the image overflow effect will be reduced or lost on desktop. Shorten item text or hide the CTA.</div>
 
-  <!-- ─── Checkmark Image ─── -->
+  <!-- CHECKMARK IMAGE -->
   <div class="section-title">Checkmark Image</div>
 
   <div class="field">
-    <div class="field-header">
-      <label>Custom Checkmark</label>
-      <label class="toggle-check"><input type="checkbox" id="useCustomCheckmark"> Override</label>
-    </div>
-    <div id="customCheckmarkWrap" style="display:none;">
-      <input type="text" id="customCheckmarkUrl" placeholder="https://..." />
-      <div class="hint">Square PNG recommended. Displays at 34×34px on desktop, 30×30px on mobile.</div>
-    </div>
-    <div id="defaultCheckmarkNote" class="hint">Using default JPIX checkmark. Enable Override to supply your own.</div>
+    <label for="customCheckmarkUrl">Custom Checkmark URL</label>
+    <input type="text" id="customCheckmarkUrl" placeholder="Leave blank to use the default JPIX checkmark" />
+    <div class="hint">Square PNG, 34×34px desktop / 30×30px mobile. Leave blank for default.</div>
   </div>
 
-  <!-- ─── CTA Button ─── -->
+  <!-- CTA BUTTON -->
   <div class="section-title">CTA Button</div>
 
   <div class="field">
@@ -332,31 +295,76 @@
   <div class="field">
     <label for="ctaLabel">Button Label</label>
     <input type="text" id="ctaLabel" placeholder="PARTNER WITH US" maxlength="40" />
-    <div class="hint"><span class="char-count" id="ctaLabelCount">0</span> / 25 chars recommended — longer labels widen the button</div>
+    <div class="hint"><span class="char-count" id="ctaLabelCount">0</span> / 25 chars recommended</div>
   </div>
 
   <div class="field">
     <label for="ctaUrl">Button URL</label>
     <input type="text" id="ctaUrl" placeholder="%%=RedirectTo(@URL)=%% or https://..." />
-    <div class="hint">Accepts plain URLs or AMPscript expressions like %%=RedirectTo(@ProspectFormURL)=%%</div>
+    <div class="hint">Accepts plain URLs or AMPscript like %%=RedirectTo(@ProspectFormURL)=%%</div>
+  </div>
+
+  <!-- COLORS -->
+  <div class="section-title">Colors</div>
+
+  <div class="field">
+    <label>Stripe Color</label>
+    <div class="swatch-row">
+      <button class="swatch light" data-target="stripeColor" data-color="#F0F0F0" style="background:#F0F0F0;" title="Light Gray (#F0F0F0)"></button>
+      <button class="swatch" data-target="stripeColor" data-color="#EAE6F5" style="background:#EAE6F5;" title="Light Purple (#EAE6F5)"></button>
+      <button class="swatch" data-target="stripeColor" data-color="#E9F0E0" style="background:#E9F0E0;" title="Light Green (#E9F0E0)"></button>
+      <button class="swatch" data-target="stripeColor" data-color="#E5EAF1" style="background:#E5EAF1;" title="Light Navy (#E5EAF1)"></button>
+      <button class="swatch" data-target="stripeColor" data-color="#E0E0E0" style="background:#E0E0E0;" title="Medium Gray (#E0E0E0)"></button>
+      <button class="swatch light" data-target="stripeColor" data-color="#FFFFFF" style="background:#FFFFFF;" title="White (#FFFFFF)"></button>
+    </div>
+    <div class="color-row">
+      <input type="color" id="stripeColorPicker" value="#F0F0F0" />
+      <input type="text" id="stripeColor" class="color-hex" placeholder="#F0F0F0" value="#F0F0F0" />
+    </div>
+    <div class="hint">Background of the content column and side spacers.</div>
   </div>
 
   <div class="field">
-    <label>Button Color</label>
+    <label>Block Background</label>
     <div class="swatch-row">
-      <button class="swatch" data-target="ctaColor" data-color="#729E40" style="background:#729E40;" title="Green (#729E40)"></button>
-      <button class="swatch" data-target="ctaColor" data-color="#6957AB" style="background:#6957AB;" title="Purple (#6957AB)"></button>
-      <button class="swatch" data-target="ctaColor" data-color="#EE692C" style="background:#EE692C;" title="Orange (#EE692C)"></button>
-      <button class="swatch" data-target="ctaColor" data-color="#031D40" style="background:#031D40;" title="Dark Navy (#031D40)"></button>
-      <button class="swatch" data-target="ctaColor" data-color="#1A1A1A" style="background:#1A1A1A;" title="Near Black (#1A1A1A)"></button>
+      <button class="swatch light" data-target="blockBgColor" data-color="#FFFFFF" style="background:#FFFFFF;" title="White (#FFFFFF)"></button>
+      <button class="swatch" data-target="blockBgColor" data-color="#F8F8F8" style="background:#F8F8F8;" title="Off White (#F8F8F8)"></button>
+      <button class="swatch" data-target="blockBgColor" data-color="#F0F0F0" style="background:#F0F0F0;" title="Light Gray (#F0F0F0)"></button>
+      <button class="swatch" data-target="blockBgColor" data-color="#031D40" style="background:#031D40;" title="Dark Navy (#031D40)"></button>
+      <button class="swatch" data-target="blockBgColor" data-color="#6957AB" style="background:#6957AB;" title="Purple (#6957AB)"></button>
     </div>
+    <div class="color-row">
+      <input type="color" id="blockBgColorPicker" value="#FFFFFF" />
+      <input type="text" id="blockBgColor" class="color-hex" placeholder="#FFFFFF" value="#FFFFFF" />
+    </div>
+    <div class="hint">Area surrounding the image on desktop — shows where the image overflows the stripe.</div>
+  </div>
+
+  <div class="field">
+    <label for="headlineColor">Headline Color</label>
+    <div class="color-row">
+      <input type="color" id="headlineColorPicker" value="#6957AB" />
+      <input type="text" id="headlineColor" class="color-hex" placeholder="#6957AB" value="#6957AB" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="textColor">Body Text Color</label>
+    <div class="color-row">
+      <input type="color" id="textColorPicker" value="#555555" />
+      <input type="text" id="textColor" class="color-hex" placeholder="#555555" value="#555555" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="ctaColor">Button Color</label>
     <div class="color-row">
       <input type="color" id="ctaColorPicker" value="#729E40" />
       <input type="text" id="ctaColor" class="color-hex" placeholder="#729E40" value="#729E40" />
     </div>
   </div>
 
-  <!-- ─── Preview ─── -->
+  <!-- PREVIEW -->
   <div class="preview-wrap">
     <div class="preview-label">Preview</div>
     <div id="previewOuter">
@@ -367,16 +375,15 @@
   </div>
 
   <script>
-    /* ─── Defaults ─── */
     var DEFAULTS = {
       imagePosition:      'left',
       imageUrl:           'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/d62a2b56-479b-4c0e-8bf7-b5de404262cf.png',
       imageAlt:           'Jostens Photographer',
       headlineText:       'The Jostens Difference',
       headlineColor:      '#6957AB',
-      showParagraph:      false,
-      paragraphText:      '',
-      useCustomCheckmark: false,
+      textColor:          '#555555',
+      stripeColor:        '#F0F0F0',
+      blockBgColor:       '#FFFFFF',
       customCheckmarkUrl: '',
       item1Text: 'We take care of all the details, from planning through delivery',
       item1Show: true,
@@ -384,8 +391,6 @@
       item2Show: true,
       item3Text: 'There’s no waiting around — portraits are available to view about five days after picture day',
       item3Show: true,
-      item4Text: '',
-      item4Show: false,
       showCta:   true,
       ctaLabel:  'PARTNER WITH US',
       ctaUrl:    '#',
@@ -394,15 +399,16 @@
 
     var DEFAULT_CHECKMARK_URL = 'https://image.s1.sfmc-content.com/lib/fe6715707c6605797117/m/1/8ec9a66f-a9e9-425b-b005-68f74819ee43.png';
 
-    /* ─── SDK ─── */
-    var BlockSDK = window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : null;
-    if (!BlockSDK) console.error('BlockSDK failed to load');
-    var sdk = new BlockSDK();
+    var sdk = new (window.sfdc && window.sfdc.BlockSDK ? window.sfdc.BlockSDK : function() {
+      this.getData      = function(cb)    { cb({}); };
+      this.setData      = function(d, cb) { if (cb) cb(); };
+      this.setContent   = function() {};
+      this.setSuperContent = function() {};
+    })();
 
-    /* ─── State ─── */
     var imagePosition = 'left';
 
-    /* ─── Color helpers ─── */
+    /* ── Color helpers ── */
     function setColor(hexId, pickerId, value) {
       document.getElementById(hexId).value    = value || '';
       document.getElementById(pickerId).value = /^#[0-9A-Fa-f]{6}$/.test(value) ? value : '#000000';
@@ -411,12 +417,14 @@
     function bindColorPair(pickerId, hexId) {
       document.getElementById(pickerId).addEventListener('input', function() {
         document.getElementById(hexId).value = this.value;
+        updateSwatchActive(hexId, this.value);
         onChange();
       });
       document.getElementById(hexId).addEventListener('input', function() {
         if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
           document.getElementById(pickerId).value = this.value;
         }
+        updateSwatchActive(hexId, this.value);
         onChange();
       });
     }
@@ -437,10 +445,13 @@
       });
     });
 
+    bindColorPair('stripeColorPicker',   'stripeColor');
+    bindColorPair('blockBgColorPicker',  'blockBgColor');
     bindColorPair('headlineColorPicker', 'headlineColor');
+    bindColorPair('textColorPicker',     'textColor');
     bindColorPair('ctaColorPicker',      'ctaColor');
 
-    /* ─── Character counter ─── */
+    /* ── Character counters ── */
     function updateCharCount(inputId, countId, limit) {
       var el = document.getElementById(inputId);
       var counter = document.getElementById(countId);
@@ -457,15 +468,37 @@
       });
     }
 
-    bindCharCount('headlineText',  'headlineCount',  55);
-    bindCharCount('paragraphText', 'paragraphCount', 120);
-    bindCharCount('item1Text',     'item1Count',     80);
-    bindCharCount('item2Text',     'item2Count',     80);
-    bindCharCount('item3Text',     'item3Count',     80);
-    bindCharCount('item4Text',     'item4Count',     80);
-    bindCharCount('ctaLabel',      'ctaLabelCount',  25);
+    bindCharCount('headlineText', 'headlineCount', 55);
+    bindCharCount('item1Text',    'item1Count',    75);
+    bindCharCount('item2Text',    'item2Count',    75);
+    bindCharCount('item3Text',    'item3Count',    75);
+    bindCharCount('ctaLabel',     'ctaLabelCount', 25);
 
-    /* ─── Image position toggle ─── */
+    /* ── Height estimator ── */
+    function updateHeightWarning(d) {
+      var h = 30; // 15px top + 15px bottom padding
+      var hlChars = (d.headlineText || '').length;
+      h += (hlChars > 55 ? 56 : 28) + 8; // headline text + padding-bottom
+
+      var items = [
+        { text: d.item1Text, show: d.item1Show },
+        { text: d.item2Text, show: d.item2Show },
+        { text: d.item3Text, show: d.item3Show }
+      ].filter(function(i) { return i.show && i.text; });
+
+      items.forEach(function(item, idx) {
+        var isLast = idx === items.length - 1;
+        var lines  = Math.ceil((item.text || '').length / 43); // ~43 chars per line at this width
+        var pb     = isLast ? (d.showCta ? 8 : 0) : 5;
+        h += Math.max(lines, 1) * 20 + 3 + pb; // text + icon top-pad + bottom-pad
+      });
+
+      if (d.showCta) h += 38; // 10px top + 18px line-height + 10px bottom
+
+      document.getElementById('heightWarn').classList.toggle('visible', h > 248);
+    }
+
+    /* ── Image position toggle ── */
     document.querySelectorAll('#imagePositionBtns .toggle-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         setImagePosition(this.getAttribute('data-pos'));
@@ -480,28 +513,16 @@
       });
     }
 
-    /* ─── Simple field listeners ─── */
+    /* ── Simple field listeners ── */
     ['imageUrl', 'imageAlt', 'customCheckmarkUrl', 'ctaUrl'].forEach(function(id) {
       document.getElementById(id).addEventListener('input', onChange);
     });
 
-    /* ─── Toggle listeners ─── */
-    document.getElementById('showParagraph').addEventListener('change', function() {
-      document.getElementById('paragraphWrap').style.display = this.checked ? '' : 'none';
-      onChange();
-    });
-
-    document.getElementById('useCustomCheckmark').addEventListener('change', function() {
-      document.getElementById('customCheckmarkWrap').style.display = this.checked ? '' : 'none';
-      document.getElementById('defaultCheckmarkNote').style.display = this.checked ? 'none' : '';
-      onChange();
-    });
-
-    ['showCta', 'item1Show', 'item2Show', 'item3Show', 'item4Show'].forEach(function(id) {
+    ['showCta', 'item1Show', 'item2Show', 'item3Show'].forEach(function(id) {
       document.getElementById(id).addEventListener('change', onChange);
     });
 
-    /* ─── readFields ─── */
+    /* ── readFields ── */
     function readFields() {
       return {
         imagePosition:      imagePosition,
@@ -509,18 +530,16 @@
         imageAlt:           document.getElementById('imageAlt').value           || DEFAULTS.imageAlt,
         headlineText:       document.getElementById('headlineText').value       || DEFAULTS.headlineText,
         headlineColor:      document.getElementById('headlineColor').value      || DEFAULTS.headlineColor,
-        showParagraph:      document.getElementById('showParagraph').checked,
-        paragraphText:      document.getElementById('paragraphText').value      || '',
-        useCustomCheckmark: document.getElementById('useCustomCheckmark').checked,
-        customCheckmarkUrl: document.getElementById('customCheckmarkUrl').value || '',
+        textColor:          document.getElementById('textColor').value          || DEFAULTS.textColor,
+        stripeColor:        document.getElementById('stripeColor').value        || DEFAULTS.stripeColor,
+        blockBgColor:       document.getElementById('blockBgColor').value       || DEFAULTS.blockBgColor,
+        customCheckmarkUrl: document.getElementById('customCheckmarkUrl').value.trim(),
         item1Text: document.getElementById('item1Text').value || DEFAULTS.item1Text,
         item1Show: document.getElementById('item1Show').checked,
         item2Text: document.getElementById('item2Text').value || DEFAULTS.item2Text,
         item2Show: document.getElementById('item2Show').checked,
         item3Text: document.getElementById('item3Text').value || DEFAULTS.item3Text,
         item3Show: document.getElementById('item3Show').checked,
-        item4Text: document.getElementById('item4Text').value || '',
-        item4Show: document.getElementById('item4Show').checked,
         showCta:   document.getElementById('showCta').checked,
         ctaLabel:  document.getElementById('ctaLabel').value || DEFAULTS.ctaLabel,
         ctaUrl:    document.getElementById('ctaUrl').value   || DEFAULTS.ctaUrl,
@@ -528,118 +547,111 @@
       };
     }
 
-    /* ─── populateFields ─── */
+    /* ── populateFields ── */
     function populateFields(d) {
       setImagePosition(d.imagePosition || 'left');
 
-      document.getElementById('imageUrl').value  = d.imageUrl  || DEFAULTS.imageUrl;
-      document.getElementById('imageAlt').value  = d.imageAlt  || DEFAULTS.imageAlt;
-
+      document.getElementById('imageUrl').value     = d.imageUrl     || DEFAULTS.imageUrl;
+      document.getElementById('imageAlt').value     = d.imageAlt     || DEFAULTS.imageAlt;
       document.getElementById('headlineText').value = d.headlineText || DEFAULTS.headlineText;
+
       setColor('headlineColor', 'headlineColorPicker', d.headlineColor || DEFAULTS.headlineColor);
-      updateSwatchActive('headlineColor', d.headlineColor || DEFAULTS.headlineColor);
+      setColor('textColor',     'textColorPicker',     d.textColor     || DEFAULTS.textColor);
+      setColor('stripeColor',   'stripeColorPicker',   d.stripeColor   || DEFAULTS.stripeColor);
+      setColor('blockBgColor',  'blockBgColorPicker',  d.blockBgColor  || DEFAULTS.blockBgColor);
+      setColor('ctaColor',      'ctaColorPicker',      d.ctaColor      || DEFAULTS.ctaColor);
 
-      var showP = !!d.showParagraph;
-      document.getElementById('showParagraph').checked = showP;
-      document.getElementById('paragraphWrap').style.display = showP ? '' : 'none';
-      document.getElementById('paragraphText').value = d.paragraphText || '';
+      updateSwatchActive('stripeColor',  d.stripeColor  || DEFAULTS.stripeColor);
+      updateSwatchActive('blockBgColor', d.blockBgColor || DEFAULTS.blockBgColor);
 
-      var useCC = !!d.useCustomCheckmark;
-      document.getElementById('useCustomCheckmark').checked = useCC;
-      document.getElementById('customCheckmarkWrap').style.display = useCC ? '' : 'none';
-      document.getElementById('defaultCheckmarkNote').style.display = useCC ? 'none' : '';
       document.getElementById('customCheckmarkUrl').value = d.customCheckmarkUrl || '';
 
-      document.getElementById('item1Text').value    = d.item1Text !== undefined ? d.item1Text : DEFAULTS.item1Text;
-      document.getElementById('item1Show').checked  = d.item1Show !== false;
-      document.getElementById('item2Text').value    = d.item2Text !== undefined ? d.item2Text : DEFAULTS.item2Text;
-      document.getElementById('item2Show').checked  = d.item2Show !== false;
-      document.getElementById('item3Text').value    = d.item3Text !== undefined ? d.item3Text : DEFAULTS.item3Text;
-      document.getElementById('item3Show').checked  = d.item3Show !== false;
-      document.getElementById('item4Text').value    = d.item4Text !== undefined ? d.item4Text : '';
-      document.getElementById('item4Show').checked  = !!d.item4Show;
+      document.getElementById('item1Text').value   = d.item1Text !== undefined ? d.item1Text : DEFAULTS.item1Text;
+      document.getElementById('item1Show').checked = d.item1Show !== false;
+      document.getElementById('item2Text').value   = d.item2Text !== undefined ? d.item2Text : DEFAULTS.item2Text;
+      document.getElementById('item2Show').checked = d.item2Show !== false;
+      document.getElementById('item3Text').value   = d.item3Text !== undefined ? d.item3Text : DEFAULTS.item3Text;
+      document.getElementById('item3Show').checked = d.item3Show !== false;
 
-      document.getElementById('showCta').checked  = d.showCta !== false;
-      document.getElementById('ctaLabel').value   = d.ctaLabel || DEFAULTS.ctaLabel;
-      document.getElementById('ctaUrl').value     = d.ctaUrl   || DEFAULTS.ctaUrl;
-      setColor('ctaColor', 'ctaColorPicker', d.ctaColor || DEFAULTS.ctaColor);
-      updateSwatchActive('ctaColor', d.ctaColor || DEFAULTS.ctaColor);
+      document.getElementById('showCta').checked = d.showCta !== false;
+      document.getElementById('ctaLabel').value  = d.ctaLabel || DEFAULTS.ctaLabel;
+      document.getElementById('ctaUrl').value    = d.ctaUrl   || DEFAULTS.ctaUrl;
 
-      updateCharCount('headlineText',  'headlineCount',  55);
-      updateCharCount('paragraphText', 'paragraphCount', 120);
-      updateCharCount('item1Text',     'item1Count',     80);
-      updateCharCount('item2Text',     'item2Count',     80);
-      updateCharCount('item3Text',     'item3Count',     80);
-      updateCharCount('item4Text',     'item4Count',     80);
-      updateCharCount('ctaLabel',      'ctaLabelCount',  25);
+      updateCharCount('headlineText', 'headlineCount', 55);
+      updateCharCount('item1Text',    'item1Count',    75);
+      updateCharCount('item2Text',    'item2Count',    75);
+      updateCharCount('item3Text',    'item3Count',    75);
+      updateCharCount('ctaLabel',     'ctaLabelCount', 25);
     }
 
-    /* ─── updatePreview ─── */
+    /* ── Preview ── */
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     function updatePreview(d) {
-      var checkmarkUrl = (d.useCustomCheckmark && d.customCheckmarkUrl) ? d.customCheckmarkUrl : DEFAULT_CHECKMARK_URL;
+      var checkmarkUrl = d.customCheckmarkUrl ? d.customCheckmarkUrl : DEFAULT_CHECKMARK_URL;
+      var stripeColor  = d.stripeColor  || DEFAULTS.stripeColor;
+      var blockBgColor = d.blockBgColor || DEFAULTS.blockBgColor;
+      var textColor    = d.textColor    || DEFAULTS.textColor;
+      var isRight      = d.imagePosition === 'right';
+      var contentPad   = isRight ? '8px 8px 8px 12px' : '8px 12px 8px 8px';
 
       var items = [
         { text: d.item1Text, show: d.item1Show },
         { text: d.item2Text, show: d.item2Show },
-        { text: d.item3Text, show: d.item3Show },
-        { text: d.item4Text, show: d.item4Show }
+        { text: d.item3Text, show: d.item3Show }
       ];
 
-      var contentHtml = '';
-
-      contentHtml += '<div style="font-size:11px;font-weight:bold;color:' + (d.headlineColor || '#6957AB') + ';margin-bottom:4px;">' + (d.headlineText || '') + '</div>';
-
-      if (d.showParagraph && d.paragraphText) {
-        contentHtml += '<div style="font-size:9px;color:#555;line-height:13px;margin-bottom:4px;">' + d.paragraphText + '</div>';
-      }
+      var inner = '<div style="font-size:11px;font-weight:bold;color:' + esc(d.headlineColor || '#6957AB') + ';margin-bottom:4px;">' + esc(d.headlineText || '') + '</div>';
 
       items.forEach(function(item) {
         if (item.show && item.text) {
-          contentHtml += '<div style="display:flex;align-items:flex-start;gap:4px;margin-bottom:3px;">';
-          contentHtml += '<img src="' + checkmarkUrl + '" width="12" height="12" style="display:block;flex-shrink:0;margin-top:1px;" onerror="this.style.display=\'none\'">';
-          contentHtml += '<span style="font-size:9px;color:#555;line-height:13px;">' + item.text + '</span>';
-          contentHtml += '</div>';
+          inner += '<div style="display:flex;align-items:flex-start;gap:4px;margin-bottom:3px;">';
+          inner += '<img src="' + esc(checkmarkUrl) + '" width="12" height="12" style="display:block;flex-shrink:0;margin-top:1px;" onerror="this.style.display=\'none\'">';
+          inner += '<span style="font-size:9px;color:' + esc(textColor) + ';line-height:13px;">' + esc(item.text) + '</span>';
+          inner += '</div>';
         }
       });
 
       if (d.showCta) {
-        contentHtml += '<div style="margin-top:5px;"><span style="display:inline-block;font-size:8px;font-weight:bold;color:#fff;background:' + (d.ctaColor || '#729E40') + ';padding:3px 10px;border-radius:10px;letter-spacing:0.5px;">' + (d.ctaLabel || 'PARTNER WITH US') + '</span></div>';
+        inner += '<div style="margin-top:5px;"><span style="display:inline-block;font-size:8px;font-weight:bold;color:#fff;background:' + esc(d.ctaColor || '#729E40') + ';padding:3px 10px;border-radius:10px;letter-spacing:0.5px;">' + esc(d.ctaLabel || '') + '</span></div>';
       }
 
       var imgSrc = d.imageUrl || DEFAULTS.imageUrl;
-      var isRight = d.imagePosition === 'right';
-      var contentPad = isRight ? '8px 8px 8px 12px' : '8px 12px 8px 8px';
 
-      var spacerCell   = '<td width="6%" style="background:#F0F0F0;min-height:90px;">&nbsp;</td>';
-      var imageCell    = '<td width="40%" valign="middle" align="center" style="padding:4px;background:#fff;"><img src="' + imgSrc + '" style="display:block;width:100%;max-width:100%;border-radius:6px;" alt=""></td>';
-      var contentCell  = '<td width="54%" valign="middle" style="background:#F0F0F0;padding:' + contentPad + ';min-height:90px;">' + contentHtml + '</td>';
+      var spacerCell  = '<td width="6%" style="background:' + stripeColor + ';">&nbsp;</td>';
+      var imageCell   = '<td width="40%" valign="middle" align="center" style="padding:4px;background:' + blockBgColor + ';"><img src="' + imgSrc + '" style="display:block;width:100%;max-width:100%;" alt=""></td>';
+      var contentCell = '<td width="54%" valign="middle" style="background:' + stripeColor + ';padding:' + contentPad + ';">' + inner + '</td>';
 
       document.getElementById('previewRow').innerHTML = isRight
         ? contentCell + imageCell + spacerCell
         : spacerCell + imageCell + contentCell;
+
+      document.getElementById('previewOuter').style.backgroundColor = blockBgColor;
     }
 
-    /* ─── buildContent — generates the full email HTML ─── */
+    /* ── buildContent — full email HTML ── */
     function buildContent(d) {
-      var checkmarkUrl  = (d.useCustomCheckmark && d.customCheckmarkUrl) ? d.customCheckmarkUrl : DEFAULT_CHECKMARK_URL;
+      var checkmarkUrl  = d.customCheckmarkUrl ? d.customCheckmarkUrl : DEFAULT_CHECKMARK_URL;
       var isRight       = d.imagePosition === 'right';
       var contentPad    = isRight ? '15px 15px 15px 25px' : '15px 25px 15px 15px';
       var imgUrl        = d.imageUrl        || DEFAULTS.imageUrl;
       var imgAlt        = d.imageAlt        || DEFAULTS.imageAlt;
       var headlineColor = d.headlineColor   || DEFAULTS.headlineColor;
+      var textColor     = d.textColor       || DEFAULTS.textColor;
+      var stripeColor   = d.stripeColor     || DEFAULTS.stripeColor;
+      var blockBgColor  = d.blockBgColor    || DEFAULTS.blockBgColor;
       var ctaColor      = d.ctaColor        || DEFAULTS.ctaColor;
       var ctaUrl        = d.ctaUrl          || '#';
       var ctaLabel      = d.ctaLabel        || DEFAULTS.ctaLabel;
 
-      var allItems = [
+      var visibleItems = [
         { text: d.item1Text, show: d.item1Show },
         { text: d.item2Text, show: d.item2Show },
-        { text: d.item3Text, show: d.item3Show },
-        { text: d.item4Text, show: d.item4Show }
-      ];
-      var visibleItems = allItems.filter(function(it) { return it.show && it.text; });
+        { text: d.item3Text, show: d.item3Show }
+      ].filter(function(it) { return it.show && it.text; });
 
-      /* CTA button (shared desktop + mobile) */
       function buildCtaBtn(url, label, color) {
         var btnWidth = Math.max(180, label.length * 9 + 96);
         return [
@@ -664,39 +676,29 @@
         ].join('\n');
       }
 
-      /* Shared content block (desktop + mobile variants) */
       function buildContentInner(isMobile) {
-        var headFs   = isMobile ? '20' : '22';
-        var headLh   = isMobile ? '26' : '28';
-        var headPb   = isMobile ? '10' : '8';
-        var iconW    = isMobile ? '30' : '34';
-        var iconCol  = isMobile ? '38' : '40';
+        var headFs  = isMobile ? '20' : '22';
+        var headLh  = isMobile ? '26' : '28';
+        var headPb  = isMobile ? '10' : '8';
+        var iconW   = isMobile ? '30' : '34';
+        var iconCol = isMobile ? '38' : '40';
         var lines = ['<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%">'];
 
         lines.push('<tr>');
-        lines.push('  <td style="font-family:Helvetica,Arial,sans-serif;font-size:' + headFs + 'px;line-height:' + headLh + 'px;font-weight:bold;color:' + headlineColor + ';padding-bottom:' + headPb + 'px;">' + d.headlineText + '</td>');
+        lines.push('  <td style="font-family:Helvetica,Arial,sans-serif;font-size:' + headFs + 'px;line-height:' + headLh + 'px;font-weight:bold;color:' + headlineColor + ';padding-bottom:' + headPb + 'px;">' + (d.headlineText || '') + '</td>');
         lines.push('</tr>');
-
-        if (d.showParagraph && d.paragraphText) {
-          lines.push('<tr>');
-          lines.push('  <td style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#555555;padding-bottom:8px;">' + d.paragraphText + '</td>');
-          lines.push('</tr>');
-        }
 
         visibleItems.forEach(function(item, idx) {
           var isLast = idx === visibleItems.length - 1;
-          var pb;
-          if (isMobile) {
-            pb = isLast ? (d.showCta ? '14px' : '0') : '6px';
-          } else {
-            pb = isLast ? (d.showCta ? '8px' : '5px') : '5px';
-          }
+          var pb = isMobile
+            ? (isLast ? (d.showCta ? '14px' : '0') : '6px')
+            : (isLast ? (d.showCta ? '8px'  : '5px') : '5px');
           lines.push('<tr><td>');
           lines.push('  <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%"><tr>');
           lines.push('    <td width="' + iconCol + '" valign="top" style="padding-right:4px;padding-top:3px;">');
           lines.push('      <img src="' + checkmarkUrl + '" width="' + iconW + '" height="' + iconW + '" alt="" style="display:block;border:0;">');
           lines.push('    </td>');
-          lines.push('    <td style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#555555;padding-bottom:' + pb + ';">' + item.text + '</td>');
+          lines.push('    <td style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:' + textColor + ';padding-bottom:' + pb + ';">' + item.text + '</td>');
           lines.push('  </tr></table>');
           lines.push('</td></tr>');
         });
@@ -711,18 +713,17 @@
         return lines.join('\n');
       }
 
-      /* Mobile stacked layout */
       var mobileHtml = [
         '<!--[if !mso]><!-->',
         '<div class="tup-show" style="display:none;max-height:0;overflow:hidden;mso-hide:all;">',
         '  <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">',
         '  <tr>',
-        '    <td align="center" bgcolor="#F0F0F0" style="padding:24px 20px 16px;">',
+        '    <td align="center" bgcolor="' + stripeColor + '" style="padding:24px 20px 16px;">',
         '      <img src="' + imgUrl + '" width="260" height="260" class="tup-img" alt="' + imgAlt + '" style="display:block;border:0;width:260px;height:auto;">',
         '    </td>',
         '  </tr>',
         '  <tr>',
-        '    <td bgcolor="#F0F0F0" style="padding:20px 20px 24px;">',
+        '    <td bgcolor="' + stripeColor + '" style="padding:20px 20px 24px;">',
         buildContentInner(true),
         '    </td>',
         '  </tr>',
@@ -731,11 +732,10 @@
         '<!--<![endif]-->'
       ].join('\n');
 
-      /* Desktop column pieces */
       var spacerCol = [
         '<td width="40" valign="middle">',
         '  <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="40">',
-        '  <tr><td width="40" height="250" bgcolor="#F0F0F0" style="height:250px;font-size:0;line-height:0;">&nbsp;</td></tr>',
+        '  <tr><td width="40" height="250" bgcolor="' + stripeColor + '" style="height:250px;font-size:0;line-height:0;">&nbsp;</td></tr>',
         '  </table>',
         '</td>'
       ].join('\n');
@@ -754,7 +754,7 @@
         '<td width="408" valign="middle">',
         '  <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="408">',
         '  <tr>',
-        '    <td height="250" bgcolor="#F0F0F0" valign="middle" style="height:250px;">',
+        '    <td height="250" bgcolor="' + stripeColor + '" valign="middle" style="height:250px;overflow:hidden;">',
         '      <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%">',
         '      <tr><td style="padding:' + contentPad + ';">',
         buildContentInner(false),
@@ -770,14 +770,6 @@
         ? [contentCol, imageCol, spacerCol].join('\n')
         : [spacerCol,  imageCol, contentCol].join('\n');
 
-      var desktopHtml = [
-        '<table class="tup-hide" width="768" cellpadding="0" cellspacing="0" border="0" role="presentation">',
-        '<tr>',
-        desktopCols,
-        '</tr>',
-        '</table>'
-      ].join('\n');
-
       return [
         '<style>',
         '  @media only screen and (max-width:480px) {',
@@ -786,12 +778,20 @@
         '    .tup-img  { width:260px !important; height:auto !important; }',
         '  }',
         '</style>',
+        '<table width="768" cellpadding="0" cellspacing="0" border="0" role="presentation" align="center" style="background-color:' + blockBgColor + ';">',
+        '<tr><td>',
         mobileHtml,
-        desktopHtml
+        '<table class="tup-hide" width="768" cellpadding="0" cellspacing="0" border="0" role="presentation">',
+        '<tr>',
+        desktopCols,
+        '</tr>',
+        '</table>',
+        '</td></tr>',
+        '</table>'
       ].join('\n');
     }
 
-    /* ─── onChange ─── */
+    /* ── onChange ── */
     function sanitizeCtaUrl(url) {
       return (url || '').indexOf('%%') === -1 ? (url || '#') : '#';
     }
@@ -799,6 +799,7 @@
     function onChange() {
       var d = readFields();
       updatePreview(d);
+      updateHeightWarning(d);
       sdk.setData(d, function() {
         sdk.setContent(buildContent(d));
         var pd = Object.assign({}, d, { ctaUrl: sanitizeCtaUrl(d.ctaUrl) });
@@ -806,12 +807,13 @@
       });
     }
 
-    /* ─── On load ─── */
+    /* ── Init ── */
     updatePreview(DEFAULTS);
     sdk.getData(function(savedData) {
       var d = (savedData && Object.keys(savedData).length > 0) ? savedData : DEFAULTS;
       populateFields(d);
       updatePreview(d);
+      updateHeightWarning(d);
       sdk.setContent(buildContent(d));
       var pd = Object.assign({}, d, { ctaUrl: sanitizeCtaUrl(d.ctaUrl) });
       sdk.setSuperContent(buildContent(pd));
