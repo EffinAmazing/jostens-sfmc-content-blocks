@@ -894,7 +894,13 @@
       ].join('\n');
 
       var spacerCol = [
-        '<td width="40" bgcolor="' + stripeColor + '" style="background-color:' + stripeColor + ';font-size:0;line-height:0;">&nbsp;</td>'
+        '<td width="40" bgcolor="' + blockBgColor + '" style="background-color:' + blockBgColor + ';font-size:0;line-height:0;">',
+        '  <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="40">',
+        '  <tr><td height="35" bgcolor="' + blockBgColor + '" style="height:35px;font-size:0;line-height:0;mso-line-height-rule:exactly;background-color:' + blockBgColor + ';">&nbsp;</td></tr>',
+        '  <tr><td height="250" bgcolor="' + stripeColor + '" style="height:250px;font-size:0;line-height:0;mso-line-height-rule:exactly;background-color:' + stripeColor + ';">&nbsp;</td></tr>',
+        '  <tr><td height="35" bgcolor="' + blockBgColor + '" style="height:35px;font-size:0;line-height:0;mso-line-height-rule:exactly;background-color:' + blockBgColor + ';">&nbsp;</td></tr>',
+        '  </table>',
+        '</td>'
       ].join('\n');
 
       var imageCol = [
@@ -908,11 +914,15 @@
       ].join('\n');
 
       var contentCol = [
-        '<td width="408" valign="middle" bgcolor="' + stripeColor + '" style="background-color:' + stripeColor + ';">',
+        '<td width="408" valign="middle" bgcolor="' + blockBgColor + '" style="background-color:' + blockBgColor + ';">',
         '  <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="408">',
         '  <tr>',
-        '    <td valign="middle" style="padding:' + contentPad + ';">',
+        '    <td height="250" bgcolor="' + stripeColor + '" valign="middle" style="height:250px;background-color:' + stripeColor + ';">',
+        '      <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="100%">',
+        '      <tr><td style="padding:' + contentPad + ';">',
         buildContentInner(false),
+        '      </td></tr>',
+        '      </table>',
         '    </td>',
         '  </tr>',
         '  </table>',
